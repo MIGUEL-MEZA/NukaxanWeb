@@ -1,0 +1,135 @@
+﻿# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+  - SISTCP # - master
+
+pool:
+  name: GpoNutecNukaxan
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  iisLocalUrl: 'http://localhost/NukaxanWebVBA/Login'
+  iisPhysicalPath: 'C:\SISTCP\ASPapps\NukaxanWebVBA'
+  dllPhysicalPath: 'C:\SISTCP\ASPapps\NukaxanWebVBA\bin'
+  deletionExecutablePath: 'C:\SISTCP\CICD\PIPELINE_WORK\preprocessing.cmd'  
+  zipName: 'NukaxanWebVBA_$(Build.BuildId).zip'
+
+jobs:
+- job: Run_build_prerequisites  
+  displayName: "Installation of prerequisites and restoration of NuGet packages"
+  steps:
+    # Checkouts the repository
+    - checkout: self
+      displayName: 'Checkout the repository (main branch) in $(Build.SourcesDirectory)'
+
+    ##[error]Failed to download or parse releases-index.json with error: self-signed certificate in certificate chain
+    # # Install NuGet tool (if necessary)
+    # - task: NuGetToolInstaller@1
+    #   displayName: 'Install NuGet'
+    # Restore NuGet packages
+    # - task: NuGetCommand@2
+    #   displayName: 'Restore NuGet Packages'
+    #   inputs:
+    #     restoreSolution: '$(solution)'
+- job: Run_publish_and_test
+  displayName: "Build and Test Nukaxan Web Productive"
+  dependsOn: Run_build_prerequisites
+  steps: 
+    # Run dotnet publish command
+    - task: MSBuild@1
+      displayName: 'Publish the Visual Basic Web Application'
+      inputs:
+        solution: '$(solution)'
+        configuration: '$(buildConfiguration)'
+        platform: '$(buildPlatform)'
+        msbuildArguments: '/p:DeployOnBuild=True /p:publishUrl="$(iisPhysicalPath)"'
+    # Verify published files and the presence of the DLL file
+    - task: PowerShell@2
+      displayName: 'Verify published files and DLL file'
+      inputs:
+        targetType: 'inline'
+        script: |
+          $iisPath = "$(iisPhysicalPath)"
+          $dirPath = "$(dllPhysicalPath)"
+          $dllPath = Join-Path $dirPath "NukaxanWEB.dll"
+
+          if (Test-Path $iisPath) {
+            Write-Host "Publish files are extracted to $iisPath"
+            echo "Listing files in IIS directory = $iisPath"
+            dir $iisPath            
+          }
+          else {
+              Write-Error "❌ File extraction failed"
+          }
+          Set-Location -Path $dirPath
+
+          if (-Not (Test-Path $dllPath)) {
+              Write-Error "❌ NukaxanWeb.dll not found. Extraction may have failed."
+              exit 1
+          } 
+          else {
+              Write-Host "✅ NukaxanWeb.dll found successfully."
+          }
+    # Create a ZIP file of the published web application for backup
+    - task: ArchiveFiles@2
+      displayName: 'Create ZIP of the Published Web Application'
+      inputs:
+        rootFolderOrFile: '$(iisPhysicalPath)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(iiPhysicalPath)\$(zipName)'
+        replaceExistingArchive: true
+            
+- job: Iis_test_and_Cleanup
+  displayName: "Test the IIS deployment and cleanup"
+  dependsOn: Run_publish_and_test
+  condition: always() # Always run this job, even if a previous job fails
+  steps:
+    # Call the source code preprocessing script ## scriptname.cmd "DirectoryPathToBeDeleted"
+    - task: CmdLine@2
+      displayName: 'Run the source code deletion script'
+      inputs:
+        script: |
+          echo "Deleting folder $(Build.SourcesDirectory)"
+          $(deletionExecutablePath) "$(Build.SourcesDirectory)"
+    # Verify if IIS service is running
+    - task: PowerShell@2
+      displayName: 'Check if IIS Service is Running'
+      inputs:
+        targetType: 'inline'
+        script: |
+          $iisService = Get-Service -Name W3SVC -ErrorAction SilentlyContinue
+          if ($iisService -eq $null) {
+              Write-Error "❌ IIS (W3SVC) is not installed on this machine."
+              exit 1
+          }
+          if ($iisService.Status -ne 'Running') {
+              Write-Error "❌ IIS (W3SVC) is not running."
+              exit 1
+          }
+          Write-Host "✅ IIS (W3SVC) service is running."
+        
+    - task: PowerShell@2
+      displayName: 'Check if NukaxanAdminVB Login Page is Accessible'
+      inputs:
+        targetType: 'inline'
+        script: |
+          $url = "$(iisLocalUrl)"
+          try {
+            $response = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 10
+            if ($response.StatusCode -eq 200) {
+              Write-Host "✅ Login page is accessible: $url"
+            } else {
+              Write-Error "❌ Login page returned status code: $($response.StatusCode)"
+              exit 1
+            }
+          } 
+          catch {
+              Write-Error "❌ Failed to access the login page: $url"
+              exit 1
+          }

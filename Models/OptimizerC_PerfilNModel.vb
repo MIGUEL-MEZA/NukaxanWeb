@@ -1,0 +1,30 @@
+﻿Imports Microsoft.VisualBasic
+
+Public Class OptimizerC_PerfilNModel
+    Public Property CvePerfilN As Int64 = 0
+    Public Property CvePlan As Int64 = 0
+
+    Public Property CodCliente As String = ""
+    Public Property CveModalidad As Integer = 0
+    Public Property Titulo As String = ""
+    Public Property CveReferencia As Integer = 0
+    Public Property Temperatura As Double = 0
+    Public Property EspacioCorral As Double = 0
+    Public Property RAC As Double = 0
+    Public Property Conclusion As String = ""
+    Public Property NomCliente As String = ""
+    Public Property NomModalidad As String = ""
+    Public Property NomReferencia As String = ""
+    Public Property Valores As String = ""
+
+    'Bitacora
+    Public Property CveEstatus As Integer = 0
+    Public Property NomEstatus As String = ""
+    Public Property FecAlta As String = ""
+    Public Property UsuAlta As String = ""
+    Public Property NomUsuAlta As String = ""
+    Public Property FecAct As String = ""
+    Public Property UsuAct As String = ""
+    Public Property NomUsuAct As String = ""
+
+End Class

@@ -1,0 +1,16 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 150" width="1920" height="150">
+	<title>6163819-ai</title>
+	<defs>
+		<linearGradient id="g1" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2273.807,-1250,793.159,1442.793,-762.926,724.612)">
+			<stop offset=".191" stop-color="#3a5685"/>
+			<stop offset=".831" stop-color="#0e1938"/>
+		</linearGradient>
+	</defs>
+	<style>
+		tspan { white-space:pre } 
+		.s0 { fill: url(#g1) } 
+	</style>
+	<g id="BACKGROUND">
+		<path id="&lt;Path&gt;" class="s0" d="m0-51h1920v250h-1920z"/>
+	</g>
+</svg>
