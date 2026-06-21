@@ -1,4 +1,4 @@
-Imports System.Web.DynamicData
+﻿Imports System.Web.DynamicData
 Imports Newtonsoft.Json
 Imports NukaxanWEB.Libreria
 Imports NukaxanWEB.OptimizerP_PerfilN
@@ -178,7 +178,8 @@ Public Class OptimizerP_PerfilN_ReporteFrm
             'Dim lstE As List(Of OptimizerP_PerfilN_EtapasModel) = New OptimizerP_PerfilN_Etapas().FindlstAll(CodCliente.Text, Convert.ToInt64(regPId.Text))
             'Dim lstVariables As List(Of OptimizerP_CatVariablesModel) = New OptimizerP_CatVariables().FindlstAll(0)
 
-            Dim modeloCaptura As List(Of PNCapturaModel) = JsonConvert.DeserializeObject(Of List(Of PNCapturaModel))(New OptimizerP_PerfilN_Resultado().FindById(CInt(regPId.Text)).Response2)
+            Dim objPerfil As OptimizerP_PerfilNModel = New OptimizerP_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
+            Dim modeloCaptura As List(Of PNCapturaModel) = New OptimizerP_PerfilN().ConstruirModeloCaptura(Convert.ToInt64(regPId.Text), objPerfil.CodCliente)
             Dim jsonCaptura = JsonConvert.SerializeObject(modeloCaptura)
             ClientScript.RegisterStartupScript(Me.GetType(), "initModelo", "var modeloCaptura = " & jsonCaptura & ";", True)
 
@@ -286,3 +287,4 @@ Public Class OptimizerP_PerfilN_ReporteFrm
         ' Verifies that the control is rendered
     End Sub
 End Class
+

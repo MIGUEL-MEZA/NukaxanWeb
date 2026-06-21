@@ -1343,6 +1343,9 @@
     <Compile Include="Models\PerfilClienteModel.vb" />
     <Compile Include="Models\Nireo_CatProducto_ParametrosModel.vb" />
     <Compile Include="Models\OptimizerP_CatVariablesModel.vb" />
+    <Compile Include="Models\OptimizerP_ResponseEditableModel.vb" />
+    <Compile Include="Models\OptimizerP_ResponseDataEditableModel.vb" />
+    <Compile Include="Models\OptimizerP_EtapaEditableModel.vb" />
     <Compile Include="Models\WSOptimizerP_PerfilN_RequestEtapasModel.vb" />
     <Compile Include="Models\WSOptimizerP_PerfilN_RequestModel.vb" />
     <Compile Include="Models\WSOptimizerP_PlanA_RequestModel.vb" />
@@ -2309,3 +2312,5 @@
   </Target>
   -->
 </Project>
+
+

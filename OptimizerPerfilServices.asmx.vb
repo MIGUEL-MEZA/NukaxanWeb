@@ -17,12 +17,23 @@ Public Class OptimizerPerfilServices
     <ScriptMethod(ResponseFormat:=ResponseFormat.Json)>
     Public Function GuardarJSONAjuste(modelo As List(Of PNCapturaModel), modulo As String, id As Long, usuario As String) As String
         Try
-            Dim jsonNuevo = JsonConvert.SerializeObject(modelo)
-            Dim result
+            Dim result As Boolean = False
+
             If modulo = "P" Then
-                result = New OptimizerP_PerfilN().ActualizaEditable(3, id, jsonNuevo, usuario)
+                Dim negocio As New OptimizerP_PerfilN()
+                Dim modeloEditable As OptimizerP_ResponseEditableModel = negocio.ObtenerModeloEditable(id)
+                modeloEditable = negocio.AplicarAjustes(modeloEditable, modelo)
+                Dim jsonNuevo = JsonConvert.SerializeObject(modeloEditable)
+                result = negocio.ActualizaEditable(3, id, jsonNuevo, usuario)
             ElseIf modulo = "G" Then
+                Dim jsonNuevo = JsonConvert.SerializeObject(modelo)
                 result = New OptimizerG_PerfilN().ActualizaEditable(3, id, jsonNuevo, usuario)
+            Else
+                Throw New Exception("Módulo no soportado.")
+            End If
+
+            If Not result Then
+                Throw New Exception("No fue posible guardar los ajustes.")
             End If
 
             Return "OK"

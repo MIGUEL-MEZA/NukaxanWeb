@@ -1,4 +1,4 @@
-﻿Imports System.Data
+Imports System.Data
 Imports Microsoft.Ajax.Utilities
 Imports Newtonsoft.Json
 Imports NukaxanWEB
@@ -223,64 +223,173 @@ Public Class OptimizerP_PerfilN
         Return IsResult
     End Function
 
+    Public Function ConstruirModeloEditable(Id As Int64) As OptimizerP_ResponseEditableModel
+        Dim objResultado As OptimizerP_PerfilN_ResultadoModel = New OptimizerP_PerfilN_Resultado().FindById(Id)
+        Return ConstruirModeloEditableDesdeResponseJson(objResultado.Response)
+    End Function
+
+    Public Function ObtenerModeloEditable(Id As Int64) As OptimizerP_ResponseEditableModel
+        Dim objResultado As OptimizerP_PerfilN_ResultadoModel = New OptimizerP_PerfilN_Resultado().FindById(Id)
+
+        If String.IsNullOrWhiteSpace(objResultado.Response2) Then
+            Return ConstruirModeloEditableDesdeResponseJson(objResultado.Response)
+        End If
+
+        Try
+            Dim modeloEditable As OptimizerP_ResponseEditableModel = JsonConvert.DeserializeObject(Of OptimizerP_ResponseEditableModel)(objResultado.Response2)
+            If modeloEditable IsNot Nothing AndAlso modeloEditable.Variables IsNot Nothing AndAlso modeloEditable.Variables.Count > 0 Then
+                Return NormalizarModeloEditable(modeloEditable)
+            End If
+        Catch
+        End Try
+
+        Try
+            Dim legacyCaptura As List(Of PNCapturaModel) = JsonConvert.DeserializeObject(Of List(Of PNCapturaModel))(objResultado.Response2)
+            If legacyCaptura IsNot Nothing AndAlso legacyCaptura.Count > 0 Then
+                Dim modeloBase = ConstruirModeloEditableDesdeResponseJson(objResultado.Response)
+                Return AplicarAjustes(modeloBase, legacyCaptura)
+            End If
+        Catch
+        End Try
+
+        Return ConstruirModeloEditableDesdeResponseJson(objResultado.Response)
+    End Function
+
+    Private Function ConstruirModeloEditableDesdeResponseJson(responseJson As String) As OptimizerP_ResponseEditableModel
+        If String.IsNullOrWhiteSpace(responseJson) Then
+            Return New OptimizerP_ResponseEditableModel()
+        End If
+
+        Dim modelo As OptimizerP_ResponseEditableModel = JsonConvert.DeserializeObject(Of OptimizerP_ResponseEditableModel)(responseJson)
+        If modelo Is Nothing Then
+            modelo = New OptimizerP_ResponseEditableModel()
+        End If
+
+        modelo = NormalizarModeloEditable(modelo)
+
+        For Each variable In modelo.Variables
+            For Each etapa In variable.Etapas
+                etapa.ValorReferencia = etapa.Valor
+                etapa.Motivo = ""
+            Next
+        Next
+
+        Return modelo
+    End Function
+
+    Private Function NormalizarModeloEditable(modelo As OptimizerP_ResponseEditableModel) As OptimizerP_ResponseEditableModel
+        If modelo Is Nothing Then
+            modelo = New OptimizerP_ResponseEditableModel()
+        End If
+
+        If modelo.Variables Is Nothing Then
+            modelo.Variables = New List(Of OptimizerP_ResponseDataEditableModel)()
+        End If
+
+        modelo.DescripcionTemHum = If(modelo.DescripcionTemHum, "")
+
+        For Each variable In modelo.Variables
+            variable.Variable = If(variable.Variable, "")
+            variable.MostrarCliente = If(variable.MostrarCliente, "")
+            If variable.Etapas Is Nothing Then
+                variable.Etapas = New List(Of OptimizerP_EtapaEditableModel)()
+            End If
+            For Each etapa In variable.Etapas
+                etapa.Motivo = If(etapa.Motivo, "")
+            Next
+        Next
+
+        Return modelo
+    End Function
+
+    Public Function AplicarAjustes(modeloBase As OptimizerP_ResponseEditableModel, ajustes As List(Of PNCapturaModel)) As OptimizerP_ResponseEditableModel
+        modeloBase = NormalizarModeloEditable(modeloBase)
+
+        If ajustes Is Nothing Then
+            Return modeloBase
+        End If
+
+        For Each ajuste In ajustes
+            Dim variable = modeloBase.Variables.FirstOrDefault(Function(v) v.NoVariable = ajuste.Variable)
+            If variable Is Nothing Then
+                Continue For
+            End If
+
+            Dim etapa = variable.Etapas.FirstOrDefault(Function(e) e.Clave = ajuste.Etapa)
+            If etapa Is Nothing Then
+                etapa = New OptimizerP_EtapaEditableModel With {
+                    .Clave = ajuste.Etapa,
+                    .Valor = ajuste.Ajuste,
+                    .ValorReferencia = ajuste.Referencia,
+                    .Motivo = If(ajuste.Comentario, "")
+                }
+                variable.Etapas.Add(etapa)
+            Else
+                etapa.Valor = ajuste.Ajuste
+                etapa.ValorReferencia = ajuste.Referencia
+                etapa.Motivo = If(ajuste.Comentario, "")
+            End If
+        Next
+
+        Return modeloBase
+    End Function
+
     Public Function ConstruirModeloCaptura(Id As Int64, CodCliente As String) As List(Of PNCapturaModel)
-        Dim ObjR As ResponseModel = JsonConvert.DeserializeObject(Of ResponseModel)(New OptimizerP_PerfilN_Resultado().FindById(Id).Response)
+        Dim modeloEditable As OptimizerP_ResponseEditableModel = ObtenerModeloEditable(Id)
+        Return ConstruirModeloCaptura(modeloEditable, Id, CodCliente)
+    End Function
+
+    Public Function ConstruirModeloCaptura(modeloEditable As OptimizerP_ResponseEditableModel, Id As Int64, CodCliente As String) As List(Of PNCapturaModel)
+        modeloEditable = NormalizarModeloEditable(modeloEditable)
+
         Dim lstE As List(Of OptimizerP_PerfilN_EtapasModel) = New OptimizerP_PerfilN_Etapas().FindlstAll(CodCliente, Id)
         Dim lstVariables As List(Of OptimizerP_CatVariablesModel) = New OptimizerP_CatVariables().FindlstAll(0)
 
-
         Dim resultado As New List(Of PNCapturaModel)
-        For Each variable In ObjR.Variables.Where(Function(v) v.MostrarCliente = "S").OrderBy(Function(v) v.Posicion)
+        For Each variable In modeloEditable.Variables.Where(Function(v) v.MostrarCliente = "S").OrderBy(Function(v) v.Posicion)
             Dim infoVar = lstVariables.FirstOrDefault(Function(v) v.CveVariable = variable.NoVariable)
             Dim decimales As Integer = If(infoVar IsNot Nothing, infoVar.Decimales, 2)
-            Dim EditarAjuste As String = If(infoVar IsNot Nothing, infoVar.EditarAjuste, "N")
-            Dim CveCategoria As Integer = If(infoVar IsNot Nothing, infoVar.CveCategoria, 0)
-            Dim NomCategoria As String = If(infoVar IsNot Nothing, infoVar.NomCategoria, "")
-            Dim ReporteInterno As String = If(infoVar IsNot Nothing, infoVar.ReporteInterno, "N")
-            Dim ReporteExterno As String = If(infoVar IsNot Nothing, infoVar.ReporteExterno, "N")
-            Dim EnvioFlujo As String = If(infoVar IsNot Nothing, infoVar.EnvioFlujo, "N")
+            Dim editarAjuste As String = If(infoVar IsNot Nothing, infoVar.EditarAjuste, "N")
+            Dim cveCategoria As Integer = If(infoVar IsNot Nothing, infoVar.CveCategoria, 0)
+            Dim nomCategoria As String = If(infoVar IsNot Nothing, infoVar.NomCategoria, "")
+            Dim reporteInterno As String = If(infoVar IsNot Nothing, infoVar.ReporteInterno, "N")
+            Dim reporteExterno As String = If(infoVar IsNot Nothing, infoVar.ReporteExterno, "N")
+            Dim envioFlujo As String = If(infoVar IsNot Nothing, infoVar.EnvioFlujo, "N")
+            Dim mostrarValores As String = If(infoVar IsNot Nothing, infoVar.MostrarValores, "")
 
             For Each etapa In lstE.Where(Function(e) e.Aplica = "S")
                 Dim etapaData = variable.Etapas.FirstOrDefault(Function(x) x.Clave = etapa.CveEtapa)
-                Dim valor As Double = 0
-                If etapaData IsNot Nothing Then
-                    Dim raw As String = etapaData.Valor.ToString().Trim()
-                    If raw = "" Then
-                        valor = 0
-                    ElseIf raw.Equals("NaN", StringComparison.OrdinalIgnoreCase) _
-                        OrElse raw.Equals("Infinity", StringComparison.OrdinalIgnoreCase) _
-                        OrElse raw.Equals("-Infinity", StringComparison.OrdinalIgnoreCase) Then
-                        valor = 0 ' o Nothing si quieres interpretar como vacío
+                Dim valorReferencia As Double = 0
+                Dim valorAjuste As Double = 0
+                Dim motivo As String = ""
 
-                    ElseIf Double.TryParse(raw, Globalization.NumberStyles.Any, Globalization.CultureInfo.InvariantCulture, valor) Then
-                    Else
-                        valor = 0
-                    End If
+                If etapaData IsNot Nothing Then
+                    valorReferencia = etapaData.ValorReferencia
+                    valorAjuste = etapaData.Valor
+                    motivo = If(etapaData.Motivo, "")
                 End If
 
                 resultado.Add(New PNCapturaModel With {
-                .Etapa = etapa.CveEtapa,
-                .NombreEtapa = etapa.NomEtapa,
-                .Variable = variable.NoVariable,
-                .Descripcion = variable.Variable,
-                .Decimales = decimales,
-                .Referencia = valor,
-                .Ajuste = valor,           ' 👈 CLAVE
-                .Comentario = "",
-                .Mostrar = variable.MostrarCliente,
-                .CveCategoria = CveCategoria,
-                .EditarAjuste = EditarAjuste,
-                .ReporteInterno = ReporteInterno,
-                .ReporteExterno = ReporteExterno,
-                .EnvioFlujo = EnvioFlujo,
-                .NomCategoria = NomCategoria
-            })
-
+                    .Etapa = etapa.CveEtapa,
+                    .NombreEtapa = etapa.NomEtapa,
+                    .Variable = variable.NoVariable,
+                    .Descripcion = variable.Variable,
+                    .Decimales = decimales,
+                    .Referencia = valorReferencia,
+                    .Ajuste = valorAjuste,
+                    .Comentario = motivo,
+                    .Mostrar = variable.MostrarCliente,
+                    .CveCategoria = cveCategoria,
+                    .EditarAjuste = editarAjuste,
+                    .ReporteInterno = reporteInterno,
+                    .ReporteExterno = reporteExterno,
+                    .MostrarValores = mostrarValores,
+                    .EnvioFlujo = envioFlujo,
+                    .NomCategoria = nomCategoria
+                })
             Next
         Next
 
         Return resultado
     End Function
-
-
 End Class

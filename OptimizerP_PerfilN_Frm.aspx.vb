@@ -1,4 +1,4 @@
-Imports System.Web.DynamicData
+﻿Imports System.Web.DynamicData
 Imports Newtonsoft.Json
 Imports NukaxanWEB.Libreria
 Imports NukaxanWEB.OptimizerP_PerfilN
@@ -241,7 +241,7 @@ Public Class OptimizerP_PerfilN_Frm
                 CodCliente.Text = ""
                 CodALLIX.Text = ""
                 TBID.Text = "POR ASIGNAR"
-                TBNomEstatusD.Text = "EN EDICI�N"
+                TBNomEstatusD.Text = "EN EDICIÓN"
                 TBFecAltaD.Text = Now.ToString("dd/MM/yyyy") + " | " + ObjUser.NomUsuario
                 TBFecActD.Text = Now.ToString("dd/MM/yyyy") + " | " + ObjUser.NomUsuario
                 LlenaRPT_Etapas()
@@ -412,10 +412,11 @@ Public Class OptimizerP_PerfilN_Frm
     Sub GuardarJSON()
         Dim IsResult As Boolean
         Try
-            Dim modeloCaptura As List(Of PNCapturaModel) = New OptimizerP_PerfilN().ConstruirModeloCaptura(Convert.ToInt64(regPId.Text), CodCliente.Text)
-            Dim jsonCaptura = JsonConvert.SerializeObject(modeloCaptura)
+            Dim negocio As New OptimizerP_PerfilN()
+            Dim modeloEditable As OptimizerP_ResponseEditableModel = negocio.ConstruirModeloEditable(Convert.ToInt64(regPId.Text))
+            Dim jsonCaptura = JsonConvert.SerializeObject(modeloEditable)
 
-            IsResult = New OptimizerP_PerfilN().ActualizaEditable(3, Convert.ToInt64(regPId.Text), jsonCaptura, ObjUser.CodUsuario)
+            IsResult = negocio.ActualizaEditable(3, Convert.ToInt64(regPId.Text), jsonCaptura, ObjUser.CodUsuario)
 
         Catch ex As Exception
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
@@ -427,10 +428,11 @@ Public Class OptimizerP_PerfilN_Frm
         Try
             Dim lst As List(Of OptimizerP_PerfilNModel) = New OptimizerP_PerfilN().FindlstAll(0, "")
             lst.ForEach(Sub(p)
-                            Dim modeloCaptura As List(Of PNCapturaModel) = New OptimizerP_PerfilN().ConstruirModeloCaptura(p.CvePerfilN, p.CodCliente)
-                            Dim jsonCaptura = JsonConvert.SerializeObject(modeloCaptura)
+                            Dim negocio As New OptimizerP_PerfilN()
+                            Dim modeloEditable As OptimizerP_ResponseEditableModel = negocio.ConstruirModeloEditable(p.CvePerfilN)
+                            Dim jsonCaptura = JsonConvert.SerializeObject(modeloEditable)
 
-                            IsResult = New OptimizerP_PerfilN().ActualizaEditable(3, p.CvePerfilN, jsonCaptura, ObjUser.CodUsuario)
+                            IsResult = negocio.ActualizaEditable(3, p.CvePerfilN, jsonCaptura, ObjUser.CodUsuario)
 
                         End Sub)
 
@@ -559,7 +561,7 @@ Public Class OptimizerP_PerfilN_Frm
             'Dim lstE As List(Of OptimizerP_PerfilN_EtapasModel) = New OptimizerP_PerfilN_Etapas().FindlstAll(CodCliente.Text, Convert.ToInt64(regPId.Text))
             'Dim lstVariables As List(Of OptimizerP_CatVariablesModel) = New OptimizerP_CatVariables().FindlstAll(0)
 
-            Dim modeloCaptura As List(Of PNCapturaModel) = JsonConvert.DeserializeObject(Of List(Of PNCapturaModel))(New OptimizerP_PerfilN_Resultado().FindById(CInt(regPId.Text)).Response2)
+            Dim modeloCaptura As List(Of PNCapturaModel) = New OptimizerP_PerfilN().ConstruirModeloCaptura(Convert.ToInt64(regPId.Text), CodCliente.Text)
             Dim jsonCaptura = JsonConvert.SerializeObject(modeloCaptura)
             ClientScript.RegisterStartupScript(Me.GetType(), "initModelo", "var modeloCaptura = " & jsonCaptura & ";", True)
 
@@ -777,5 +779,9 @@ td {
         ' Verifies that the control is rendered
     End Sub
 End Class
+
+
+
+
 
 

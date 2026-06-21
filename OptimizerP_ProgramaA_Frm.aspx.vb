@@ -298,7 +298,8 @@ Public Class OptimizerP_ProgramaA_Frm
                 Dim lstPN As OptimizerP_PerfilNModel = New OptimizerP_PerfilN().FindById(Convert.ToInt64(CvePerfilN.Text), "")
                 Dim lstE As List(Of OptimizerP_PerfilN_EtapasModel) = New OptimizerP_PerfilN_Etapas().FindlstAll(CodCliente.Text, Convert.ToInt64(CvePerfilN.Text))
                 Dim ObjR As ResponseModel = JsonConvert.DeserializeObject(Of ResponseModel)(New OptimizerP_PerfilN_Resultado().FindById(Convert.ToInt64(CvePerfilN.Text)).Response)
-                Dim modeloCaptura As List(Of PNCapturaModel) = JsonConvert.DeserializeObject(Of List(Of PNCapturaModel))(New OptimizerP_PerfilN_Resultado().FindById(CInt(CvePerfilN.Text)).Response2)
+                Dim modeloEditable As OptimizerP_ResponseEditableModel = New OptimizerP_PerfilN().ObtenerModeloEditable(CInt(CvePerfilN.Text))
+                Dim variableEditable = modeloEditable.Variables.Find(Function(s) s.NoVariable = 25)
                 rptEtapas.Items.Cast(Of RepeaterItem)().ToList.ForEach(Sub(p)
                                                                            Dim Aplica As String = TryCast(p.FindControl("Aplica"), Label).Text
                                                                            Dim CveEtapa As String = TryCast(p.FindControl("CveEtapa"), Label).Text
@@ -312,9 +313,11 @@ Public Class OptimizerP_ProgramaA_Frm
                                                                            If lst2.Aplica = "S" Then
                                                                                TBEM.Text = lst2.EMAlimento.ToString
                                                                                Dim SIDLys_tmp As Double = CDbl(ObjR.Variables.Find(Function(s) s.NoVariable = 25).Etapas.Find(Function(c) CInt(c.Clave) = CInt(CveEtapa)).Valor)
-                                                                               Dim item = modeloCaptura.Find(Function(s) s.Variable = 25 And s.Etapa = CInt(CveEtapa))
-                                                                               If item IsNot Nothing Then
-                                                                                   SIDLys_tmp = item.Ajuste
+                                                                               If variableEditable IsNot Nothing Then
+                                                                                   Dim etapaEditable = variableEditable.Etapas.Find(Function(s) s.Clave = CInt(CveEtapa))
+                                                                                   If etapaEditable IsNot Nothing Then
+                                                                                       SIDLys_tmp = etapaEditable.Valor
+                                                                                   End If
                                                                                End If
 
                                                                                TBSIDLYS.Text = Math.Round(SIDLys_tmp, 3).ToString
@@ -812,3 +815,4 @@ Public Class OptimizerP_ProgramaA_Frm
     End Sub
 
 End Class
+
