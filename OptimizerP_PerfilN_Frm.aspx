@@ -92,7 +92,7 @@
                 let dec = x.Decimales || 2;
                 let ref = parseFloat(x.Referencia.toFixed(dec));
                 let aju = parseFloat(x.Ajuste.toFixed(dec));
-                // ✅ si son iguales después de redondeo → forzar igualdad
+                // si son iguales despu�s de redondeo, forzar igualdad
                 if (aju === ref) {
                     x.Ajuste = ref;
                 }
@@ -131,7 +131,7 @@
 
             if (e.target.classList.contains("ajuste")) {
 
-                // ✅ Marcar como editado
+                // Marcar como editado
                 e.target.dataset.editado = "1";
             }
 
@@ -155,17 +155,17 @@
             let errores = false;
             let tolerancia = 0.0001;
 
-            // 🔄 Limpia bordes previos
+            // Limpia bordes previos
             document.querySelectorAll(".comentario").forEach(input => {
                 input.style.border = "";
             });
 
             modelo.forEach(item => {
 
-                // ✅ 1. Ignorar los que no se muestran
+                // 1. Ignorar los que no se muestran
                 if (item.Mostrar === "N" || item.EditarAjuste === "N") return;
 
-                // ✅ 2. Buscar inputs en UI
+                // 2. Buscar inputs en UI
                 let inputAjuste = document.querySelector(
                     `.ajuste[data-etapa='${item.Etapa}'][data-variable='${item.Variable}']`
                 );
@@ -174,7 +174,7 @@
                     `.comentario[data-etapa='${item.Etapa}'][data-variable='${item.Variable}']`
                 );
 
-                // ✅ 3. Si no existe o está oculto → ignorar
+                // 3. Si no existe o est� oculto, ignorar
                 if (!inputAjuste || inputAjuste.offsetParent === null) return;
 
                 let dec = item.Decimales || 2;
@@ -183,10 +183,10 @@
                 let referencia = parseFloat(Number(item.Referencia).toFixed(dec));
                 let comentario = String(item.Comentario || "").trim();
 
-                // ✅ 4. Detectar cambio real (con tolerancia)
+                // 4. Detectar cambio real (con tolerancia)
                 let cambioReal = Math.abs(ajuste - referencia) > tolerancia;
 
-                // ✅ 5. Validar SOLO si el usuario lo tocó
+                // 5. Validar solo si el usuario lo toc�
                 let fueEditado = inputAjuste.dataset.editado === "1";
 
                 if (cambioReal && fueEditado && comentario.length === 0) {
@@ -220,7 +220,7 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         xhrFields: {
-                            withCredentials: true   // ✅ ENVÍA COOKIES DE AUTH
+                            withCredentials: true   // Env�a cookies de autenticaci�n
                         },
                         data: JSON.stringify({
                             modelo: modelo,

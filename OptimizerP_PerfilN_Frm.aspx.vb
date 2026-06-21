@@ -241,7 +241,7 @@ Public Class OptimizerP_PerfilN_Frm
                 CodCliente.Text = ""
                 CodALLIX.Text = ""
                 TBID.Text = "POR ASIGNAR"
-                TBNomEstatusD.Text = "EN EDICIï¿½N"
+                TBNomEstatusD.Text = "EN EDICIÓN"
                 TBFecAltaD.Text = Now.ToString("dd/MM/yyyy") + " | " + ObjUser.NomUsuario
                 TBFecActD.Text = Now.ToString("dd/MM/yyyy") + " | " + ObjUser.NomUsuario
                 LlenaRPT_Etapas()
@@ -567,7 +567,7 @@ Public Class OptimizerP_PerfilN_Frm
                 Function(g) New With {.Etapa = g.Key, .NombreEtapa = g.First().NombreEtapa}).OrderBy(Function(x) x.Etapa).ToList()
 
 
-            Dim variables = modeloCaptura.GroupBy(Function(x) x.Variable).ToList()
+            Dim categorias = modeloCaptura.OrderBy(Function(x) x.CveCategoria).ThenBy(Function(x) x.Variable).GroupBy(Function(x) x.CveCategoria).ToList()
 
             Dim w As String = (250 + ((100 + 100 + 150) * etapas.Count)).ToString + "px"
             Dim sb As StringBuilder = New StringBuilder()
@@ -620,41 +620,51 @@ td {
 
             sb.Append("</thead><tbody>")
 
-            For Each grupo In variables
-                sb.Append("<tr>")
-                sb.Append("<td >" & grupo.First().Descripcion & "</td>")
-                For Each e In etapas
-                    Dim item = grupo.FirstOrDefault(Function(x) x.Etapa = e.Etapa)
-                    If item IsNot Nothing Then
-                        Dim stepValue As String = If(item.Decimales <= 0, "1", "0." & New String("0"c, item.Decimales - 1) & "1")
-                        Dim valorTexto = Math.Round(item.Referencia, item.Decimales).ToString(System.Globalization.CultureInfo.InvariantCulture)
-                        Dim displayStyle = If(item.EditarAjuste = "N", "display:none;", "")
+            For Each categoria In categorias
+                Dim grupoVariables = categoria.GroupBy(Function(x) x.Variable).ToList()
+                Dim nombreCategoria = grupoVariables.First().First().NomCategoria
 
-                        sb.Append("<td align='center'>" & If(item.Mostrar = "N", "", valorTexto) & "</td>")
-                        sb.Append("<td align='center' >")
-                        sb.Append("<input class='ajuste form-control' type='text' step='" + stepValue + "' style='width:90%;" + displayStyle + "' ")
-                        sb.Append("data-etapa='" & item.Etapa & "' ")
-                        sb.Append("data-variable='" & item.Variable & "' ")
-                        sb.Append("data-referencia='" & valorTexto & "' ")
-                        sb.Append("value='" & Math.Round(item.Ajuste, item.Decimales).ToString("G") & "' />")
-                        sb.Append("</td>")
+                If Not String.IsNullOrWhiteSpace(nombreCategoria) Then
+                    sb.Append("<tr style='background-color:#e1effd!important;font-weight:bold;'>")
+                    sb.Append("<td colspan='" & ((etapas.Count * 3) + 1).ToString() & "'>" & nombreCategoria & "</td>")
+                    sb.Append("</tr>")
+                End If
 
-                        sb.Append("<td align='center'>")
-                        sb.Append("<input class='comentario form-control' type='text' style='width:95%;" + displayStyle + "' ")
-                        sb.Append("data-etapa='" & item.Etapa & "' ")
-                        sb.Append("data-variable='" & item.Variable & "' ")
-                        sb.Append("value='" & item.Comentario & "' />")
-                        sb.Append("</td>")
+                For Each grupo In grupoVariables
+                    sb.Append("<tr>")
+                    sb.Append("<td >" & grupo.First().Descripcion & "</td>")
+                    For Each e In etapas
+                        Dim item = grupo.FirstOrDefault(Function(x) x.Etapa = e.Etapa)
+                        If item IsNot Nothing Then
+                            Dim stepValue As String = If(item.Decimales <= 0, "1", "0." & New String("0"c, item.Decimales - 1) & "1")
+                            Dim valorTexto = Math.Round(item.Referencia, item.Decimales).ToString(System.Globalization.CultureInfo.InvariantCulture)
+                            Dim displayStyle = If(item.EditarAjuste = "N", "display:none;", "")
 
-                    Else
-                        sb.Append("<td></td><td></td><td></td>")
-                    End If
+                            sb.Append("<td align='center'>" & If(item.Mostrar = "N", "", valorTexto) & "</td>")
+                            sb.Append("<td align='center' >")
+                            sb.Append("<input class='ajuste form-control' type='text' step='" + stepValue + "' style='width:90%;" + displayStyle + "' ")
+                            sb.Append("data-etapa='" & item.Etapa & "' ")
+                            sb.Append("data-variable='" & item.Variable & "' ")
+                            sb.Append("data-referencia='" & valorTexto & "' ")
+                            sb.Append("value='" & Math.Round(item.Ajuste, item.Decimales).ToString("G") & "' />")
+                            sb.Append("</td>")
 
+                            sb.Append("<td align='center'>")
+                            sb.Append("<input class='comentario form-control' type='text' style='width:95%;" + displayStyle + "' ")
+                            sb.Append("data-etapa='" & item.Etapa & "' ")
+                            sb.Append("data-variable='" & item.Variable & "' ")
+                            sb.Append("value='" & item.Comentario & "' />")
+                            sb.Append("</td>")
+
+                        Else
+                            sb.Append("<td></td><td></td><td></td>")
+                        End If
+
+                    Next
+
+                    sb.Append("</tr>")
                 Next
-
-                sb.Append("</tr>")
             Next
-
 
             sb.Append("</tbody></table>")
             PerfilN.Text = sb.ToString
@@ -767,3 +777,5 @@ td {
         ' Verifies that the control is rendered
     End Sub
 End Class
+
+

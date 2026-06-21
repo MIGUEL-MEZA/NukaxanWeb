@@ -43,18 +43,18 @@
         border-radius: 10px;
         display: flex;
         justify-content: space-between;
-        align-items: flex-start; /* 🔥 Alinea todo arriba */
+        align-items: flex-start; /* Alinea todo arriba */
     }
 
     .header-left {
         display: flex;
-        align-items: flex-start; /* 🔥 clave */
+        display: flex;        align-items: flex-start; /* clave */
         gap: 5px;
     }
 
     .logo-left {
-        width: 85px;             /* 🔥 más grande */
-        margin-right: 8px;      /* 🔥 más espacio */        
+        width: 85px;             /* m�s grande */
+        margin-right: 8px;      /* m�s espacio */        
     }
 
     .header-text h1 {
@@ -127,7 +127,7 @@ td {
 }
 
 .table-rep thead tr th:last-child {
-    border-right: none; /* 🔥 evita el borde cuadrado */
+    border-right: none; /* evita el borde cuadrado */
 }
 
 .table-rep thead tr th:first-child {
@@ -189,14 +189,14 @@ td {
                         <img src="Content/Image/Icono-PerfilNutricional.svg" class="logo-left" />
                         <div class="header-text">
                             <h1>PERFIL NUTRICIONAL</h1>
-                            <div class="subtitulo">ROSS 308 – MIXTO 2022</div>
+                            <div class="subtitulo">ROSS 308 - MIXTO 2022</div>
                             <div class="cliente">CHAPARRAL</div>
                         </div>
                     </div>                    
                     <div class="header-right">
                         <img src="Content/Image/logo-nuptimizer.svg" class="logo-right" />
                        <%-- <div class="fecha">
-                            FECHA EMISIÓN: 18/06/2026
+                            FECHA EMISI�N: 18/06/2026
                         </div>--%>
                     </div>
                 </div>
@@ -225,3 +225,4 @@ td {
         </asp:UpdatePanel>
     </div>
 </asp:Content>
+
