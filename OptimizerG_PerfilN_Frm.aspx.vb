@@ -1,5 +1,6 @@
 Imports System.Web.DynamicData
 Imports Newtonsoft.Json
+Imports System.Configuration
 Imports NukaxanWEB.Libreria
 Imports NukaxanWEB.OptimizerP_PerfilN
 
@@ -37,10 +38,41 @@ Public Class OptimizerG_PerfilN_Frm
         iList.Add(New DatosGrid() With {.Tipo = 1, .Campo = "TBEMAlimento", .Valida = "S", .ValidaCeros = "S"})
         iList.Add(New DatosGrid() With {.Tipo = 1, .Campo = "TBPesoHuevo", .Valida = "S", .ValidaCeros = "N"})
 
+        RegistrarDescargaDirecta()
+
         If Not Page.IsPostBack Then
             DatosLoad()
         End If
     End Sub
+    Private Sub RegistrarDescargaDirecta()
+        RegistrarControlDescarga("LBExcel")
+        RegistrarControlDescarga("LBPdf")
+    End Sub
+
+    Private Sub RegistrarControlDescarga(controlId As String)
+        Dim scriptManager = System.Web.UI.ScriptManager.GetCurrent(Page)
+        If scriptManager Is Nothing Then Exit Sub
+
+        Dim control = BuscarControlRecursivo(Me, controlId)
+        If Not control Is Nothing Then
+            scriptManager.RegisterPostBackControl(control)
+        End If
+    End Sub
+
+    Private Function BuscarControlRecursivo(parent As System.Web.UI.Control, controlId As String) As System.Web.UI.Control
+        If parent Is Nothing Then Return Nothing
+
+        Dim control = parent.FindControl(controlId)
+        If Not control Is Nothing Then Return control
+
+        For Each child As System.Web.UI.Control In parent.Controls
+            control = BuscarControlRecursivo(child, controlId)
+            If Not control Is Nothing Then Return control
+        Next
+
+        Return Nothing
+    End Function
+
     Sub DatosLoad()
         'pnlPopup.Style.Value = "display:none;"
         regPId.Text = "0"
@@ -319,6 +351,20 @@ Public Class OptimizerG_PerfilN_Frm
     Sub Refrescar()
         Response.Redirect(New RedirectPaginas().FindById(Plataforma + "-" + menu + "-1").PaginaURL.Replace("@Id", Codif(regPId.Text)).Replace("@filtro", Codif(filtroview.Text)).Replace("@pageIndex", gvindexpage.Text), True)
     End Sub
+    Sub DescargarExcel()
+        DescargarArchivoReporte("excel", 1, ConfigurationManager.AppSettings("WSOptimizerGallinas"))
+    End Sub
+    Sub DescargarPdf()
+        DescargarArchivoReporte("pdf", 1, ConfigurationManager.AppSettings("WSOptimizerGallinas"))
+    End Sub
+    Private Sub DescargarArchivoReporte(formato As String, versionReporte As Integer, baseApiUrl As String)
+        Try
+            If regPId.Text = "0" Then Throw New Exception("Debes guardar el perfil antes de generar el archivo.")
+            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, versionReporte, "PerfilNutricional")
+        Catch ex As Exception
+            Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
+        End Try
+    End Sub
     Function Valida() As Boolean
         Dim IsResult As Boolean = False
         Dim lst As Controles_CapturaModel
@@ -420,10 +466,11 @@ Public Class OptimizerG_PerfilN_Frm
     Sub GuardarJSON()
         Dim IsResult As Boolean
         Try
-            Dim modeloCaptura As List(Of PNCapturaModel) = New OptimizerG_PerfilN().ConstruirModeloCaptura(Convert.ToInt64(regPId.Text), CodCliente.Text)
-            Dim jsonCaptura = JsonConvert.SerializeObject(modeloCaptura)
+            Dim negocio As New OptimizerG_PerfilN()
+            Dim modeloEditable As OptimizerG_ResponseEditableModel = negocio.ConstruirModeloEditable(Convert.ToInt64(regPId.Text))
+            Dim jsonCaptura = JsonConvert.SerializeObject(modeloEditable)
 
-            IsResult = New OptimizerG_PerfilN().ActualizaEditable(3, Convert.ToInt64(regPId.Text), jsonCaptura, ObjUser.CodUsuario)
+            IsResult = negocio.ActualizaEditable(3, Convert.ToInt64(regPId.Text), jsonCaptura, ObjUser.CodUsuario)
 
         Catch ex As Exception
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
@@ -435,10 +482,11 @@ Public Class OptimizerG_PerfilN_Frm
         Try
             Dim lst As List(Of OptimizerG_PerfilNModel) = New OptimizerG_PerfilN().FindlstAll(0, "")
             lst.ForEach(Sub(p)
-                            Dim modeloCaptura As List(Of PNCapturaModel) = New OptimizerG_PerfilN().ConstruirModeloCaptura(p.CvePerfilN, p.CodCliente)
-                            Dim jsonCaptura = JsonConvert.SerializeObject(modeloCaptura)
+                            Dim negocio As New OptimizerG_PerfilN()
+                            Dim modeloEditable As OptimizerG_ResponseEditableModel = negocio.ConstruirModeloEditable(p.CvePerfilN)
+                            Dim jsonCaptura = JsonConvert.SerializeObject(modeloEditable)
 
-                            IsResult = New OptimizerG_PerfilN().ActualizaEditable(3, p.CvePerfilN, jsonCaptura, ObjUser.CodUsuario)
+                            IsResult = negocio.ActualizaEditable(3, p.CvePerfilN, jsonCaptura, ObjUser.CodUsuario)
 
                         End Sub)
 
@@ -566,7 +614,7 @@ Public Class OptimizerG_PerfilN_Frm
         Dim num_decimales As Integer = 3
 
         Try
-            Dim modeloCaptura As List(Of PNCapturaModel) = JsonConvert.DeserializeObject(Of List(Of PNCapturaModel))(New OptimizerG_PerfilN_Resultado().FindById(CInt(regPId.Text)).Response2)
+            Dim modeloCaptura As List(Of PNCapturaModel) = New OptimizerG_PerfilN().ConstruirModeloCaptura(Convert.ToInt64(regPId.Text), CodCliente.Text)
             Dim jsonCaptura = JsonConvert.SerializeObject(modeloCaptura)
             ClientScript.RegisterStartupScript(Me.GetType(), "initModelo", "var modeloCaptura = " & jsonCaptura & ";", True)
 
@@ -574,7 +622,7 @@ Public Class OptimizerG_PerfilN_Frm
                 Function(g) New With {.Etapa = g.Key, .NombreEtapa = g.First().NombreEtapa}).OrderBy(Function(x) x.Etapa).ToList()
 
 
-            Dim variables = modeloCaptura.GroupBy(Function(x) x.Variable).ToList()
+            Dim categorias = modeloCaptura.OrderBy(Function(x) x.CveCategoria).ThenBy(Function(x) x.Variable).GroupBy(Function(x) x.CveCategoria).ToList()
 
             Dim w As String = (250 + ((100 + 100 + 150) * etapas.Count)).ToString + "px"
             Dim sb As StringBuilder = New StringBuilder()
@@ -626,39 +674,48 @@ td {
             sb.Append("</tr>")
 
             sb.Append("</thead><tbody>")
-            For Each grupo In variables
-                sb.Append("<tr>")
-                sb.Append("<td >" & grupo.First().Descripcion & "</td>")
-                For Each e In etapas
-                    Dim item = grupo.FirstOrDefault(Function(x) x.Etapa = e.Etapa)
-                    If item IsNot Nothing Then
-                        Dim stepValue As String = If(item.Decimales <= 0, "1", "0." & New String("0"c, item.Decimales - 1) & "1")
-                        Dim valorTexto = Math.Round(item.Referencia, item.Decimales).ToString(System.Globalization.CultureInfo.InvariantCulture)
-                        Dim displayStyle = If(item.Mostrar = "N" Or item.EditarAjuste = "N", "display:none;", "")
+            For Each categoria In categorias
+                Dim grupoVariables = categoria.GroupBy(Function(x) x.Variable).ToList()
+                Dim nombreCategoria = grupoVariables.First().First().NomCategoria
 
-                        sb.Append("<td align='center'>" & If(item.Mostrar = "N", "", valorTexto) & "</td>")
-                        sb.Append("<td align='center' >")
-                        sb.Append("<input class='ajuste form-control' type='text' step='" + stepValue + "' style='width:90%;" + displayStyle + "' ")
-                        sb.Append("data-etapa='" & item.Etapa & "' ")
-                        sb.Append("data-variable='" & item.Variable & "' ")
-                        sb.Append("data-referencia='" & valorTexto & "' ")
-                        sb.Append("value='" & Math.Round(item.Ajuste, item.Decimales).ToString("G") & "' />")
-                        sb.Append("</td>")
+                If Not String.IsNullOrWhiteSpace(nombreCategoria) Then
+                    sb.Append("<tr style='background-color:#e1effd!important;font-weight:bold;'>")
+                    sb.Append("<td colspan='" & ((etapas.Count * 3) + 1).ToString() & "'>" & nombreCategoria & "</td>")
+                    sb.Append("</tr>")
+                End If
 
-                        sb.Append("<td align='center'>")
-                        sb.Append("<input class='comentario form-control' type='text' style='width:95%;" + displayStyle + "' ")
-                        sb.Append("data-etapa='" & item.Etapa & "' ")
-                        sb.Append("data-variable='" & item.Variable & "' ")
-                        sb.Append("value='" & item.Comentario & "' />")
-                        sb.Append("</td>")
+                For Each grupo In grupoVariables
+                    sb.Append("<tr>")
+                    sb.Append("<td >" & grupo.First().Descripcion & "</td>")
+                    For Each e In etapas
+                        Dim item = grupo.FirstOrDefault(Function(x) x.Etapa = e.Etapa)
+                        If item IsNot Nothing Then
+                            Dim stepValue As String = If(item.Decimales <= 0, "1", "0." & New String("0"c, item.Decimales - 1) & "1")
+                            Dim valorTexto = Math.Round(item.Referencia, item.Decimales).ToString(System.Globalization.CultureInfo.InvariantCulture)
+                            Dim displayStyle = If(item.Mostrar = "N" Or item.EditarAjuste = "N", "display:none;", "")
 
-                    Else
-                        sb.Append("<td></td><td></td><td></td>")
-                    End If
+                            sb.Append("<td align='center'>" & If(item.Mostrar = "N", "", valorTexto) & "</td>")
+                            sb.Append("<td align='center' >")
+                            sb.Append("<input class='ajuste form-control' type='text' step='" + stepValue + "' style='width:90%;" + displayStyle + "' ")
+                            sb.Append("data-etapa='" & item.Etapa & "' ")
+                            sb.Append("data-variable='" & item.Variable & "' ")
+                            sb.Append("data-referencia='" & valorTexto & "' ")
+                            sb.Append("value='" & Math.Round(item.Ajuste, item.Decimales).ToString("G") & "' />")
+                            sb.Append("</td>")
 
+                            sb.Append("<td align='center'>")
+                            sb.Append("<input class='comentario form-control' type='text' style='width:95%;" + displayStyle + "' ")
+                            sb.Append("data-etapa='" & item.Etapa & "' ")
+                            sb.Append("data-variable='" & item.Variable & "' ")
+                            sb.Append("value='" & item.Comentario & "' />")
+                            sb.Append("</td>")
+                        Else
+                            sb.Append("<td></td><td></td><td></td>")
+                        End If
+                    Next
+
+                    sb.Append("</tr>")
                 Next
-
-                sb.Append("</tr>")
             Next
             sb.Append("</tbody></table>")
             PerfilN.Text = sb.ToString
@@ -805,3 +862,4 @@ td {
         ' Verifies that the control is rendered
     End Sub
 End Class
+

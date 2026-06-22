@@ -194,6 +194,9 @@ Public Class OptimizerG_PerfilN
             dt = execQuery(sb.ToString)
             If Not dt Is Nothing And dt.Rows.Count > 0 Then
                 If dt(0)("Estatus").ToString = "0" Then
+                    If Not ActualizarBitacoraResultado(CvePerfilN, UsuAct) Then
+                        Throw New Exception("No fue posible actualizar la bitacora del resultado.")
+                    End If
                     IsResult = True
                 Else
                     Throw New Exception(dt(0)("Mensaje").ToString)
@@ -208,63 +211,212 @@ Public Class OptimizerG_PerfilN
         Return IsResult
     End Function
 
+    Private Function ActualizarBitacoraResultado(CvePerfilN As Int64, UsuAct As String) As Boolean
+        Try
+            Dim usuEscapado As String = UsuAct.Replace("'", "''")
+            Dim sql As String = "UPDATE OptimizerG_PerfilN_Resultado SET FecAct = GETDATE(), UsuAct = '" + usuEscapado + "' WHERE CvePerfilN = " + CvePerfilN.ToString
+            execQuery(sql)
+            Return True
+        Catch ex As Exception
+            strError = CleanSpecialCharacter(ex.Message)
+            Return False
+        End Try
+    End Function
+
+    Public Function ConstruirModeloEditable(Id As Int64) As OptimizerG_ResponseEditableModel
+        Dim objResultado As OptimizerG_PerfilN_ResultadoModel = New OptimizerG_PerfilN_Resultado().FindById(Id)
+        Return ConstruirModeloEditableDesdeResponseJson(objResultado.Response)
+    End Function
+
+    Public Function ObtenerModeloEditable(Id As Int64) As OptimizerG_ResponseEditableModel
+        Dim objResultado As OptimizerG_PerfilN_ResultadoModel = New OptimizerG_PerfilN_Resultado().FindById(Id)
+
+        If String.IsNullOrWhiteSpace(objResultado.Response2) Then
+            Return ConstruirModeloEditableDesdeResponseJson(objResultado.Response)
+        End If
+
+        Try
+            Dim modeloEditable As OptimizerG_ResponseEditableModel = JsonConvert.DeserializeObject(Of OptimizerG_ResponseEditableModel)(objResultado.Response2)
+            If modeloEditable IsNot Nothing AndAlso modeloEditable.Variables IsNot Nothing AndAlso modeloEditable.Variables.Count > 0 Then
+                Return NormalizarModeloEditable(modeloEditable)
+            End If
+        Catch
+        End Try
+
+        Try
+            Dim legacyCaptura As List(Of PNCapturaModel) = JsonConvert.DeserializeObject(Of List(Of PNCapturaModel))(objResultado.Response2)
+            If legacyCaptura IsNot Nothing AndAlso legacyCaptura.Count > 0 Then
+                Dim modeloBase = ConstruirModeloEditableDesdeResponseJson(objResultado.Response)
+                Return AplicarAjustes(modeloBase, legacyCaptura)
+            End If
+        Catch
+        End Try
+
+        Return ConstruirModeloEditableDesdeResponseJson(objResultado.Response)
+    End Function
+
+    Private Function ConstruirModeloEditableDesdeResponseJson(responseJson As String) As OptimizerG_ResponseEditableModel
+        If String.IsNullOrWhiteSpace(responseJson) Then
+            Return New OptimizerG_ResponseEditableModel()
+        End If
+
+        Dim modelo As OptimizerG_ResponseEditableModel = JsonConvert.DeserializeObject(Of OptimizerG_ResponseEditableModel)(responseJson)
+        If modelo Is Nothing Then
+            modelo = New OptimizerG_ResponseEditableModel()
+        End If
+
+        modelo = NormalizarModeloEditable(modelo)
+
+        For Each variable In modelo.Variables
+            For Each etapa In variable.Etapas
+                etapa.Valor = NormalizarNumero(etapa.Valor)
+                etapa.ValorReferencia = etapa.Valor
+                etapa.Motivo = ""
+            Next
+        Next
+
+        Return modelo
+    End Function
+
+    Private Function NormalizarModeloEditable(modelo As OptimizerG_ResponseEditableModel) As OptimizerG_ResponseEditableModel
+        If modelo Is Nothing Then
+            modelo = New OptimizerG_ResponseEditableModel()
+        End If
+
+        If modelo.Variables Is Nothing Then
+            modelo.Variables = New List(Of OptimizerG_ResponseDataEditableModel)()
+        End If
+
+        For Each variable In modelo.Variables
+            variable.Variable = If(variable.Variable, "")
+            variable.MostrarCliente = If(variable.MostrarCliente, "")
+            If variable.Etapas Is Nothing Then
+                variable.Etapas = New List(Of OptimizerG_EtapaEditableModel)()
+            End If
+
+            For Each etapa In variable.Etapas
+                etapa.Valor = NormalizarNumero(etapa.Valor)
+                etapa.ValorReferencia = NormalizarNumero(etapa.ValorReferencia)
+                etapa.Motivo = If(etapa.Motivo, "")
+            Next
+        Next
+
+        Return modelo
+    End Function
+
+    Private Function NormalizarNumero(valor As Double) As Double
+        If Double.IsNaN(valor) OrElse Double.IsInfinity(valor) Then
+            Return 0
+        End If
+
+        Return valor
+    End Function
+
+    Public Function AplicarAjustes(modeloBase As OptimizerG_ResponseEditableModel, ajustes As List(Of PNCapturaModel)) As OptimizerG_ResponseEditableModel
+        modeloBase = NormalizarModeloEditable(modeloBase)
+
+        If ajustes Is Nothing Then
+            Return modeloBase
+        End If
+
+        For Each ajuste In ajustes
+            Dim variable = modeloBase.Variables.FirstOrDefault(Function(v) v.NoVariable = ajuste.Variable)
+            If variable Is Nothing Then
+                Continue For
+            End If
+
+            Dim etapa = variable.Etapas.FirstOrDefault(Function(e) e.Clave = ajuste.Etapa)
+            If etapa Is Nothing Then
+                etapa = New OptimizerG_EtapaEditableModel With {
+                    .Clave = ajuste.Etapa,
+                    .Valor = NormalizarNumero(ajuste.Ajuste),
+                    .ValorReferencia = NormalizarNumero(ajuste.Referencia),
+                    .Motivo = If(ajuste.Comentario, "")
+                }
+                variable.Etapas.Add(etapa)
+            Else
+                etapa.Valor = NormalizarNumero(ajuste.Ajuste)
+                etapa.ValorReferencia = NormalizarNumero(ajuste.Referencia)
+                etapa.Motivo = If(ajuste.Comentario, "")
+            End If
+        Next
+
+        Return modeloBase
+    End Function
+
     Public Function ConstruirModeloCaptura(Id As Int64, CodCliente As String) As List(Of PNCapturaModel)
-        Dim ObjR As ResponseModel = JsonConvert.DeserializeObject(Of ResponseModel)(New OptimizerG_PerfilN_Resultado().FindById(Id).Response)
+        Dim modeloEditable As OptimizerG_ResponseEditableModel = ObtenerModeloEditable(Id)
+        Return ConstruirModeloCaptura(modeloEditable, Id, CodCliente)
+    End Function
+
+    Public Function ConstruirModeloCaptura(modeloEditable As OptimizerG_ResponseEditableModel, Id As Int64, CodCliente As String) As List(Of PNCapturaModel)
+        modeloEditable = NormalizarModeloEditable(modeloEditable)
+
         Dim lstE As List(Of OptimizerG_PerfilN_EtapasModel) = New OptimizerG_PerfilN_Etapas().FindlstAll(CodCliente, Id)
         Dim lstVariables As List(Of OptimizerG_CatVariablesModel) = New OptimizerG_CatVariables().FindlstAll(0)
 
-
         Dim resultado As New List(Of PNCapturaModel)
-        For Each variable In ObjR.Variables.Where(Function(v) v.MostrarCliente = "S").OrderBy(Function(v) v.Posicion)
+        For Each variable In modeloEditable.Variables.Where(Function(v) v.MostrarCliente = "S").OrderBy(Function(v) v.Posicion)
             Dim infoVar = lstVariables.FirstOrDefault(Function(v) v.CveVariable = variable.NoVariable)
             Dim decimales As Integer = If(infoVar IsNot Nothing, infoVar.Decimales, 2)
-            Dim EditarAjuste As String = If(infoVar IsNot Nothing, infoVar.EditarAjuste, "N")
-            Dim CveCategoria As Integer = If(infoVar IsNot Nothing, infoVar.CveCategoria, 0)
-            Dim NomCategoria As String = If(infoVar IsNot Nothing, infoVar.NomCategoria, "")
-            Dim ReporteInterno As String = If(infoVar IsNot Nothing, infoVar.ReporteInterno, "N")
-            Dim ReporteExterno As String = If(infoVar IsNot Nothing, infoVar.ReporteExterno, "N")
-            Dim EnvioFlujo As String = If(infoVar IsNot Nothing, infoVar.EnvioFlujo, "N")
+            Dim editarAjuste As String = If(infoVar IsNot Nothing, infoVar.EditarAjuste, "N")
+            Dim cveCategoria As Integer = If(infoVar IsNot Nothing, infoVar.CveCategoria, 0)
+            Dim nomCategoria As String = If(infoVar IsNot Nothing, infoVar.NomCategoria, "")
+            Dim reporteInterno As String = If(infoVar IsNot Nothing, infoVar.ReporteInterno, "N")
+            Dim reporteExterno As String = If(infoVar IsNot Nothing, infoVar.ReporteExterno, "N")
+            Dim envioFlujo As String = If(infoVar IsNot Nothing, infoVar.EnvioFlujo, "N")
+            Dim mostrarValores As String = If(infoVar IsNot Nothing, infoVar.MostrarValores, "")
 
-            Dim mostrar() As String = If(infoVar IsNot Nothing, infoVar.MostrarValores.Split(","), "")
             For Each etapa In lstE.Where(Function(e) e.Aplica = "S")
                 Dim etapaData = variable.Etapas.FirstOrDefault(Function(x) x.Clave = etapa.CveEtapa)
-                Dim valor As Double = 0
-                If etapaData IsNot Nothing Then
-                    Dim raw As String = etapaData.Valor.ToString().Trim()
-                    If raw = "" Then
-                        valor = 0
-                    ElseIf raw.Equals("NaN", StringComparison.OrdinalIgnoreCase) _
-                        OrElse raw.Equals("Infinity", StringComparison.OrdinalIgnoreCase) _
-                        OrElse raw.Equals("-Infinity", StringComparison.OrdinalIgnoreCase) Then
-                        valor = 0 ' o Nothing si quieres interpretar como vacío
+                Dim valorReferencia As Double = 0
+                Dim valorAjuste As Double = 0
+                Dim motivo As String = ""
 
-                    ElseIf Double.TryParse(raw, Globalization.NumberStyles.Any, Globalization.CultureInfo.InvariantCulture, valor) Then
-                    Else
-                        valor = 0
-                    End If
+                If etapaData IsNot Nothing Then
+                    valorReferencia = NormalizarNumero(etapaData.ValorReferencia)
+                    valorAjuste = NormalizarNumero(etapaData.Valor)
+                    motivo = If(etapaData.Motivo, "")
                 End If
 
                 resultado.Add(New PNCapturaModel With {
-                .Etapa = etapa.CveEtapa,
-                .NombreEtapa = etapa.NomEtapa,
-                .Variable = variable.NoVariable,
-                .Descripcion = variable.Variable,
-                .Decimales = decimales,
-                .Referencia = valor,
-                .Ajuste = valor,
-                .Comentario = "",
-                .Mostrar = mostrar(etapa.CveEtapa - 1),
-                .CveCategoria = CveCategoria,
-                .EditarAjuste = EditarAjuste,
-                .ReporteInterno = ReporteInterno,
-                .ReporteExterno = ReporteExterno,
-                .EnvioFlujo = EnvioFlujo,
-                .NomCategoria = NomCategoria
-            })
-
+                    .Etapa = etapa.CveEtapa,
+                    .NombreEtapa = etapa.NomEtapa,
+                    .Variable = variable.NoVariable,
+                    .Descripcion = variable.Variable,
+                    .Decimales = decimales,
+                    .Referencia = valorReferencia,
+                    .Ajuste = valorAjuste,
+                    .Comentario = motivo,
+                    .Mostrar = ObtenerBanderaMostrar(mostrarValores, etapa.CveEtapa, variable.MostrarCliente),
+                    .CveCategoria = cveCategoria,
+                    .EditarAjuste = editarAjuste,
+                    .ReporteInterno = reporteInterno,
+                    .ReporteExterno = reporteExterno,
+                    .EnvioFlujo = envioFlujo,
+                    .MostrarValores = mostrarValores,
+                    .NomCategoria = nomCategoria
+                })
             Next
         Next
 
         Return resultado
+    End Function
+
+    Private Function ObtenerBanderaMostrar(mostrarValores As String, cveEtapa As Integer, mostrarCliente As String) As String
+        If String.IsNullOrWhiteSpace(mostrarValores) Then
+            Return If(String.IsNullOrWhiteSpace(mostrarCliente), "S", mostrarCliente)
+        End If
+
+        Dim valores() As String = mostrarValores.Split(","c)
+        Dim indice As Integer = cveEtapa - 1
+        If indice >= 0 AndAlso indice < valores.Length Then
+            Dim valor As String = valores(indice).Trim()
+            If valor <> "" Then
+                Return valor
+            End If
+        End If
+
+        Return If(String.IsNullOrWhiteSpace(mostrarCliente), "S", mostrarCliente)
     End Function
 End Class

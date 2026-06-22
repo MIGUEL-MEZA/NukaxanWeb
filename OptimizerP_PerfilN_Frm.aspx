@@ -298,7 +298,12 @@
                             <i runat="server" id="LB_IMG11" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL11">Calcular</asp:Label>
                         </asp:LinkButton>
-                        <asp:LinkButton ID="LB2" runat="server" OnClick="Regresar" CssClass="lnkbtn-action">
+                        <asp:LinkButton ID="LBExcel" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action">
+                            <asp:Label runat="server" ID="LB_LBLExcel">Excel</asp:Label>
+                        </asp:LinkButton>
+                        <asp:LinkButton ID="LBPdf" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action">
+                            <asp:Label runat="server" ID="LB_LBLPdf">PDF</asp:Label>
+                        </asp:LinkButton>                        <asp:LinkButton ID="LB2" runat="server" OnClick="Regresar" CssClass="lnkbtn-action">
                             <i runat="server" id="LB_IMG2" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL2">Salir</asp:Label>
                         </asp:LinkButton>

@@ -26,8 +26,11 @@ Public Class OptimizerPerfilServices
                 Dim jsonNuevo = JsonConvert.SerializeObject(modeloEditable)
                 result = negocio.ActualizaEditable(3, id, jsonNuevo, usuario)
             ElseIf modulo = "G" Then
-                Dim jsonNuevo = JsonConvert.SerializeObject(modelo)
-                result = New OptimizerG_PerfilN().ActualizaEditable(3, id, jsonNuevo, usuario)
+                Dim negocio As New OptimizerG_PerfilN()
+                Dim modeloEditable As OptimizerG_ResponseEditableModel = negocio.ObtenerModeloEditable(id)
+                modeloEditable = negocio.AplicarAjustes(modeloEditable, modelo)
+                Dim jsonNuevo = JsonConvert.SerializeObject(modeloEditable)
+                result = negocio.ActualizaEditable(3, id, jsonNuevo, usuario)
             Else
                 Throw New Exception("Módulo no soportado.")
             End If

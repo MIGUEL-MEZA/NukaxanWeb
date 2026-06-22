@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="VB" Async="true" AutoEventWireup="true" MasterPageFile="~/Master_OptimizerP.Master" CodeBehind="OptimizerP_PerfilN_ReporteFrm.aspx.vb" Inherits="NukaxanWEB.OptimizerP_PerfilN_ReporteFrm" %>
+<%@ Page Title="" Language="VB" Async="true" AutoEventWireup="true" MasterPageFile="~/Master_OptimizerG.Master" CodeBehind="OptimizerG_PerfilN_ReporteFrm.aspx.vb" Inherits="NukaxanWEB.OptimizerG_PerfilN_ReporteFrm" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -53,8 +53,8 @@
     }
 
     .logo-left {
-        width: 85px;             /* m·s grande */
-        margin-right: 8px;      /* m·s espacio */        
+        width: 85px;             /* m√°s grande */
+        margin-right: 8px;      /* m√°s espacio */        
     }
 
     .header-text h1 {
@@ -201,7 +201,7 @@ td {
                     <div class="header-right">
                         <img src="Content/Image/logo-nuptimizer.svg" class="logo-right" />
                        <%-- <div class="fecha">
-                            FECHA EMISI”N: 18/06/2026
+                            FECHA EMISI√ìN: 18/06/2026
                         </div>--%>
                     </div>
                 </div>

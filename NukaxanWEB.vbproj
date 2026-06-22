@@ -244,6 +244,8 @@
     <Content Include="Nireo_CatCurvasCalibracion_View.aspx" />
     <Content Include="OptimizerG_PerfilN_View.aspx" />
     <Content Include="OptimizerG_PerfilN_Frm.aspx" />
+    <Content Include="OptimizerG_PerfilN_ReporteFrm.aspx" />
+    <Content Include="OptimizerG_PerfilN_ReporteView.aspx" />
     <Content Include="OptimizerG_Home.aspx" />
     <Content Include="OptimizerG_ProgramaA_View.aspx" />
     <Content Include="OptimizerG_ProgramaA_Frm.aspx" />
@@ -1293,6 +1295,9 @@
     <Compile Include="Models\OptimizerG_PerfilN_EtapasModel.vb" />
     <Compile Include="Models\OptimizerG_PerfilN_ResultadoModel.vb" />
     <Compile Include="Models\OptimizerG_CatVariablesModel.vb" />
+    <Compile Include="Models\OptimizerG_ResponseEditableModel.vb" />
+    <Compile Include="Models\OptimizerG_ResponseDataEditableModel.vb" />
+    <Compile Include="Models\OptimizerG_EtapaEditableModel.vb" />
     <Compile Include="Models\OptimizerG_ProgramaA_EtapasModel.vb" />
     <Compile Include="Models\OptimizerG_ProgramaAModel.vb" />
     <Compile Include="Models\ProdAves_CatGuias_EstandaresModel.vb" />
@@ -1363,6 +1368,7 @@
     <Compile Include="Nireo_CatOrigenes.vb" />
     <Compile Include="Nukaxan_PerfilCliente.vb" />
     <Compile Include="OptimizerG_PerfilN.vb" />
+    <Compile Include="OptimizerReporteDescarga.vb" />
     <Compile Include="OptimizerG_PerfilN_View.aspx.designer.vb">
       <DependentUpon>OptimizerG_PerfilN_View.aspx</DependentUpon>
     </Compile>
@@ -1375,6 +1381,20 @@
     </Compile>
     <Compile Include="OptimizerG_PerfilN_Frm.aspx.vb">
       <DependentUpon>OptimizerG_PerfilN_Frm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OptimizerG_PerfilN_ReporteFrm.aspx.designer.vb">
+      <DependentUpon>OptimizerG_PerfilN_ReporteFrm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OptimizerG_PerfilN_ReporteFrm.aspx.vb">
+      <DependentUpon>OptimizerG_PerfilN_ReporteFrm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OptimizerG_PerfilN_ReporteView.aspx.designer.vb">
+      <DependentUpon>OptimizerG_PerfilN_ReporteView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OptimizerG_PerfilN_ReporteView.aspx.vb">
+      <DependentUpon>OptimizerG_PerfilN_ReporteView.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="OptimizerG_Home.aspx.designer.vb">

@@ -1,5 +1,6 @@
-﻿Imports System.Web.DynamicData
+Imports System.Web.DynamicData
 Imports Newtonsoft.Json
+Imports System.Configuration
 Imports NukaxanWEB.Libreria
 Imports NukaxanWEB.OptimizerP_PerfilN
 
@@ -36,10 +37,41 @@ Public Class OptimizerP_PerfilN_Frm
         iList.Add(New DatosGrid() With {.Tipo = 1, .Campo = "TBEdadFin", .Valida = "S", .ValidaCeros = "N"})
         iList.Add(New DatosGrid() With {.Tipo = 1, .Campo = "TBEMAlimento", .Valida = "S", .ValidaCeros = "S"})
 
+        RegistrarDescargaDirecta()
+
         If Not Page.IsPostBack Then
             DatosLoad()
         End If
     End Sub
+    Private Sub RegistrarDescargaDirecta()
+        RegistrarControlDescarga("LBExcel")
+        RegistrarControlDescarga("LBPdf")
+    End Sub
+
+    Private Sub RegistrarControlDescarga(controlId As String)
+        Dim scriptManager = System.Web.UI.ScriptManager.GetCurrent(Page)
+        If scriptManager Is Nothing Then Exit Sub
+
+        Dim control = BuscarControlRecursivo(Me, controlId)
+        If Not control Is Nothing Then
+            scriptManager.RegisterPostBackControl(control)
+        End If
+    End Sub
+
+    Private Function BuscarControlRecursivo(parent As System.Web.UI.Control, controlId As String) As System.Web.UI.Control
+        If parent Is Nothing Then Return Nothing
+
+        Dim control = parent.FindControl(controlId)
+        If Not control Is Nothing Then Return control
+
+        For Each child As System.Web.UI.Control In parent.Controls
+            control = BuscarControlRecursivo(child, controlId)
+            If Not control Is Nothing Then Return control
+        Next
+
+        Return Nothing
+    End Function
+
     Sub DatosLoad()
         'pnlPopup.Style.Value = "display:none;"
         regPId.Text = "0"
@@ -241,7 +273,7 @@ Public Class OptimizerP_PerfilN_Frm
                 CodCliente.Text = ""
                 CodALLIX.Text = ""
                 TBID.Text = "POR ASIGNAR"
-                TBNomEstatusD.Text = "EN EDICIÓN"
+                TBNomEstatusD.Text = "EN EDICI�N"
                 TBFecAltaD.Text = Now.ToString("dd/MM/yyyy") + " | " + ObjUser.NomUsuario
                 TBFecActD.Text = Now.ToString("dd/MM/yyyy") + " | " + ObjUser.NomUsuario
                 LlenaRPT_Etapas()
@@ -310,6 +342,20 @@ Public Class OptimizerP_PerfilN_Frm
     End Sub
     Sub Refrescar()
         Response.Redirect(New RedirectPaginas().FindById(Plataforma + "-" + menu + "-1").PaginaURL.Replace("@Id", Codif(regPId.Text)).Replace("@filtro", Codif(filtroview.Text)).Replace("@pageIndex", gvindexpage.Text), True)
+    End Sub
+    Sub DescargarExcel()
+        DescargarArchivoReporte("excel", 1, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+    End Sub
+    Sub DescargarPdf()
+        DescargarArchivoReporte("pdf", 1, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+    End Sub
+    Private Sub DescargarArchivoReporte(formato As String, versionReporte As Integer, baseApiUrl As String)
+        Try
+            If regPId.Text = "0" Then Throw New Exception("Debes guardar el perfil antes de generar el archivo.")
+            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, versionReporte, "PerfilNutricional")
+        Catch ex As Exception
+            Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
+        End Try
     End Sub
     Function Valida() As Boolean
         Dim IsResult As Boolean = False
@@ -779,6 +825,8 @@ td {
         ' Verifies that the control is rendered
     End Sub
 End Class
+
+
 
 
 

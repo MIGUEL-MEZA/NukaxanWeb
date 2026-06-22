@@ -223,6 +223,18 @@ Public Class OptimizerP_PerfilN
         Return IsResult
     End Function
 
+    Private Function ActualizarBitacoraResultado(CvePerfilN As Int64, UsuAct As String) As Boolean
+        Try
+            Dim usuEscapado As String = UsuAct.Replace("'", "''")
+            Dim sql As String = "UPDATE OptimizerP_PerfilN_Resultado SET FecAct = GETDATE(), UsuAct = '" + usuEscapado + "' WHERE CvePerfilN = " + CvePerfilN.ToString
+            execQuery(sql)
+            Return True
+        Catch ex As Exception
+            strError = CleanSpecialCharacter(ex.Message)
+            Return False
+        End Try
+    End Function
+
     Public Function ConstruirModeloEditable(Id As Int64) As OptimizerP_ResponseEditableModel
         Dim objResultado As OptimizerP_PerfilN_ResultadoModel = New OptimizerP_PerfilN_Resultado().FindById(Id)
         Return ConstruirModeloEditableDesdeResponseJson(objResultado.Response)

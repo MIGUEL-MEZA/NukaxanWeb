@@ -4,10 +4,10 @@ Imports System.Configuration
 Imports NukaxanWEB.Libreria
 Imports NukaxanWEB.OptimizerP_PerfilN
 
-Public Class OptimizerP_PerfilN_ReporteFrm
+Public Class OptimizerG_PerfilN_ReporteFrm
     Inherits Page
     Public ObjUser As UsuarioModel
-    Private Plataforma As String = "42"
+    Private Plataforma As String = "43"
     Private menu As String = "4"
     'Variables Generales
     Public defaultoption As String = ""
@@ -203,10 +203,10 @@ Public Class OptimizerP_PerfilN_ReporteFrm
     End Sub
 
     Sub DescargarExcel()
-        DescargarArchivoReporte("excel", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+        DescargarArchivoReporte("excel", 2, ConfigurationManager.AppSettings("WSOptimizerGallinas"))
     End Sub
     Sub DescargarPdf()
-        DescargarArchivoReporte("pdf", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+        DescargarArchivoReporte("pdf", 2, ConfigurationManager.AppSettings("WSOptimizerGallinas"))
     End Sub
     Private Sub DescargarArchivoReporte(formato As String, versionReporte As Integer, baseApiUrl As String)
         Try
@@ -224,8 +224,8 @@ Public Class OptimizerP_PerfilN_ReporteFrm
             'Dim lstE As List(Of OptimizerP_PerfilN_EtapasModel) = New OptimizerP_PerfilN_Etapas().FindlstAll(CodCliente.Text, Convert.ToInt64(regPId.Text))
             'Dim lstVariables As List(Of OptimizerP_CatVariablesModel) = New OptimizerP_CatVariables().FindlstAll(0)
 
-            Dim objPerfil As OptimizerP_PerfilNModel = New OptimizerP_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
-            Dim modeloCaptura As List(Of PNCapturaModel) = New OptimizerP_PerfilN().ConstruirModeloCaptura(Convert.ToInt64(regPId.Text), objPerfil.CodCliente)
+            Dim objPerfil As OptimizerG_PerfilNModel = New OptimizerG_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
+            Dim modeloCaptura As List(Of PNCapturaModel) = New OptimizerG_PerfilN().ConstruirModeloCaptura(Convert.ToInt64(regPId.Text), objPerfil.CodCliente)
             Dim jsonCaptura = JsonConvert.SerializeObject(modeloCaptura)
             ClientScript.RegisterStartupScript(Me.GetType(), "initModelo", "var modeloCaptura = " & jsonCaptura & ";", True)
 

@@ -122,6 +122,42 @@ Partial Public Class OptimizerP_PerfilN_ReporteFrm
     Protected WithEvents PageTitulo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control LBExcel.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LBExcel As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control LB_LBLExcel.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB_LBLExcel As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control LBPdf.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LBPdf As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control LB_LBLPdf.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB_LBLPdf As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control LB2.
     '''</summary>
     '''<remarks>
