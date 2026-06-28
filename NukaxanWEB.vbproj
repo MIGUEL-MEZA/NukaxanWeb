@@ -247,10 +247,14 @@
     <Content Include="OptimizerG_PerfilN_ReporteFrm.aspx" />
     <Content Include="OptimizerG_PerfilN_ReporteView.aspx" />
     <Content Include="OptimizerG_Home.aspx" />
+    <Content Include="OptimizerG_ProgramaA_ReporteFrm.aspx" />
     <Content Include="OptimizerG_ProgramaA_View.aspx" />
     <Content Include="OptimizerG_ProgramaA_Frm.aspx" />
     <Content Include="OptimizerPerfilServices.asmx" />
     <Content Include="OptimizerP_PerfilN_ReporteFrm.aspx" />
+    <Content Include="OptimizerP_ProgramaA_ReporteFrm.aspx" />
+    <Content Include="OptimizerG_ProgramaA_ReporteView.aspx" />
+    <Content Include="OptimizerP_ProgramaA_ReporteView.aspx" />
     <Content Include="OptimizerP_PerfilN_ReporteView.aspx" />
     <Content Include="ProdAves_CatGuias_View.aspx" />
     <Content Include="Nulink_Admin_CatLineasGeneticas_View.aspx" />
@@ -391,6 +395,8 @@
     <Content Include="Nireo_Home.aspx" />
     <Content Include="OptimizerC_ProgramaA_Frm.aspx" />
     <Content Include="OptimizerC_PerfilN_Frm.aspx" />
+    <Content Include="OptimizerC_PerfilN_ReporteFrm.aspx" />
+    <Content Include="OptimizerC_PerfilN_ReporteView.aspx" />
     <Content Include="Nukaxan_Home.aspx" />
     <Content Include="Home.aspx" />
     <Content Include="Default.aspx" />
@@ -1407,6 +1413,13 @@
     <Compile Include="OptimizerG_PerfilN_Etapas.vb" />
     <Compile Include="OptimizerG_PerfilN_Resultado.vb" />
     <Compile Include="OptimizerG_CatVariables.vb" />
+    <Compile Include="OptimizerG_ProgramaA_ReporteFrm.aspx.designer.vb">
+      <DependentUpon>OptimizerG_ProgramaA_ReporteFrm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OptimizerG_ProgramaA_ReporteFrm.aspx.vb">
+      <DependentUpon>OptimizerG_ProgramaA_ReporteFrm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="OptimizerG_ProgramaA_View.aspx.designer.vb">
       <DependentUpon>OptimizerG_ProgramaA_View.aspx</DependentUpon>
     </Compile>
@@ -1432,6 +1445,27 @@
     </Compile>
     <Compile Include="OptimizerP_PerfilN_ReporteFrm.aspx.vb">
       <DependentUpon>OptimizerP_PerfilN_ReporteFrm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OptimizerP_ProgramaA_ReporteFrm.aspx.designer.vb">
+      <DependentUpon>OptimizerP_ProgramaA_ReporteFrm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OptimizerP_ProgramaA_ReporteFrm.aspx.vb">
+      <DependentUpon>OptimizerP_ProgramaA_ReporteFrm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OptimizerG_ProgramaA_ReporteView.aspx.designer.vb">
+      <DependentUpon>OptimizerG_ProgramaA_ReporteView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OptimizerG_ProgramaA_ReporteView.aspx.vb">
+      <DependentUpon>OptimizerG_ProgramaA_ReporteView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OptimizerP_ProgramaA_ReporteView.aspx.designer.vb">
+      <DependentUpon>OptimizerP_ProgramaA_ReporteView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OptimizerP_ProgramaA_ReporteView.aspx.vb">
+      <DependentUpon>OptimizerP_ProgramaA_ReporteView.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="OptimizerP_PerfilN_ReporteView.aspx.designer.vb">
@@ -1855,6 +1889,7 @@
     <Compile Include="OptimizerC_PerfilN.vb" />
     <Compile Include="OptimizerC_PerfilN_Etapas.vb" />
     <Compile Include="OptimizerC_PerfilN_Resultado.vb" />
+    <Compile Include="OptimizerC_CatVariables.vb" />
     <Compile Include="OptimizerC_ProgramaA.vb" />
     <Compile Include="OptimizerC_ProgramaA_Etapas.vb" />
     <Compile Include="OptimizerP_CatVariables.vb" />
@@ -2085,6 +2120,10 @@
     <Compile Include="Models\OptimizerC_ProgramaA_EtapasModel.vb" />
     <Compile Include="Models\OptimizerC_ProgramaAModel.vb" />
     <Compile Include="Models\OptimizerC_PerfilN_ResultadoModel.vb" />
+    <Compile Include="Models\OptimizerC_CatVariablesModel.vb" />
+    <Compile Include="Models\OptimizerC_EtapaEditableModel.vb" />
+    <Compile Include="Models\OptimizerC_ResponseDataEditableModel.vb" />
+    <Compile Include="Models\OptimizerC_ResponseEditableModel.vb" />
     <Compile Include="Models\PerfilN_VariablesModel.vb" />
     <Compile Include="Models\WSOptimizerC_ResultadoModel.vb" />
     <Compile Include="Models\WSOptimizerC_TablaModel.vb" />
@@ -2127,6 +2166,20 @@
     </Compile>
     <Compile Include="OptimizerC_ProgramaA_Frm.aspx.vb">
       <DependentUpon>OptimizerC_ProgramaA_Frm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OptimizerC_PerfilN_ReporteFrm.aspx.designer.vb">
+      <DependentUpon>OptimizerC_PerfilN_ReporteFrm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OptimizerC_PerfilN_ReporteFrm.aspx.vb">
+      <DependentUpon>OptimizerC_PerfilN_ReporteFrm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OptimizerC_PerfilN_ReporteView.aspx.designer.vb">
+      <DependentUpon>OptimizerC_PerfilN_ReporteView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OptimizerC_PerfilN_ReporteView.aspx.vb">
+      <DependentUpon>OptimizerC_PerfilN_ReporteView.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="OptimizerC_PerfilN_Frm.aspx.designer.vb">
@@ -2332,5 +2385,7 @@
   </Target>
   -->
 </Project>
+
+
 
 

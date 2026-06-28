@@ -8,7 +8,7 @@ Public Class OptimizerG_ProgramaA_View
     Inherits Page
     Private ObjUser As UsuarioModel
     Private Plataforma As String = "43"
-    Private menu As String = "3"
+    Private menu As String = "62"
 
     'Variables de GridView
     Public gv As GridView

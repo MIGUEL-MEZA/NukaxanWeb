@@ -3,6 +3,9 @@
 Public Class OptimizerC_ProgramaAModel
     Public Property CvePlan As Int64 = 0
     Public Property CvePerfilN As Int64 = 0
+    Public Property Folio As Int64 = 0
+    Public Property FolioR As String = ""
+    Public Property FolioRPN As String = ""
     Public Property CodCliente As String = ""
     Public Property CodALLIXCte As String = ""
     Public Property CveModalidad As Integer = 0

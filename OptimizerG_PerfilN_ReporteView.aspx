@@ -104,26 +104,18 @@
                 <div style="overflow-y: scroll; height: 57vh; width: 100%;">
                     <%--Grid--%>
                     <asp:GridView ID="gv1" runat="server" AutoGenerateColumns="false" DataKeyNames="CvePerfilN" ShowHeader="true"
-                        Width="100%" ShowFooter="false" AllowPaging="True" CssClass="datagrid" CellSpacing="0" >
+                        Width="100%" ShowFooter="false" AllowPaging="True" CssClass="datagrid" CellSpacing="0">
                         <HeaderStyle />
                         <Columns>
-                           <asp:BoundField DataField="CvePerfilN" HeaderText="" HeaderStyle-Width="6%" />
+                           <asp:BoundField DataField="FolioR" HeaderText="" HeaderStyle-Width="6%" />
                             <asp:TemplateField HeaderText="" HeaderStyle-Width="22%">
                                 <ItemTemplate>
                                     <asp:Label ID="CvePerfilN" runat="server" Text='<%# Eval("CvePerfilN") %>' Visible="false"></asp:Label>
                                     <asp:Label ID="FolioR" runat="server" Text='<%# Eval("Titulo") %>'></asp:Label>
-                                    <%--<asp:HoverMenuExtender runat="server" ID="HME1" TargetControlID="FolioR" PopupControlID="pnl_action" PopupPosition="Right">
-                                    </asp:HoverMenuExtender>
-                                    <asp:Panel ID="pnl_action" runat="server" CssClass="panel-action">
-                                        <asp:ImageButton runat="server" ID="IB1" OnClick="Editar" CommandArgument='<%# Eval("CvePerfilN")%>' ImageUrl="Content/Image/icon_file_jpg.png"
-                                            ImageAlign="AbsMiddle" />
-                                    </asp:Panel>--%>
-
                                     <asp:Button ID="btnDblClick" runat="server"
                                         CommandName="RowDblClick"
                                         CommandArgument='<%# Container.DataItemIndex %>'
                                         Style="display: none;" />
-
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:BoundField DataField="NomModalidad" HeaderText="" HeaderStyle-Width="13%" />

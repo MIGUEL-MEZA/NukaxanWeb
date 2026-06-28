@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="VB" Async="true" MasterPageFile="~/Master_OptimizerP.Master" AutoEventWireup="true" CodeBehind="OptimizerP_ProgramaA_View.aspx.vb" Inherits="NukaxanWEB.OptimizerP_ProgramaA_View" %>
+﻿<%@ Page Title="" Language="VB" Async="true" MasterPageFile="~/Master_OptimizerC.Master" AutoEventWireup="true" CodeBehind="OptimizerC_PerfilN_ReporteView.aspx.vb" Inherits="NukaxanWEB.OptimizerC_PerfilN_ReporteView" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register TagPrefix="asp" Namespace="Saplin.Controls" Assembly="DropDownCheckBoxes" %>
@@ -14,6 +14,18 @@
             </div>
         </ProgressTemplate>
     </asp:UpdateProgress>
+    <style>
+        
+.datagrid tr.selected-row {
+    background-color: #e6f0ff;   /* azulito suave */
+    border-bottom: 3px solid #3399ff; /* línea azul abajo */
+}
+
+.datagrid tr:hover {
+    background-color: #f2f7ff;
+}
+
+    </style>
     <script>         
         function onDataShown(sender, args) {
             sender._popupBehavior._element.style.zIndex = 1000001;
@@ -28,10 +40,36 @@
             prm.add_endRequest(function (sender, e) {
                 if (sender._postBackSettings.panelsToUpdate != null) {
                     $("[id*=DDLFiltroCliente]").select2({ dropdownAutoWidth: true, dropdownParent: $('#MainContent_pnlCaptura') });
-                    
+                   
                 }
             });
         };
+
+        function activarSeleccionFila() {
+
+            $(".datagrid tr").off("click").on("click", function () {
+
+                // Quitar selección previa
+                $(".datagrid tr").removeClass("selected-row");
+
+                // Agregar clase a la fila actual
+                $(this).addClass("selected-row");
+
+            });
+        }
+
+        // Primera carga
+        $(document).ready(function () {
+            activarSeleccionFila();
+        });
+
+        // IMPORTANTE: UpdatePanel
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        if (prm != null) {
+            prm.add_endRequest(function () {
+                activarSeleccionFila();
+            });
+        }
 
     </script>
     <div class="container-fluid w-100 h-100">
@@ -46,15 +84,7 @@
                 <div class="page-sec-title" align="center">
                     <asp:Label runat="server" ID="PageTitle" CssClass="page-title"></asp:Label>
                 </div>
-                <div runat="server" id="sec_actions" class="bar-actions" style="display: inline-block;">
-                    <div align="left">
-                        <asp:LinkButton ID="LB44" runat="server" OnClick="Exportar" CssClass="lnk-action">
-                            <asp:Image ID="IMG44" runat="server" ImageAlign="AbsMiddle" ImageUrl="Content/Image/icon_file_excel.png" />
-                            <asp:Label runat="server" ID="LBL44"></asp:Label>
-                        </asp:LinkButton>
-                    </div>
-                </div>
-                <asp:Panel ID="Panel1" runat="server" DefaultButton="btnInvisible" Style="display: inline-block; float: right; margin-left: 15px;">
+                 <asp:Panel ID="Panel1" runat="server" DefaultButton="btnInvisible" Style="display: inline-block; float: right; margin-left: 15px;">
                     <asp:LinkButton ID="LB41" Font-Underline="false" runat="server" CssClass="lnk-action" OnClick="FiltrosAbrir">
                         <asp:Image ID="IMG41" runat="server" ImageAlign="AbsMiddle" Width="24px" Height="24px" ImageUrl="Content/Image/action_filter.png" />
                         <asp:Label runat="server" ID="LBL41" CssClass="lnk_action"></asp:Label>
@@ -72,35 +102,50 @@
                     <asp:Button ID="btnInvisible" runat="server" Style="display: none" OnClick="FiltrosAplicar" CommandArgument="filtro_gen" />
                 </asp:Panel>
                 <div style="overflow-y: scroll; height: 57vh; width: 100%;">
-                    <asp:GridView ID="gv1" runat="server" AutoGenerateColumns="false" DataKeyNames="CvePlan" ShowHeader="true"
-                       Width="100%" ShowFooter="false" AllowPaging="True" CssClass="datagrid" CellSpacing="0">                       
+                    <%--Grid--%>
+                    <asp:GridView ID="gv1" runat="server" AutoGenerateColumns="false" DataKeyNames="CvePerfilN" ShowHeader="true"
+                        Width="100%" ShowFooter="false" AllowPaging="True" CssClass="datagrid" CellSpacing="0" >
                         <HeaderStyle />
                         <Columns>
-                             <asp:BoundField DataField="FolioR" HeaderText="" HeaderStyle-Width="6%" />
-                             <asp:BoundField DataField="FolioRPN" HeaderText="" HeaderStyle-Width="6%" />
-                            <asp:TemplateField HeaderText="" HeaderStyle-Width="18%">
+                           <asp:BoundField DataField="FolioR" HeaderText="" HeaderStyle-Width="6%" />
+                            <asp:TemplateField HeaderText="" HeaderStyle-Width="22%">
                                 <ItemTemplate>
-                                    <asp:Label ID="CvePlan" runat="server" Text='<%# Eval("CvePlan") %>' Visible="false"></asp:Label>                                    
+                                    <asp:Label ID="CvePerfilN" runat="server" Text='<%# Eval("CvePerfilN") %>' Visible="false"></asp:Label>
                                     <asp:Label ID="FolioR" runat="server" Text='<%# Eval("Titulo") %>'></asp:Label>
-                                    <asp:HoverMenuExtender runat="server" ID="HME1" TargetControlID="FolioR" PopupControlID="pnl_action" PopupPosition="Right">
+                                    <%--<asp:HoverMenuExtender runat="server" ID="HME1" TargetControlID="FolioR" PopupControlID="pnl_action" PopupPosition="Right">
                                     </asp:HoverMenuExtender>
                                     <asp:Panel ID="pnl_action" runat="server" CssClass="panel-action">
-                                        <asp:ImageButton runat="server" ID="IB1" OnClick="Editar" CommandArgument='<%# Eval("CvePlan")%>' ImageUrl="Content/Image/icon_file_jpg.png"
-                                            ImageAlign="AbsMiddle" />                                        
-                                    </asp:Panel>
+                                        <asp:ImageButton runat="server" ID="IB1" OnClick="Editar" CommandArgument='<%# Eval("CvePerfilN")%>' ImageUrl="Content/Image/icon_file_jpg.png"
+                                            ImageAlign="AbsMiddle" />
+                                    </asp:Panel>--%>
+
+                                    <asp:Button ID="btnDblClick" runat="server"
+                                        CommandName="RowDblClick"
+                                        CommandArgument='<%# Container.DataItemIndex %>'
+                                        Style="display: none;" />
+
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:BoundField DataField="NomModalidad" HeaderText="" HeaderStyle-Width="9%" />
-                            <asp:BoundField DataField="NomCliente" HeaderText="" HeaderStyle-Width="17%" />
-                            <asp:BoundField DataField="NomReferencia" HeaderText="" HeaderStyle-Width="11%" />
-                            <asp:BoundField DataField="NomParametro" HeaderText="" HeaderStyle-Width="13%" />                            
+                            <asp:BoundField DataField="NomModalidad" HeaderText="" HeaderStyle-Width="13%" />
+                            <asp:BoundField DataField="NomCliente" HeaderText="" HeaderStyle-Width="22%" />
+                            <asp:BoundField DataField="NomReferencia" HeaderText="" HeaderStyle-Width="15%" />
+                            <%--<asp:TemplateField HeaderText="" HeaderStyle-Width="8%">
+                                <ItemTemplate>
+                                    <asp:Label ID="Temperatura" runat="server" Text='<%# Eval("Temperatura").ToString + " °C" %>'></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="" HeaderStyle-Width="7%">
+                                <ItemTemplate>
+                                    <asp:Label ID="EspacioCorral" runat="server" Text='<%# Eval("EspacioCorral").ToString + " m2/cerdo" %>'></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>--%>
                             <asp:BoundField DataField="FecAct" HeaderText="" HeaderStyle-Width="9%" DataFormatString="{0:dd/MM/yyyy}" />
-                            <asp:BoundField DataField="NomUsuAct" HeaderText="" HeaderStyle-Width="12%" />
+                            <asp:BoundField DataField="NomUsuAct" HeaderText="" HeaderStyle-Width="17%" />
                         </Columns>
                         <PagerSettings Visible=" false" />
                     </asp:GridView>
                 </div>
-               <div runat="server" class="datagrid-footer" id="tblpaging">
+                <div runat="server" class="datagrid-footer" id="tblpaging">
                     <div class="row align-items-center d-flex">
                         <div class="col-md-3">
                             <asp:Label runat="server" ID="totreg" Visible="true"></asp:Label>
@@ -113,12 +158,12 @@
                             <asp:Button runat="server" ID="BTNP14" OnClick="GVPaging" CommandArgument="Last" CssClass="button-paging" />
                         </div>
                         <div class="col-md-3">
-                           <asp:Label runat="server" ID="Label2" Visible="true"></asp:Label>
+                            <asp:label runat="server" ID="Label2"></asp:label>
                         </div>
                     </div>
                 </div>
                 <%--SHOW POPUP--%>
-                <asp:Label runat="server" ID="mpe_regId" Visible="false"></asp:Label>                
+                 <asp:Label runat="server" ID="mpe_regId" Visible="false"></asp:Label>                
                 <asp:Label runat="server" ID="mpe_op" Visible="false"></asp:Label>
                 <asp:LinkButton Text="" ID="lnkshowdata" runat="server" />
                  <asp:LinkButton Text="" ID="lnkshowdata2" runat="server" />
@@ -184,8 +229,9 @@
                 </asp:Panel>
             </ContentTemplate>
             <Triggers>
-                <asp:PostBackTrigger ControlID="LB44" />
+                
             </Triggers>
         </asp:UpdatePanel>
     </div>
 </asp:Content>
+

@@ -88,6 +88,9 @@ Public Class OptimizerG_ProgramaA
         Dim ObjModel As New OptimizerG_ProgramaAModel
         ObjModel.CvePlan = dr("CvePlan")
         ObjModel.CvePerfilN = dr("CvePerfilN")
+        ObjModel.Folio = dr("Folio")
+        ObjModel.FolioR = dr("FolioR")
+        ObjModel.FolioRPN = dr("FolioRPN")
         ObjModel.CodCliente = dr("CodCliente")
         ObjModel.CveModalidad = dr("CveModalidad")
         ObjModel.Titulo = dr("Titulo")
@@ -161,13 +164,16 @@ Public Class OptimizerG_ProgramaA
 
             ObjR.Data.ForEach(Sub(p)
                                   Dim NomEtapa As String = lstEtapas.Find(Function(x) x.CveEtapa = p.Identificador).NomEtapa
-                                  Dim lst As New ResultadoPAModel With {
+                                  Dim Aplica As String = lstEtapas.Find(Function(x) x.CveEtapa = p.Identificador).Aplica
+                                  If Aplica = "S" Then
+                                      Dim lst As New ResultadoPAModel With {
                                   .CveEtapa = p.Identificador, .NomEtapa = NomEtapa, .Costo = p.Costo, .EdadInicial = p.EdadInicial, .EdadFinal = p.EdadFinal,
                                   .Semanas = p.Semanas, .Dias = p.Dias, .Mortalidad = p.Mortalidad, .NoAves = p.NoAves, .ConsumoAlimento = p.ConsumoAlimento,
                                   .ConsumoAlimentoTotal = p.ConsumoAlimentoTotal, .PesoHuevo = p.PesoHuevo, .Produccion = p.Produccion,
                                   .MasaHuevo = p.MasaHuevo, .ConversionAlimenticia = p.ConversionAlimenticia, .HuevoProducido = p.HuevoProducido
                                   }
-                                  lstRPA.Add(lst)
+                                      lstRPA.Add(lst)
+                                  End If
                               End Sub)
 
         Catch ex As Exception

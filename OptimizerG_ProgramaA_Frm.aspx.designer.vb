@@ -599,220 +599,148 @@ Partial Public Class OptimizerG_ProgramaA_Frm
     Protected WithEvents rptResultado As Global.System.Web.UI.WebControls.Repeater
 
     '''<summary>
-    '''Control LBAEPT1.
+    '''Control LBLCostoProgramaAlimTotal.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents LBAEPT1 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents LBLCostoProgramaAlimTotal As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control TBAEPT1.
+    '''Control TBCostoProgramaAlimTotal.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TBAEPT1 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents TBCostoProgramaAlimTotal As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control LBAEPT2.
+    '''Control LBLCostoPonderadoAlimTotal.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents LBAEPT2 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents LBLCostoPonderadoAlimTotal As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control TBAEPT2.
+    '''Control TBCostoPonderadoAlimTotal.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TBAEPT2 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents TBCostoPonderadoAlimTotal As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control LBAEPT3.
+    '''Control LBLCostoKGProducido.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents LBAEPT3 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents LBLCostoKGProducido As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control TBAEPT3.
+    '''Control TBCostoKGProducido.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TBAEPT3 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents TBCostoKGProducido As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control LBAEPT4.
+    '''Control LBLMasaHuevoKGParvada.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents LBAEPT4 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents LBLMasaHuevoKGParvada As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control TBAEPT4.
+    '''Control TBMasaHuevoKGParvada.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TBAEPT4 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents TBMasaHuevoKGParvada As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control LBAEPT5.
+    '''Control LBLPrecioVentaHuevo.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents LBAEPT5 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents LBLPrecioVentaHuevo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control TBAEPT5.
+    '''Control TBPrecioVentaHuevo.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TBAEPT5 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents TBPrecioVentaHuevo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control LBAEPT6.
+    '''Control LBLIngresoxVentaHuevo.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents LBAEPT6 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents LBLIngresoxVentaHuevo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control TBAEPT6.
+    '''Control TBIngresoxVentaHuevo.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TBAEPT6 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents TBIngresoxVentaHuevo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control LBAEPT7.
+    '''Control LBLUtilidadBruta.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents LBAEPT7 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents LBLUtilidadBruta As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control TBAEPT7.
+    '''Control TBUtilidadBruta.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TBAEPT7 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents TBUtilidadBruta As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control LBAEPT8.
+    '''Control LBLROI.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents LBAEPT8 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents LBLROI As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control TBAEPT8.
+    '''Control TBROI.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TBAEPT8 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control LBAEPT9.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LBAEPT9 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control TBAEPT9.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents TBAEPT9 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control LBAEPT10.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LBAEPT10 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control TBAEPT10.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents TBAEPT10 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control LBAEPT11.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LBAEPT11 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control TBAEPT11.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents TBAEPT11 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control LBAEPT12.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LBAEPT12 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control TBAEPT12.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents TBAEPT12 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents TBROI As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control LBAEPC1.

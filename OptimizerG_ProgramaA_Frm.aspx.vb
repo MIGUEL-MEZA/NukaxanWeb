@@ -133,18 +133,19 @@ Public Class OptimizerG_ProgramaA_Frm
             End If
         Next
         'SECCIONES TOTALES OPTIMIZADO
-        LBAEPT1.Text = "COSTO PONDERADO DEL ALIMENTO TOTAL, $"
-        LBAEPT2.Text = "CONSUMO TOTAL DE ALIMENTO, KG/AVE"
-        LBAEPT3.Text = "COSTO POR KG PRODUCIDO, $/KG HUEVO"
-        LBAEPT4.Text = "CONVERSIÓN ALIMENTICIA (CRIANZA + POSTURA)"
-        LBAEPT5.Text = "MASA DE HUEVO TOTAL, KG/AVE"
-        LBAEPT6.Text = "COSTO PROGAMA DE ALIMENTACIÓN TOTAL, $/AVE"
-        LBAEPT7.Text = "CONSUMO TOTAL DE ALIMENTO, KG/PARVADA"
-        LBAEPT8.Text = "COSTO PROGAMA DE ALIMENTACIÓN TOTAL, $/PARVADA"
-        LBAEPT9.Text = "MASA DE HUEVO, KG/PARVADA"
-        LBAEPT10.Text = "INGRESO POR VENTA DE HUEVO, $/PARVADA"
-        LBAEPT11.Text = "UTILIDAD POR CONCEPTO DE ALIMENTACIÓN, $/PARVADA"
-        LBAEPT12.Text = "ROI, %"
+        LBLCostoPonderadoAlimTotal.Text = "COSTO PONDERADO DEL ALIMENTO TOTAL, $"
+        'LBAEPT2.Text = "CONSUMO TOTAL DE ALIMENTO, KG/AVE"
+        LBLCostoKGProducido.Text = "COSTO POR KG PRODUCIDO, $/KG HUEVO"
+        'LBAEPT4.Text = "CONVERSIÓN ALIMENTICIA (CRIANZA + POSTURA)"
+        'LBAEPT5.Text = "MASA DE HUEVO TOTAL, KG/AVE"
+        LBLCostoProgramaAlimTotal.Text = "COSTO PROGAMA DE ALIMENTACIÓN TOTAL, $/AVE"
+        'LBAEPT7.Text = "CONSUMO TOTAL DE ALIMENTO, KG/PARVADA"
+        'LBAEPT8.Text = "COSTO PROGAMA DE ALIMENTACIÓN TOTAL, $/PARVADA"
+        LBLPrecioVentaHuevo.Text = "PRECIO VENTA ($/Kg huevo)"
+        LBLMasaHuevoKGParvada.Text = "MASA DE HUEVO, KG/PARVADA"
+        LBLIngresoxVentaHuevo.Text = "INGRESO POR VENTA DE HUEVO, $/PARVADA"
+        LBLUtilidadBruta.Text = "UTILIDAD POR CONCEPTO DE ALIMENTACIÓN, $/PARVADA"
+        LBLROI.Text = "ROI, %"
 
         LBAEPC1.Text = "COSTO PONDERADO DEL ALIMENTO CRIANZA, $"
         LBAEPC2.Text = "CONSUMO DE ALIMENTO CRIANZA, KG/AVE"
@@ -197,7 +198,7 @@ Public Class OptimizerG_ProgramaA_Frm
     Sub LlenaDDL()
         Call New Catalogos().LlenaGeneralClientes(DDLCliente, Plataforma, ObjUser.CodUsuario)
         Call New Catalogos().LlenaOptimizer_Modalidad(DDLModalidad)
-        Call New Catalogos().LlenaOptimizerP_Referencia(DDLReferencia)
+        Call New Catalogos().LlenaOptimizerG_Referencia(DDLReferencia)
         'Call New Catalogos().LlenaOptimizerP_Parametros(DDLParametro)
     End Sub
     Sub Acciones(op As Boolean, op2 As Boolean, arrAction As String)
@@ -309,7 +310,7 @@ Public Class OptimizerG_ProgramaA_Frm
                 CodALLIXCte.Text = New Clientes().FindById(CodCliente.Text).CodALLIX
             End If
             LlenaRPT_Etapas()
-            MostrarPrograma()
+            If regPId.Text <> "0" Then MostrarPrograma()
             SeguridadLoad()
 
         Catch ex As Exception
@@ -359,6 +360,7 @@ Public Class OptimizerG_ProgramaA_Frm
     End Sub
     Sub LlenaRPT_Resultado()
         Try
+            'Dim ObjM As OptimizerG_ProgramaAModel = New OptimizerG_ProgramaA().FindById(Convert.ToInt64(regPId.Text), 0, "")
             Dim lstRPA As List(Of ResultadoPAModel) = New OptimizerG_ProgramaA().ObtenResultadoPA(Convert.ToInt64(regPId.Text))
             rptResultado.DataSource = lstRPA
             rptResultado.DataBind()
@@ -368,7 +370,7 @@ Public Class OptimizerG_ProgramaA_Frm
                                                                           Dim Produccion As Label = TryCast(p.FindControl("Produccion"), Label)
                                                                           Dim MasaHuevo As Label = TryCast(p.FindControl("MasaHuevo"), Label)
                                                                           Dim ConversionAlimenticia As Label = TryCast(p.FindControl("ConversionAlimenticia"), Label)
-                                                                          Dim HuevoProducido As Label = TryCast(p.FindControl("HuevoProducido"), Label)
+                                                                          'Dim HuevoProducido As Label = TryCast(p.FindControl("HuevoProducido"), Label)
 
                                                                           Dim IsOculta As Boolean = If(New ArrayList({"1", "2", "3", "4", "5"}).IndexOf(CveEtapa) >= 0, False, True)
 
@@ -376,23 +378,29 @@ Public Class OptimizerG_ProgramaA_Frm
                                                                           Produccion.Visible = IsOculta
                                                                           MasaHuevo.Visible = IsOculta
                                                                           ConversionAlimenticia.Visible = IsOculta
-                                                                          HuevoProducido.Visible = IsOculta
+                                                                          'HuevoProducido.Visible = IsOculta
 
                                                                       End Sub)
 
             Dim lstTot As List(Of String) = New OptimizerG_ProgramaA().ObtenTotales(Convert.ToInt64(regPId.Text))
-            TBAEPT1.Text = lstTot(0)
-            TBAEPT2.Text = lstTot(1)
-            TBAEPT3.Text = lstTot(2)
-            TBAEPT4.Text = lstTot(3)
-            TBAEPT5.Text = lstTot(4)
-            TBAEPT6.Text = lstTot(5)
-            TBAEPT7.Text = lstTot(6)
-            TBAEPT8.Text = lstTot(7)
-            TBAEPT9.Text = lstTot(8)
-            TBAEPT10.Text = lstTot(9)
-            TBAEPT11.Text = lstTot(10)
-            TBAEPT12.Text = lstTot(11)
+
+            TryCast(rptResultado.Controls(rptResultado.Controls.Count - 1).Controls(0).FindControl("TOTConsumoAlimento"), Label).Text = CDbl(lstTot(1)).ToString("N2")
+            TryCast(rptResultado.Controls(rptResultado.Controls.Count - 1).Controls(0).FindControl("TOTMasaHUevo"), Label).Text = CDbl(lstTot(4)).ToString("N2")
+            TryCast(rptResultado.Controls(rptResultado.Controls.Count - 1).Controls(0).FindControl("TOTCA"), Label).Text = CDbl(lstTot(3)).ToString("N2")
+
+            TBCostoPonderadoAlimTotal.Text = lstTot(0)
+            'TBAEPT2.Text = lstTot(1)
+            TBCostoKGProducido.Text = lstTot(2)
+            'TBAEPT4.Text = lstTot(3)
+            'TBAEPT5.Text = lstTot(4)
+            TBCostoProgramaAlimTotal.Text = lstTot(5)
+            'TBAEPT7.Text = lstTot(6)
+            'TBAEPT8.Text = lstTot(7)
+            TBMasaHuevoKGParvada.Text = lstTot(8)
+            TBPrecioVentaHuevo.Text = TBPrecioVentaH.Text
+            TBIngresoxVentaHuevo.Text = lstTot(9)
+            TBUtilidadBruta.Text = lstTot(10)
+            TBROI.Text = lstTot(11)
 
             TBAEPC1.Text = lstTot(12)
             TBAEPC2.Text = lstTot(13)
@@ -662,7 +670,7 @@ Public Class OptimizerG_ProgramaA_Frm
         Dim TBCosto As TextBox = TryCast(item.FindControl("TBCosto"), TextBox)
 
         TBCosto.Enabled = chk.Checked
-        'TBCosto.Text = "0"
+        TBCosto.Text = If(chk.Checked = False, "0", TBCosto.Text)
 
     End Sub
     Public Overrides Sub VerifyRenderingInServerForm(control As Control)

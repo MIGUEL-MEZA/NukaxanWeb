@@ -70,6 +70,8 @@ Public Class OptimizerG_PerfilN
         Dim ObjModel As New OptimizerG_PerfilNModel
         ObjModel.CvePerfilN = dr("CvePerfilN")
         ObjModel.CvePlan = dr("CvePlan")
+        ObjModel.Folio = dr("Folio")
+        ObjModel.FolioR = dr("FolioR")
         ObjModel.CodCliente = dr("CodCliente")
         ObjModel.CveModalidad = dr("CveModalidad")
         ObjModel.Titulo = dr("Titulo")
@@ -366,7 +368,7 @@ Public Class OptimizerG_PerfilN
             Dim reporteExterno As String = If(infoVar IsNot Nothing, infoVar.ReporteExterno, "N")
             Dim envioFlujo As String = If(infoVar IsNot Nothing, infoVar.EnvioFlujo, "N")
             Dim mostrarValores As String = If(infoVar IsNot Nothing, infoVar.MostrarValores, "")
-
+			Dim NomVariable As String = If(infoVar IsNot Nothing, infoVar.NomVariable, "")
             For Each etapa In lstE.Where(Function(e) e.Aplica = "S")
                 Dim etapaData = variable.Etapas.FirstOrDefault(Function(x) x.Clave = etapa.CveEtapa)
                 Dim valorReferencia As Double = 0
@@ -383,7 +385,7 @@ Public Class OptimizerG_PerfilN
                     .Etapa = etapa.CveEtapa,
                     .NombreEtapa = etapa.NomEtapa,
                     .Variable = variable.NoVariable,
-                    .Descripcion = variable.Variable,
+                    .Descripcion = NomVariable,'variable.Variable,
                     .Decimales = decimales,
                     .Referencia = valorReferencia,
                     .Ajuste = valorAjuste,

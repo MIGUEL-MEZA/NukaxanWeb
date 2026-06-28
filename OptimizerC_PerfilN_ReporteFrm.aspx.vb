@@ -1,10 +1,10 @@
-Imports System.Web.DynamicData
+﻿Imports System.Web.DynamicData
 Imports Newtonsoft.Json
 Imports System.Configuration
 Imports NukaxanWEB.Libreria
-Imports NukaxanWEB.OptimizerP_PerfilN
+Imports NukaxanWEB.OptimizerC_PerfilN
 
-Public Class OptimizerP_PerfilN_ReporteFrm
+Public Class OptimizerC_PerfilN_ReporteFrm
     Inherits Page
     Protected WithEvents LB15 As LinkButton
     Protected WithEvents LB_IMG15 As HtmlGenericControl
@@ -12,7 +12,7 @@ Public Class OptimizerP_PerfilN_ReporteFrm
     Protected WithEvents LBLReferencia As Label
     Protected WithEvents LBLCliente As Label
     Public ObjUser As UsuarioModel
-    Private Plataforma As String = "42"
+    Private Plataforma As String = "41"
     Private menu As String = "61"
     'Variables Generales
     Public defaultoption As String = ""
@@ -188,7 +188,7 @@ Public Class OptimizerP_PerfilN_ReporteFrm
         Acciones(False, False, "0")
         Acciones(True, True, "0")
 
-        Dim ObjM As OptimizerP_ProgramaAModel = New OptimizerP_ProgramaA().FindById(0, Convert.ToInt64(regPId.Text), "")
+        Dim ObjM As OptimizerC_ProgramaAModel = New OptimizerC_ProgramaA().FindById(0, Convert.ToInt64(regPId.Text), "")
         LB15.Visible = If(ObjM Is Nothing, False, True)
 
     End Sub
@@ -212,10 +212,10 @@ Public Class OptimizerP_PerfilN_ReporteFrm
     End Sub
 
     Sub DescargarExcel()
-        DescargarArchivoReporte("excel", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+        DescargarArchivoReporte("excel", 2, ConfigurationManager.AppSettings("WSOptimizer"))
     End Sub
     Sub DescargarPdf()
-        DescargarArchivoReporte("pdf", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+        DescargarArchivoReporte("pdf", 2, ConfigurationManager.AppSettings("WSOptimizer"))
     End Sub
     Private Sub DescargarArchivoReporte(formato As String, versionReporte As Integer, baseApiUrl As String)
         Try
@@ -229,15 +229,15 @@ Public Class OptimizerP_PerfilN_ReporteFrm
         Dim num_decimales As Integer = 3
 
         Try
-            'Dim ObjR As ResponseModel = JsonConvert.DeserializeObject(Of ResponseModel)(New OptimizerP_PerfilN_Resultado().FindById(CInt(regPId.Text)).Response)
-            'Dim lstE As List(Of OptimizerP_PerfilN_EtapasModel) = New OptimizerP_PerfilN_Etapas().FindlstAll(CodCliente.Text, Convert.ToInt64(regPId.Text))
-            'Dim lstVariables As List(Of OptimizerP_CatVariablesModel) = New OptimizerP_CatVariables().FindlstAll(0)
-Dim ObjM As OptimizerP_PerfilNModel = New OptimizerP_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
+            'Dim ObjR As ResponseModel = JsonConvert.DeserializeObject(Of ResponseModel)(New OptimizerC_PerfilN_Resultado().FindById(CInt(regPId.Text)).Response)
+            'Dim lstE As List(Of OptimizerC_PerfilN_EtapasModel) = New OptimizerC_PerfilN_Etapas().FindlstAll(CodCliente.Text, Convert.ToInt64(regPId.Text))
+            'Dim lstVariables As List(Of OptimizerC_CatVariablesModel) = New OptimizerC_CatVariables().FindlstAll(0)
+Dim ObjM As OptimizerC_PerfilNModel = New OptimizerC_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
             LBLReferencia.Text = "FOLIO: " + ObjM.FolioR + " | " + ObjM.NomReferencia
             LBLCliente.Text = ObjM.NomCliente
 
-            Dim objPerfil As OptimizerP_PerfilNModel = New OptimizerP_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
-            Dim modeloCaptura As List(Of PNCapturaModel) = New OptimizerP_PerfilN().ConstruirModeloCaptura(Convert.ToInt64(regPId.Text), objPerfil.CodCliente)
+            Dim objPerfil As OptimizerC_PerfilNModel = New OptimizerC_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
+            Dim modeloCaptura As List(Of PNCapturaModel) = New OptimizerC_PerfilN().ConstruirModeloCaptura(Convert.ToInt64(regPId.Text), objPerfil.CodCliente)
             Dim jsonCaptura = JsonConvert.SerializeObject(modeloCaptura)
             ClientScript.RegisterStartupScript(Me.GetType(), "initModelo", "var modeloCaptura = " & jsonCaptura & ";", True)
 
@@ -325,7 +325,7 @@ Dim ObjM As OptimizerP_PerfilNModel = New OptimizerP_PerfilN().FindById(Convert.
 
     End Sub
  Sub MostrarPrograma()
-        Dim ObjM As OptimizerP_PerfilNModel = New OptimizerP_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
+        Dim ObjM As OptimizerC_PerfilNModel = New OptimizerC_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
         Dim filtro As String = filtroview.Text
         Response.Redirect(New RedirectPaginas().FindById(Plataforma + "-62-1").PaginaURL.Replace("@Id", Codif(ObjM.CvePlan)).Replace("@CvePN", Codif(regPId.Text)).Replace("@filtro", Codif(filtro)).Replace("@pageIndex", gvindexpage.Text), True)
     End Sub
@@ -350,5 +350,6 @@ Dim ObjM As OptimizerP_PerfilNModel = New OptimizerP_PerfilN().FindById(Convert.
         ' Verifies that the control is rendered
     End Sub
 End Class
+
 
 

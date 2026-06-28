@@ -8,7 +8,7 @@ Public Class OptimizerP_PerfilN_ReporteView
     Inherits Page
     Private ObjUser As UsuarioModel
     Private Plataforma As String = "42"
-    Private menu As String = "4"
+    Private menu As String = "61"
 
     'Variables de GridView
     Public gv As GridView

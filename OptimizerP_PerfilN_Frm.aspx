@@ -92,7 +92,7 @@
                 let dec = x.Decimales || 2;
                 let ref = parseFloat(x.Referencia.toFixed(dec));
                 let aju = parseFloat(x.Ajuste.toFixed(dec));
-                // si son iguales después de redondeo, forzar igualdad
+                // ? si son iguales después de redondeo ? forzar igualdad
                 if (aju === ref) {
                     x.Ajuste = ref;
                 }
@@ -131,7 +131,7 @@
 
             if (e.target.classList.contains("ajuste")) {
 
-                // Marcar como editado
+                // ? Marcar como editado
                 e.target.dataset.editado = "1";
             }
 
@@ -155,17 +155,17 @@
             let errores = false;
             let tolerancia = 0.0001;
 
-            // Limpia bordes previos
+            // ?? Limpia bordes previos
             document.querySelectorAll(".comentario").forEach(input => {
                 input.style.border = "";
             });
 
             modelo.forEach(item => {
 
-                // 1. Ignorar los que no se muestran
+                // ? 1. Ignorar los que no se muestran
                 if (item.Mostrar === "N" || item.EditarAjuste === "N") return;
 
-                // 2. Buscar inputs en UI
+                // ? 2. Buscar inputs en UI
                 let inputAjuste = document.querySelector(
                     `.ajuste[data-etapa='${item.Etapa}'][data-variable='${item.Variable}']`
                 );
@@ -174,7 +174,7 @@
                     `.comentario[data-etapa='${item.Etapa}'][data-variable='${item.Variable}']`
                 );
 
-                // 3. Si no existe o está oculto, ignorar
+                // ? 3. Si no existe o está oculto ? ignorar
                 if (!inputAjuste || inputAjuste.offsetParent === null) return;
 
                 let dec = item.Decimales || 2;
@@ -183,10 +183,10 @@
                 let referencia = parseFloat(Number(item.Referencia).toFixed(dec));
                 let comentario = String(item.Comentario || "").trim();
 
-                // 4. Detectar cambio real (con tolerancia)
+                // ? 4. Detectar cambio real (con tolerancia)
                 let cambioReal = Math.abs(ajuste - referencia) > tolerancia;
 
-                // 5. Validar solo si el usuario lo tocó
+                // ? 5. Validar SOLO si el usuario lo tocó
                 let fueEditado = inputAjuste.dataset.editado === "1";
 
                 if (cambioReal && fueEditado && comentario.length === 0) {
@@ -220,7 +220,7 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         xhrFields: {
-                            withCredentials: true   // Envía cookies de autenticación
+                            withCredentials: true   // ? ENVÍA COOKIES DE AUTH
                         },
                         data: JSON.stringify({
                             modelo: modelo,
@@ -240,6 +240,77 @@
                     });
 
         }
+
+        /*Edad Inicla Actual = Edad Final Etapa Anterior*/
+        function validarFila(input) {
+
+            let fila = $(input).closest("tr");
+
+            let edadIni = parseFloat(fila.find(".edad-ini").val()) || 0;
+            let edadFin = parseFloat(fila.find(".edad-fin").val()) || 0;
+
+            let txtIni = fila.find(".edad-ini");
+            let txtFin = fila.find(".edad-fin");
+
+            // reset
+            txtIni.css("border", "");
+            txtFin.css("border", "");
+
+            // validación
+            if (edadFin < edadIni) {
+                txtFin.css("border", "2px solid red");
+                txtIni.css("border", "2px solid red");
+            }
+        }
+        function syncEdades(input) {
+
+            let filaActual = $(input).closest("tr");
+            let valorFinal = parseInt($(input).val()) || 0;
+
+            let filas = $(".fila-etapa");
+            let index = filas.index(filaActual);
+
+            for (let i = index + 1; i < filas.length; i++) {
+
+                let fila = $(filas[i]);
+                let chk = fila.find("input[type='checkbox']");
+
+                if (chk.prop("checked")) {
+
+                    let txtIni = fila.find(".edad-ini");
+
+                    txtIni.val(valorFinal);
+
+                    // validar la siguiente fila también
+                    validarFila(txtIni);
+
+                    break;
+                }
+            }
+        }
+        function syncAllEdades() {
+
+            let filas = $(".fila-etapa");
+
+            for (let i = 0; i < filas.length - 1; i++) {
+
+                let filaActual = $(filas[i]);
+                let filaSig = $(filas[i + 1]);
+
+                let chkActual = filaActual.find(".chk-etapa");
+                let chkSig = filaSig.find(".chk-etapa");
+
+                if (chkActual.prop("checked") && chkSig.prop("checked")) {
+
+                    let edadFinal = parseInt(filaActual.find(".edad-fin").val()) || 0;
+
+                    filaSig.find(".edad-ini").val(edadFinal);
+                }
+            }
+        }
+        $(document).ready(function () {
+            syncAllEdades();
+        });
     </script>
     
     <asp:UpdateProgress ID="UpdateProgress1" DisplayAfter="10" runat="server" AssociatedUpdatePanelID="UPContenido">
@@ -419,7 +490,7 @@
                                         <div style="display: flex;">
                                             <asp:TextBox ID="TBTemperatura" runat="server" CssClass="form-control tb-sm" MaxLength="5" AutoCompleteType="Disabled"></asp:TextBox>
                                             <asp:Label runat="server" ID="TBTemperaturaD" CssClass="control-label"></asp:Label>
-                                            <span runat="server" id="TBTemperaturaU" class="tb-unidad">ï¿½C</span>
+                                            <span runat="server" id="TBTemperaturaU" class="tb-unidad">&deg;C</span>
                                             <asp:Label runat="server" ID="LBLH5444" CssClass="text-muted" Style="padding: 5px 7px;"></asp:Label>
                                             <asp:FilteredTextBoxExtender ID="FTE1" runat="server" FilterType="Custom,Numbers" TargetControlID="TBTemperatura" ValidChars="." />
                                         </div>
@@ -484,10 +555,10 @@
                                                         <asp:Label runat="server" ID="Label2">NONBRE CLIENTE</asp:Label>
                                                     </th>
                                                     <th width='17%' align="center">
-                                                        <asp:Label runat="server" ID="Label3">EDAD INICIAL (dï¿½as)</asp:Label>
+                                                        <asp:Label runat="server" ID="Label3">EDAD INICIAL (dias)</asp:Label>
                                                     </th>
                                                     <th width='17%' align="center">
-                                                        <asp:Label runat="server" ID="Label4">EDAD FINAL (dï¿½as)</asp:Label>
+                                                        <asp:Label runat="server" ID="Label4">EDAD FINAL (dias)</asp:Label>
                                                     </th>
                                                     <th width='17%' align="center">
                                                         <asp:Label runat="server" ID="Label5">EM alimento (kcal/kg)</asp:Label>
@@ -496,9 +567,9 @@
                                             </thead>
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <tr>
+                                        <tr  class="fila-etapa">
                                             <td align="center ">
-                                                <asp:CheckBox ID="chk" runat="server" AutoPostBack="true" OnCheckedChanged="OnCheckedChanged" />
+                                                <asp:CheckBox ID="chk" runat="server" AutoPostBack="true" OnCheckedChanged="OnCheckedChanged" CssClass="chk-etapa" />
                                             </td>
                                              <td align="left " class="fw-bold">
                                                   <asp:Label runat="server" ID="CveEtapa" Text='<%# Eval("CveEtapa")%>' Visible="false"></asp:Label>
@@ -513,12 +584,12 @@
                                                 <asp:Label runat="server" ID="TBNomEtapaD" Text='<%# Eval("NomEtapa")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                             </td>
                                             <td align="center" class="justify-content-center">
-                                                <asp:TextBox ID="TBEdadIni" runat="server" Width="50px" Text='<%# Eval("EdadIni")%>' CssClass="form-control "></asp:TextBox>
+                                                <asp:TextBox ID="TBEdadIni" runat="server" Width="50px" Text='<%# Eval("EdadIni")%>' CssClass="form-control edad-ini"></asp:TextBox>
                                                 <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" TargetControlID="TBEdadIni" runat="server" FilterType="Custom,Numbers" ValidChars="."></asp:FilteredTextBoxExtender>
                                                 <asp:Label runat="server" ID="TBEdadIniD" Text='<%# Eval("EdadIni")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                             </td>
                                             <td align="center" class="justify-content-center">
-                                                <asp:TextBox ID="TBEdadFin" runat="server" Width="50px" Text='<%# Eval("EdadFin")%>' CssClass="form-control "></asp:TextBox>
+                                                <asp:TextBox ID="TBEdadFin" runat="server" Width="50px" Text='<%# Eval("EdadFin")%>' CssClass="form-control edad-fin" oninput="validarFila(this); syncEdades(this);"></asp:TextBox>
                                                 <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtender4" TargetControlID="TBEdadFin" runat="server" FilterType="Custom,Numbers" ValidChars="."></asp:FilteredTextBoxExtender>
                                                 <asp:Label runat="server" ID="TBEdadFinD" Text='<%# Eval("EdadFin")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                             </td>

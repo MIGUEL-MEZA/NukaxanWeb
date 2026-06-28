@@ -1,14 +1,14 @@
-Imports System.Drawing
+﻿Imports System.Drawing
 Imports System.Web.DynamicData
 Imports System.Web.Services.Description
 Imports NukaxanWEB.Libreria
 Imports WebGrease.Css
 
-Public Class OptimizerG_PerfilN_ReporteView
+Public Class OptimizerG_ProgramaA_ReporteView
     Inherits Page
     Private ObjUser As UsuarioModel
     Private Plataforma As String = "43"
-    Private menu As String = "61"
+    Private menu As String = "62"
 
     'Variables de GridView
     Public gv As GridView
@@ -172,7 +172,7 @@ Public Class OptimizerG_PerfilN_ReporteView
     Sub DefineGV()
         gv = gv1
         For i = 0 To gv.Columns.Count - 1
-            If i <> 1 Then
+            If i <> 2 Then
                 gv.Columns(i).ItemStyle.HorizontalAlign = HorizontalAlign.Center
             End If
 
@@ -184,27 +184,17 @@ Public Class OptimizerG_PerfilN_ReporteView
             e.Row.Cells(0).Font.Bold = True
             e.Row.Cells(0).ForeColor = Color.Red
             e.Row.Cells(1).Font.Bold = True
-            'e.Row.Cells(1).Style.Add("cursor", "pointer")
-
-            'For Each a As Controles_AccionesModel In lstAcciones.Where(Function(p) p.CveTipo = 3)
-            '    Dim IB As ImageButton = TryCast(e.Row.FindControl("IB" + a.CveAccion.ToString), ImageButton)
-            '    If Not IB Is Nothing Then
-            '        IB.ImageUrl = "~/Content/Image/" + a.Icono
-            '        IB.Attributes.Add("Width", a.IconoSize.Split("x")(0) + "px!important")
-            '        IB.Attributes.Add("Height", a.IconoSize.Split("x")(1) + "px!important")
-            '        IB.ToolTip = a.ToolTip
-            '        If a.ValidaClick = "S" Then IB.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
-            '    End If
-
-            'Next
+            e.Row.Cells(1).ForeColor = Color.Red
+            e.Row.Cells(2).Font.Bold = True
+            e.Row.Cells(2).Style.Add("cursor", "pointer")
 
             Dim btn As Button = CType(e.Row.FindControl("btnDblClick"), Button)
             e.Row.Attributes("ondblclick") = Page.ClientScript.GetPostBackClientHyperlink(btn, "")
             e.Row.Attributes("style") = "cursor:pointer"
             e.Row.ToolTip = "Da doble click para ver el reporte."
+
         End If
     End Sub
-
     Protected Sub gv1_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gv1.RowCommand
 
         If e.CommandName = "RowDblClick" Then
@@ -219,6 +209,7 @@ Public Class OptimizerG_PerfilN_ReporteView
             Response.Redirect(
             New RedirectPaginas().FindById(Plataforma + "-" + menu + "-1").PaginaURL _
             .Replace("@Id", Codif(keyId)) _
+            .Replace("@CvePN", Codif("0")) _
             .Replace("@filtro", Codif(filtro)) _
             .Replace("@pageIndex", gvindexpage.Text),
         True)
@@ -226,7 +217,6 @@ Public Class OptimizerG_PerfilN_ReporteView
         End If
 
     End Sub
-
     Protected Sub GVDataBound(ByVal sender As Object, ByVal e As EventArgs) Handles gv1.DataBound
         gv = gv1
         pageLabel.Text = If(ObjUser.CveLenguaje = 2, "Page ", "Página ") & gv.PageIndex + 1.ToString() & If(ObjUser.CveLenguaje = 2, " of " & gv.PageCount.ToString(), " de " & gv.PageCount.ToString())
@@ -263,7 +253,7 @@ Public Class OptimizerG_PerfilN_ReporteView
         Dim dt As DataTable
         Try
             gv1.PageIndex = 0
-            dt = New OptimizerG_PerfilN().FindAll(0, ObjUser.CodUsuario)
+            dt = New OptimizerG_ProgramaA().FindAll(0, 0, ObjUser.CodUsuario)
             Session("DatosGV") = dt
             LlenaGV(dt)
         Catch ex As Exception

@@ -3,6 +3,8 @@
 Public Class OptimizerP_PerfilNModel
     Public Property CvePerfilN As Int64 = 0
     Public Property CvePlan As Int64 = 0
+    Public Property Folio As Int64 = 0
+    Public Property FolioR As String = ""
     Public Property CodCliente As String = ""
     Public Property CveModalidad As Integer = 0
     Public Property Titulo As String = ""

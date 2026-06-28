@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="VB" Async="true" AutoEventWireup="true" MasterPageFile="~/Master_OptimizerG.Master" CodeBehind="OptimizerG_PerfilN_ReporteFrm.aspx.vb" Inherits="NukaxanWEB.OptimizerG_PerfilN_ReporteFrm" %>
+﻿<%@ Page Title="" Language="VB" Async="true" AutoEventWireup="true" MasterPageFile="~/Master_OptimizerC.Master" CodeBehind="OptimizerC_PerfilN_ReporteFrm.aspx.vb" Inherits="NukaxanWEB.OptimizerC_PerfilN_ReporteFrm" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -43,18 +43,18 @@
         border-radius: 10px;
         display: flex;
         justify-content: space-between;
-        align-items: flex-start; /* Alinea todo arriba */
+        align-items: flex-start; /* ?? Alinea todo arriba */
     }
 
     .header-left {
         display: flex;
-        display: flex;        align-items: flex-start; /* clave */
+        align-items: flex-start; /* ?? clave */
         gap: 5px;
     }
 
     .logo-left {
-        width: 85px;             /* mÃ¡s grande */
-        margin-right: 8px;      /* mÃ¡s espacio */        
+        width: 85px;             /* ?? m�s grande */
+        margin-right: 8px;      /* ?? m�s espacio */        
     }
 
     .header-text h1 {
@@ -127,7 +127,7 @@ td {
 }
 
 .table-rep thead tr th:last-child {
-    border-right: none; /* evita el borde cuadrado */
+    border-right: none; /* ?? evita el borde cuadrado */
 }
 
 .table-rep thead tr th:first-child {
@@ -175,9 +175,9 @@ td {
                         aria-expanded="false" style="margin-left: 10px;">
                         <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span><span
                             class="icon-bar"></span><span class="icon-bar"></span>
-                    </button>
+                    </button>                    
                     <div class="collapse navbar-collapse navbar-right navbar-right" id="bar-action">                       
-                        <asp:LinkButton ID="LB15" runat="server" OnClick="MostrarPrograma" CssClass="lnkbtn-action">
+                         <asp:LinkButton ID="LB15" runat="server" OnClick="MostrarPrograma" CssClass="lnkbtn-action">
                             <i runat="server" id="LB_IMG15" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL15">Ver Programa</asp:Label>
                         </asp:LinkButton>
@@ -186,8 +186,7 @@ td {
                         </asp:LinkButton>
                         <asp:LinkButton ID="LBPdf" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action">
                             <asp:Label runat="server" ID="LB_LBLPdf">PDF</asp:Label>
-                        </asp:LinkButton>
-                        <asp:LinkButton ID="LB2" runat="server" OnClick="Regresar" CssClass="lnkbtn-action">
+                        </asp:LinkButton>                        <asp:LinkButton ID="LB2" runat="server" OnClick="Regresar" CssClass="lnkbtn-action">
                             <i runat="server" id="LB_IMG2" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL2">Salir</asp:Label>
                         </asp:LinkButton>
@@ -199,14 +198,14 @@ td {
                         <img src="Content/Image/Icono-PerfilNutricional.svg" class="logo-left" />
                         <div class="header-text">
                             <h1>PERFIL NUTRICIONAL</h1>
-                             <asp:Label runat="server" ID="LBLReferencia" CssClass="subtitulo"></asp:Label><br />
+                            <asp:Label runat="server" ID="LBLReferencia" CssClass="subtitulo"></asp:Label><br />
                             <asp:Label runat="server" ID="LBLCliente" CssClass="cliente"></asp:Label>                           
                         </div>
                     </div>                    
                     <div class="header-right">
                         <img src="Content/Image/logo-nuptimizer.svg" class="logo-right" />
                        <%-- <div class="fecha">
-                            FECHA EMISIÃ“N: 18/06/2026
+                            FECHA EMISI�N: 18/06/2026
                         </div>--%>
                     </div>
                 </div>
@@ -235,4 +234,5 @@ td {
         </asp:UpdatePanel>
     </div>
 </asp:Content>
+
 

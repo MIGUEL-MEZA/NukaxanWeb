@@ -107,7 +107,7 @@
                         Width="100%" ShowFooter="false" AllowPaging="True" CssClass="datagrid" CellSpacing="0" >
                         <HeaderStyle />
                         <Columns>
-                           <asp:BoundField DataField="CvePerfilN" HeaderText="" HeaderStyle-Width="6%" />
+                           <asp:BoundField DataField="FolioR" HeaderText="" HeaderStyle-Width="6%" />
                             <asp:TemplateField HeaderText="" HeaderStyle-Width="22%">
                                 <ItemTemplate>
                                     <asp:Label ID="CvePerfilN" runat="server" Text='<%# Eval("CvePerfilN") %>' Visible="false"></asp:Label>

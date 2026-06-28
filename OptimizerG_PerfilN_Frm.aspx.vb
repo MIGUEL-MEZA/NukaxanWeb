@@ -276,7 +276,7 @@ Public Class OptimizerG_PerfilN_Frm
                 CodCliente.Text = ""
                 CodALLIX.Text = ""
                 TBID.Text = "POR ASIGNAR"
-                TBNomEstatusD.Text = "EN EDICI�N"
+                TBNomEstatusD.Text = "EN EDICIï¿½N"
                 TBFecAltaD.Text = Now.ToString("dd/MM/yyyy") + " | " + ObjUser.NomUsuario
                 TBFecActD.Text = Now.ToString("dd/MM/yyyy") + " | " + ObjUser.NomUsuario
                 LlenaRPT_Etapas()
@@ -414,7 +414,6 @@ Public Class OptimizerG_PerfilN_Frm
         Try
             LlenaControles()
             If Valida() = False Then Return False
-
             Dim tmp_row As Integer = 0
             Dim tmp_valor As Integer = 0
             rptEtapas.Items.Cast(Of RepeaterItem)().ToList.ForEach(Sub(p)
@@ -423,13 +422,13 @@ Public Class OptimizerG_PerfilN_Frm
                                                                        Dim TBEdadIni As TextBox = TryCast(p.FindControl("TBEdadIni"), TextBox)
                                                                        Dim TBEdadFin As TextBox = TryCast(p.FindControl("TBEdadFin"), TextBox)
                                                                        Dim TBPesoHuevo As TextBox = TryCast(p.FindControl("TBPesoHuevo"), TextBox)
-                                                                       'If chk.Checked And tmp_row <> 0 And tmp_valor <> "0" Then
-                                                                       '    TBEdadIni.Text = tmp_valor
-                                                                       'End If
-                                                                       'If chk.Checked Then tmp_valor = TBEdadFin.Text
+
+                                                                       If chk.Checked And tmp_row <> 0 And tmp_valor <> "0" Then
+                                                                           TBEdadIni.Text = tmp_valor
+                                                                       End If
+                                                                       If chk.Checked Then tmp_valor = TBEdadFin.Text
                                                                        tmp_row += 1
                                                                    End Sub)
-
             Dim Valores As String = String.Join("|", (lstControles.FindAll(Function(p) p.Editable = "S").Select(Function(a) a.Valor).ToList()))
             Valores += "|1"
             Dim valoresE As String = GetRPTChkCapturaAll(rptEtapas, "chk", iList)

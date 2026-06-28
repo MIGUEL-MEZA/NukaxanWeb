@@ -67,6 +67,7 @@ Public Class OptimizerC_PerfilN_Resultado
         ObjModel.CvePerfilN = dr("CvePerfilN")
         ObjModel.Request = dr("Request")
         ObjModel.Response = dr("Response")
+        ObjModel.Response2 = If(IsDBNull(dr("Response2")), "", dr("Response2"))
         ObjModel.FecAct = CDate(dr("FecAct")).ToString("dd/MM/yyyy HH:mm")
         ObjModel.UsuAct = dr("UsuAct")
 

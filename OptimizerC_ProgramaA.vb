@@ -69,6 +69,9 @@ Public Class OptimizerC_ProgramaA
         Dim ObjModel As New OptimizerC_ProgramaAModel
         ObjModel.CvePlan = dr("CvePlan")
         ObjModel.CvePerfilN = dr("CvePerfilN")
+        ObjModel.Folio = dr("Folio")
+        ObjModel.FolioR = dr("FolioR")
+        ObjModel.FolioRPN = dr("FolioRPN")
         ObjModel.CodCliente = dr("CodCliente")
         ObjModel.CveModalidad = dr("CveModalidad")
         ObjModel.Titulo = dr("Titulo")

@@ -1,4 +1,5 @@
-﻿Imports System.Web.DynamicData
+﻿Imports System.Configuration
+Imports System.Web.DynamicData
 Imports Microsoft.Ajax.Utilities
 Imports Newtonsoft.Json
 Imports NukaxanWEB.Libreria
@@ -37,10 +38,40 @@ Public Class OptimizerC_PerfilN_Frm
         iList.Add(New DatosGrid() With {.Tipo = 1, .Campo = "TBENAlimento", .Valida = "S", .ValidaCeros = "S"})
         iList.Add(New DatosGrid() With {.Tipo = 2, .Campo = "DDLAjuste", .Valida = "S", .ValidaCeros = "N"})
 
+        RegistrarDescargaDirecta()
+
         If Not Page.IsPostBack Then
             DatosLoad()
         End If
     End Sub
+        Private Sub RegistrarDescargaDirecta()
+        RegistrarControlDescarga("LBExcel")
+        RegistrarControlDescarga("LBPdf")
+    End Sub
+
+    Private Sub RegistrarControlDescarga(controlId As String)
+        Dim scriptManager = System.Web.UI.ScriptManager.GetCurrent(Page)
+        If scriptManager Is Nothing Then Exit Sub
+
+        Dim control = BuscarControlRecursivo(Me, controlId)
+        If Not control Is Nothing Then
+            scriptManager.RegisterPostBackControl(control)
+        End If
+    End Sub
+
+    Private Function BuscarControlRecursivo(parent As System.Web.UI.Control, controlId As String) As System.Web.UI.Control
+        If parent Is Nothing Then Return Nothing
+
+        Dim control = parent.FindControl(controlId)
+        If Not control Is Nothing Then Return control
+
+        For Each child As System.Web.UI.Control In parent.Controls
+            control = BuscarControlRecursivo(child, controlId)
+            If Not control Is Nothing Then Return control
+        Next
+
+        Return Nothing
+    End Function
     Sub DatosLoad()
         'pnlPopup.Style.Value = "display:none;"
         regPId.Text = "0"
@@ -345,6 +376,22 @@ Public Class OptimizerC_PerfilN_Frm
     Sub Refrescar()
         Response.Redirect(New RedirectPaginas().FindById(Plataforma + "-" + menu + "-1").PaginaURL.Replace("@Id", Codif(regPId.Text)).Replace("@filtro", Codif(filtroview.Text)).Replace("@pageIndex", gvindexpage.Text), True)
     End Sub
+        Sub DescargarExcel()
+        DescargarArchivoReporte("excel", 1, ConfigurationManager.AppSettings("WSOptimizer"))
+    End Sub
+
+    Sub DescargarPdf()
+        DescargarArchivoReporte("pdf", 1, ConfigurationManager.AppSettings("WSOptimizer"))
+    End Sub
+
+    Private Sub DescargarArchivoReporte(formato As String, versionReporte As Integer, baseApiUrl As String)
+        Try
+            If regPId.Text = "0" Then Throw New Exception("Debes guardar el perfil antes de generar el archivo.")
+            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, versionReporte, "PerfilNutricional")
+        Catch ex As Exception
+            Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
+        End Try
+    End Sub
     Function Valida() As Boolean
         Dim IsResult As Boolean = False
         Dim lst As Controles_CapturaModel
@@ -547,53 +594,61 @@ Public Class OptimizerC_PerfilN_Frm
         Dim filtro As String = filtroview.Text
         Response.Redirect(New RedirectPaginas().FindById(Plataforma + "-3-1").PaginaURL.Replace("@Id", Codif(CvePlan.Text)).Replace("@CvePN", Codif(regPId.Text)).Replace("@filtro", Codif(filtro)).Replace("@pageIndex", gvindexpage.Text), True)
     End Sub
-    Sub MostrarPerfil()
+        Sub MostrarPerfil()
         Try
-            Dim ObjR As ResponseModel = JsonConvert.DeserializeObject(Of ResponseModel)(New OptimizerC_PerfilN_Resultado().FindById(CInt(regPId.Text)).Response)
-            Dim lstE As List(Of OptimizerC_PerfilN_EtapasModel) = New OptimizerC_PerfilN_Etapas().FindlstAll(CodCliente.Text, Convert.ToInt64(regPId.Text))
+            Dim objPerfil As OptimizerC_PerfilNModel = New OptimizerC_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
+            Dim modeloCaptura As List(Of OptimizerC_PerfilN.PNCapturaModel) = New OptimizerC_PerfilN().ConstruirModeloCaptura(Convert.ToInt64(regPId.Text), objPerfil.CodCliente)
+            Dim jsonCaptura = JsonConvert.SerializeObject(modeloCaptura)
+            ClientScript.RegisterStartupScript(Me.GetType(), "initModeloCerdos", "var modeloCaptura = " & jsonCaptura & ";", True)
 
-            Dim style_titulo As String = "style='font-weight: bold!important;'"
-            Dim style_valor As String = "" '"style='font-family: Arial; font-size: 12px; font-weight: normal;color:#000000;'"
-            Dim sb As StringBuilder = New StringBuilder()
-            Dim num_decimales As Integer = 3
+            Dim etapas = modeloCaptura.GroupBy(Function(x) x.Etapa).Select(Function(g) New With {.Etapa = g.Key, .NombreEtapa = g.First().NombreEtapa}).OrderBy(Function(x) x.Etapa).ToList()
+            Dim categorias = modeloCaptura.OrderBy(Function(x) x.CveCategoria).ThenBy(Function(x) x.Variable).GroupBy(Function(x) x.CveCategoria).ToList()
+            Dim w As String = (350 + (170 * Math.Max(etapas.Count, 1))).ToString() + "px"
+            Dim sb As New StringBuilder()
 
-            'Dim arr = New String(1, 1) {{"TBNomEtapa", "1"}, {"CveEtapa", "0"}}
-            'Dim lstEtapas As List(Of String) = RPTCaptura(arr)
+            sb.Append("<style>")
+            sb.Append("thead tr:nth-child(1) th {height:35px;position:sticky;top:0;background:#9aa3b2;z-index:3;}")
+            sb.Append("th,td{border:1px solid #ccc;padding:5px;}")
+            sb.Append("</style>")
+            sb.Append("<div style='overflow:auto; height:57vh; width:100%;'>")
+            sb.Append("<table align='left' style='min-width:" & w & ";margin-top:10px;' cellpadding='1' border='0' class='datagrid333 table table-condensed table-sm table-rep'>")
+            sb.Append("<thead><tr><th width='350px'></th>")
+            For Each etapa In etapas
+                sb.Append("<th align='center' width='170px'><label style='font-weight:bold!important;'>" & etapa.NombreEtapa & "</label></th>")
+            Next
+            sb.Append("</tr></thead><tbody>")
 
-            Dim w As String = (350 + (170 * lstE.Count)).ToString + "px"
-            w = "900px"
-            sb.Append("<div >")
-            sb.Append("<table align='left' style='width:" + w + ";margin-top:10px;'cellpadding='3' border='1' class='table table-condensed  table-sm table-rep'>")
-            sb.Append("<thead><tr >")
-            sb.Append("<th align='left' width='350px' ><label " + style_titulo + ">&nbsp;</label></th>")
+            For Each categoria In categorias
+                Dim grupoVariables = categoria.GroupBy(Function(x) x.Variable).ToList()
+                Dim nombreCategoria = grupoVariables.First().First().NomCategoria
 
-            lstE.Where(Function(c) c.Aplica = "S").ToList.ForEach(Sub(p)
-                                                                      sb.Append("<th align='center' width='170px' ><label " + style_titulo + ">" + p.NomEtapa + "</label></th>")
-                                                                  End Sub)
+                If Not String.IsNullOrWhiteSpace(nombreCategoria) Then
+                    sb.Append("<tr style='background-color:#e1effd!important;font-weight:bold;'>")
+                    sb.Append("<td colspan='" & (etapas.Count + 1).ToString() & "'>" & nombreCategoria & "</td>")
+                    sb.Append("</tr>")
+                End If
 
-            sb.Append(" </thead></tr>")
-            ObjR.Variables.FindAll(Function(p) p.MostrarCliente = "S").OrderBy(Function(p) p.NoVariable).ToList.ForEach(Sub(p)
-                                                                                                                            sb.Append("<tr >")
-                                                                                                                            sb.Append("<td align='left' ><label " + style_titulo + ">" + p.Variable + "</label></td>")
-                                                                                                                            lstE.Where(Function(c) c.Aplica = "S").ToList.ForEach(Sub(e)
-                                                                                                                                                                                      If p.Etapas.Find(Function(x) x.Clave = e.CveEtapa) Is Nothing Then
-                                                                                                                                                                                          sb.Append("<td align='center' ><label " + style_valor + ">" + "&nbsp;" + "</label></td>")
-                                                                                                                                                                                      Else
-                                                                                                                                                                                          sb.Append("<td align='center' ><label " + style_valor + ">" + p.Etapas.Find(Function(x) x.Clave = e.CveEtapa).Valor.ToString("N2") + "</label></td>")
-                                                                                                                                                                                      End If
+                For Each grupo In grupoVariables
+                    sb.Append("<tr>")
+                    sb.Append("<td><label style='font-weight:bold!important;'>" & grupo.First().Descripcion & "</label></td>")
+                    For Each etapa In etapas
+                        Dim item = grupo.FirstOrDefault(Function(x) x.Etapa = etapa.Etapa)
+                        If item IsNot Nothing Then
+                            Dim valorTexto = Math.Round(item.Ajuste, item.Decimales).ToString(System.Globalization.CultureInfo.InvariantCulture)
+                            sb.Append("<td align='center'>" & If(item.Mostrar = "N", "", valorTexto) & "</td>")
+                        Else
+                            sb.Append("<td></td>")
+                        End If
+                    Next
+                    sb.Append("</tr>")
+                Next
+            Next
 
-                                                                                                                                                                                  End Sub
-                                                                                        )
-                                                                                                                        End Sub)
-            sb.Append("</table>")
-            sb.Append("</div")
-
-            PerfilN.Text = sb.ToString
-            'LB4.Style("display") = "none"
+            sb.Append("</tbody></table></div>")
+            PerfilN.Text = sb.ToString()
         Catch ex As Exception
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
         End Try
-
     End Sub
     Sub MostrarPerfil2(res As ResponseModel, req As WSPerfilN_RequestModel)
         Try
@@ -701,3 +756,4 @@ Public Class OptimizerC_PerfilN_Frm
         ' Verifies that the control is rendered
     End Sub
 End Class
+

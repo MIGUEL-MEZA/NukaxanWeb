@@ -6,9 +6,18 @@ Imports NukaxanWEB.OptimizerP_PerfilN
 
 Public Class OptimizerG_PerfilN_ReporteFrm
     Inherits Page
+    Protected WithEvents LB15 As LinkButton
+    Protected WithEvents LB_IMG15 As HtmlGenericControl
+    Protected WithEvents LB_LBL15 As Label
+    Protected WithEvents LBExcel As LinkButton
+    Protected WithEvents LB_LBLExcel As Label
+    Protected WithEvents LBPdf As LinkButton
+    Protected WithEvents LB_LBLPdf As Label
+    Protected WithEvents LBLReferencia As Label
+    Protected WithEvents LBLCliente As Label
     Public ObjUser As UsuarioModel
     Private Plataforma As String = "43"
-    Private menu As String = "4"
+    Private menu As String = "61"
     'Variables Generales
     Public defaultoption As String = ""
     Public msg As String = ""
@@ -89,7 +98,7 @@ Public Class OptimizerG_PerfilN_ReporteFrm
 
         'Titulo
         Dim lstMenu As MenuModel = New Menu().FindById(ObjUser.CveRol, CInt(Plataforma), -1, menu)
-        PageTitulo.Text = "Perfil Nutricional - Reporte"
+        'PageTitulo.Text = "Perfil Nutricional - Reporte"
 
         '--Acciones--
         For Each a As Controles_AccionesModel In lstAcciones
@@ -115,10 +124,14 @@ Public Class OptimizerG_PerfilN_ReporteFrm
                     Dim LB_LBL As Label = TryCast(UPContenido.FindControl("LB_LBL" + a.CveAccion.ToString), Label)
                     'Dim IMGA As System.Web.UI.WebControls.Image = TryCast(UPContenido.FindControl("IMGA" + a.CveAccion.ToString), System.Web.UI.WebControls.Image)
                     If Not LB Is Nothing Then
-                        LB_IMG.Attributes("class") = a.Icono
-                        LB_IMG.Style("font-size") = a.IconoSize + "!important"
+                        If Not LB_IMG Is Nothing Then
+                            LB_IMG.Attributes("class") = a.Icono
+                            LB_IMG.Style("font-size") = a.IconoSize + "!important"
+                        End If
                         LB.ToolTip = a.ToolTip
-                        LB_LBL.Text = a.NomAccion
+                        If Not LB_LBL Is Nothing Then
+                            LB_LBL.Text = a.NomAccion
+                        End If
                         If a.ValidaMensaje = "S" Then LB.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
                     End If
 
@@ -182,6 +195,10 @@ Public Class OptimizerG_PerfilN_ReporteFrm
         Dim IsAutor = If(Autor.Text = ObjUser.CodUsuario, True, False)
         Acciones(False, False, "0")
         Acciones(True, True, "0")
+
+        Dim ObjM As OptimizerG_ProgramaAModel = New OptimizerG_ProgramaA().FindById(0, Convert.ToInt64(regPId.Text), "")
+        LB15.Visible = If(ObjM Is Nothing, False, True)
+
     End Sub
     Sub LlenaRegistro()
         Try
@@ -210,7 +227,7 @@ Public Class OptimizerG_PerfilN_ReporteFrm
     End Sub
     Private Sub DescargarArchivoReporte(formato As String, versionReporte As Integer, baseApiUrl As String)
         Try
-            If regPId.Text = "0" Then Throw New Exception("No se encontró el identificador del perfil para generar el archivo.")
+            If regPId.Text = "0" Then Throw New Exception("No se encontrÃ³ el identificador del perfil para generar el archivo.")
             OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, versionReporte, "PerfilNutricional")
         Catch ex As Exception
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
@@ -223,6 +240,10 @@ Public Class OptimizerG_PerfilN_ReporteFrm
             'Dim ObjR As ResponseModel = JsonConvert.DeserializeObject(Of ResponseModel)(New OptimizerP_PerfilN_Resultado().FindById(CInt(regPId.Text)).Response)
             'Dim lstE As List(Of OptimizerP_PerfilN_EtapasModel) = New OptimizerP_PerfilN_Etapas().FindlstAll(CodCliente.Text, Convert.ToInt64(regPId.Text))
             'Dim lstVariables As List(Of OptimizerP_CatVariablesModel) = New OptimizerP_CatVariables().FindlstAll(0)
+            Dim ObjM As OptimizerG_PerfilNModel = New OptimizerG_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
+            LBLReferencia.Text = "FOLIO: " + ObjM.FolioR + " | " + ObjM.NomReferencia
+            LBLCliente.Text = ObjM.NomCliente
+
 
             Dim objPerfil As OptimizerG_PerfilNModel = New OptimizerG_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
             Dim modeloCaptura As List(Of PNCapturaModel) = New OptimizerG_PerfilN().ConstruirModeloCaptura(Convert.ToInt64(regPId.Text), objPerfil.CodCliente)
@@ -311,6 +332,11 @@ Public Class OptimizerG_PerfilN_ReporteFrm
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
         End Try
 
+    End Sub
+Sub MostrarPrograma()
+        Dim ObjM As OptimizerG_PerfilNModel = New OptimizerG_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
+        Dim filtro As String = filtroview.Text
+        Response.Redirect(New RedirectPaginas().FindById(Plataforma + "-62-1").PaginaURL.Replace("@Id", Codif(ObjM.CvePlan)).Replace("@CvePN", Codif(regPId.Text)).Replace("@filtro", Codif(filtro)).Replace("@pageIndex", gvindexpage.Text), True)
     End Sub
 
     '--MODAL---

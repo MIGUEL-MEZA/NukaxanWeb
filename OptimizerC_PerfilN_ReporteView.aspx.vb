@@ -1,13 +1,13 @@
-Imports System.Drawing
+﻿Imports System.Drawing
 Imports System.Web.DynamicData
 Imports System.Web.Services.Description
 Imports NukaxanWEB.Libreria
 Imports WebGrease.Css
 
-Public Class OptimizerG_PerfilN_ReporteView
+Public Class OptimizerC_PerfilN_ReporteView
     Inherits Page
     Private ObjUser As UsuarioModel
-    Private Plataforma As String = "43"
+    Private Plataforma As String = "41"
     Private menu As String = "61"
 
     'Variables de GridView
@@ -263,7 +263,7 @@ Public Class OptimizerG_PerfilN_ReporteView
         Dim dt As DataTable
         Try
             gv1.PageIndex = 0
-            dt = New OptimizerG_PerfilN().FindAll(0, ObjUser.CodUsuario)
+            dt = New OptimizerC_PerfilN().FindAll(0, ObjUser.CodUsuario)
             Session("DatosGV") = dt
             LlenaGV(dt)
         Catch ex As Exception

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="VB" Async="true" MasterPageFile="~/Master_OptimizerP.Master" AutoEventWireup="true" CodeBehind="OptimizerG_PerfilN_View.aspx.vb" Inherits="NukaxanWEB.OptimizerG_PerfilN_View" %>
+﻿<%@ Page Title="" Language="VB" Async="true" MasterPageFile="~/Master_OptimizerG.Master" AutoEventWireup="true" CodeBehind="OptimizerG_PerfilN_View.aspx.vb" Inherits="NukaxanWEB.OptimizerG_PerfilN_View" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <%@ Register TagPrefix="asp" Namespace="Saplin.Controls" Assembly="DropDownCheckBoxes" %>
@@ -77,7 +77,7 @@
                         Width="100%" ShowFooter="false" AllowPaging="True" CssClass="datagrid" CellSpacing="0">
                         <HeaderStyle />
                         <Columns>
-                           <asp:BoundField DataField="CvePerfilN" HeaderText="" HeaderStyle-Width="6%" />
+                           <asp:BoundField DataField="FolioR" HeaderText="" HeaderStyle-Width="6%" />
                             <asp:TemplateField HeaderText="" HeaderStyle-Width="22%">
                                 <ItemTemplate>
                                     <asp:Label ID="CvePerfilN" runat="server" Text='<%# Eval("CvePerfilN") %>' Visible="false"></asp:Label>
