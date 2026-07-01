@@ -30,6 +30,7 @@ Public Class OptimizerP_PerfilN_Frm
         ClienteEditable = New Acceso().ClienteEditable(CInt(Plataforma), ObjUser.CodUsuario, 1)
 
         iList.Add(New DatosGrid() With {.Tipo = 0, .Campo = "CveEtapa", .Valida = "N", .ValidaCeros = "N"})
+        iList.Add(New DatosGrid() With {.Tipo = 2, .Campo = "DDLEtapaFlujo", .Valida = "S", .ValidaCeros = "N"})
         iList.Add(New DatosGrid() With {.Tipo = 1, .Campo = "TBNomEtapa", .Valida = "N", .ValidaCeros = "N"})
         iList.Add(New DatosGrid() With {.Tipo = 0, .Campo = "CodALLIX", .Valida = "N", .ValidaCeros = "N"})
         iList.Add(New DatosGrid() With {.Tipo = 0, .Campo = "Aplica", .Valida = "N", .ValidaCeros = "N"})
@@ -234,6 +235,7 @@ Public Class OptimizerP_PerfilN_Frm
 
         Dim lstc As New List(Of FrmControlModel)
         lstc.Add(New FrmControlModel With {.Nombre = "chk", .Tipo = 0})
+        lstc.Add(New FrmControlModel With {.Nombre = "DDLEtapaFlujo", .Tipo = 3})
         lstc.Add(New FrmControlModel With {.Nombre = "TBNomEtapa", .Tipo = 2})
         lstc.Add(New FrmControlModel With {.Nombre = "TBEdadIni", .Tipo = 2})
         lstc.Add(New FrmControlModel With {.Nombre = "TBEdadFin", .Tipo = 2})
@@ -321,12 +323,18 @@ Public Class OptimizerP_PerfilN_Frm
             Dim item As RepeaterItem = e.Item
             Dim chk As CheckBox = (TryCast(item.FindControl("chk"), CheckBox))
             Dim Aplica As String = (TryCast(item.FindControl("Aplica"), Label)).Text
+            Dim CveEtapaFlujo As Integer = CInt((TryCast(item.FindControl("CveEtapaFlujo"), Label).Text))
+            Dim DDLEtapaFlujo As DropDownList = (TryCast(item.FindControl("DDLEtapaFlujo"), DropDownList))
             Dim TBNomEtapa As TextBox = (TryCast(item.FindControl("TBNomEtapa"), TextBox))
             Dim TBEdadIni As TextBox = (TryCast(item.FindControl("TBEdadIni"), TextBox))
             Dim TBEdadFin As TextBox = (TryCast(item.FindControl("TBEdadFin"), TextBox))
             Dim TBEMAlimento As TextBox = (TryCast(item.FindControl("TBEMAlimento"), TextBox))
 
+            Call New Catalogos().LlenaOptimizerP_Etapas(DDLEtapaFlujo)
+            DDLEtapaFlujo.SelectedValue = CveEtapaFlujo
+
             chk.Checked = If(Aplica = "S", True, False)
+            DDLEtapaFlujo.Enabled = chk.Checked
             TBNomEtapa.Enabled = chk.Checked
             TBEdadIni.Enabled = False 'chk.Checked
             TBEdadFin.Enabled = chk.Checked
@@ -805,11 +813,13 @@ td {
     Protected Sub OnCheckedChanged(sender As Object, e As EventArgs)
         Dim chk As CheckBox = TryCast(sender, CheckBox)
         Dim item As RepeaterItem = CType(chk.NamingContainer, RepeaterItem)
+        Dim DDLEtapaFlujo As DropDownList = (TryCast(item.FindControl("DDLEtapaFlujo"), DropDownList))
         Dim TBNomEtapa As TextBox = TryCast(item.FindControl("TBNomEtapa"), TextBox)
         Dim TBEdadIni As TextBox = TryCast(item.FindControl("TBEdadIni"), TextBox)
         Dim TBEdadFin As TextBox = TryCast(item.FindControl("TBEdadFin"), TextBox)
         Dim TBEMAlimento As TextBox = TryCast(item.FindControl("TBEMAlimento"), TextBox)
 
+        DDLEtapaFlujo.Enabled = chk.Checked
         TBNomEtapa.Enabled = chk.Checked
         TBEdadIni.Enabled = False 'chk.Checked
         TBEdadFin.Enabled = chk.Checked

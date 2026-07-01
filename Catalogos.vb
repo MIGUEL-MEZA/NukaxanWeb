@@ -534,6 +534,20 @@ Public Class Catalogos
             dt = Nothing
         End Try
     End Sub
+    Public Sub LlenaOptimizer_Etapas(DDLControl As Control)
+        Dim dt As DataTable
+        Dim sb As New StringBuilder
+        Try
+            sb.Append(" EXEC spc_Catalogos 44,''")
+            dt = execQuery(sb.ToString)
+            Call subControl_fill(DDLControl, dt, "CveEtapa", "NomEtapa", True)
+
+        Catch ex As Exception
+            strError = CleanSpecialCharacter(ex.Message)
+        Finally
+            dt = Nothing
+        End Try
+    End Sub
 
     'OPTIMIZER-POLLOS
     Public Sub LlenaOptimizerP_Referencia(DDLControl As Control)
@@ -557,6 +571,20 @@ Public Class Catalogos
             sb.Append(" EXEC spc_Catalogos 412,''")
             dt = execQuery(sb.ToString)
             Call subControl_fill(DDLControl, dt, "CveParametro", "NomParametro", True)
+
+        Catch ex As Exception
+            strError = CleanSpecialCharacter(ex.Message)
+        Finally
+            dt = Nothing
+        End Try
+    End Sub
+    Public Sub LlenaOptimizerP_Etapas(DDLControl As Control)
+        Dim dt As DataTable
+        Dim sb As New StringBuilder
+        Try
+            sb.Append(" EXEC spc_Catalogos 413,''")
+            dt = execQuery(sb.ToString)
+            Call subControl_fill(DDLControl, dt, "CveEtapa", "NomEtapa", True)
 
         Catch ex As Exception
             strError = CleanSpecialCharacter(ex.Message)
@@ -601,6 +629,20 @@ Public Class Catalogos
             sb.Append(" EXEC spc_Catalogos 433,''")
             dt = execQuery(sb.ToString)
             Call subControl_fill(DDLControl, dt, "CveTipoInstalacion", "NomTipoInstalacion", True)
+
+        Catch ex As Exception
+            strError = CleanSpecialCharacter(ex.Message)
+        Finally
+            dt = Nothing
+        End Try
+    End Sub
+    Public Sub LlenaOptimizerG_Etapas(DDLControl As Control)
+        Dim dt As DataTable
+        Dim sb As New StringBuilder
+        Try
+            sb.Append(" EXEC spc_Catalogos 434,''")
+            dt = execQuery(sb.ToString)
+            Call subControl_fill(DDLControl, dt, "CveEtapa", "NomEtapa", True)
 
         Catch ex As Exception
             strError = CleanSpecialCharacter(ex.Message)

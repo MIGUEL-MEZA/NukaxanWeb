@@ -689,6 +689,24 @@ Partial Public Class OptimizerP_ProgramaA_Frm
     Protected WithEvents CostoPonderado As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control CostoTotalAlimento.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents CostoTotalAlimento As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control Ca.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Ca As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control CostoKiloProducido.
     '''</summary>
     '''<remarks>

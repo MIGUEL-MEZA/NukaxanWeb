@@ -257,42 +257,6 @@ Partial Public Class OptimizerG_PerfilN_Frm
     Protected WithEvents LB_LBL11 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control LBExcel.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LBExcel As Global.System.Web.UI.WebControls.LinkButton
-
-    '''<summary>
-    '''Control LB_LBLExcel.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LB_LBLExcel As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control LBPdf.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LBPdf As Global.System.Web.UI.WebControls.LinkButton
-
-    '''<summary>
-    '''Control LB_LBLPdf.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LB_LBLPdf As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
     '''Control LB2.
     '''</summary>
     '''<remarks>
@@ -867,6 +831,60 @@ Partial Public Class OptimizerG_PerfilN_Frm
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents LB_LBL19 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control LB20.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB20 As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control LB_IMG20.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB_IMG20 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
+    '''<summary>
+    '''Control LB_LBL20.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB_LBL20 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control LB21.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB21 As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control LB_IMG21.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB_IMG21 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
+    '''<summary>
+    '''Control LB_LBL21.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB_LBL21 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control PerfilN.

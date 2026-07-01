@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="VB" Async="true" AutoEventWireup="true" MasterPageFile="~/Master_OptimizerC.Master" CodeBehind="OptimizerC_PerfilN_Frm.aspx.vb" Inherits="NukaxanWEB.OptimizerC_PerfilN_Frm" %>
+﻿<%@ Page Title="" Language="VB" Async="true" AutoEventWireup="true" MasterPageFile="~/Master_OptimizerP.Master" CodeBehind="OptimizerC_PerfilN_Frm.aspx.vb" Inherits="NukaxanWEB.OptimizerC_PerfilN_Frm" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -36,6 +36,112 @@
             });
         };
     </script>
+     <style>
+    .header {
+        background-color: #0b2e57;
+        color: white;
+        padding: 10px 25px 10px 15px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start; /* 🔥 Alinea todo arriba */
+    }
+
+    .header-left {
+        display: flex;
+        align-items: flex-start; /* 🔥 clave */
+        gap: 5px;
+    }
+
+    .logo-left {
+        width: 85px;             /* 🔥 más grande */
+        margin-right: 8px;      /* 🔥 más espacio */        
+    }
+
+    .header-text h1 {
+        margin: 0;
+        font-size: 26px;
+        letter-spacing: 1px;
+    }
+
+    .subtitulo {
+        color: #18a4ff;
+        font-size: 13px;
+        margin-top: 3px;
+    }
+
+    .cliente {
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .divider {
+        width: 2px;
+        height: 65px;
+        background-color: #0f4d8a;
+        margin: 0 25px;
+    }
+
+    .header-right {
+        text-align: right;
+    }
+
+    .logo-right {
+        width: 290px;
+        margin-bottom: 8px;
+    }
+
+    .fecha {
+        font-size: 12px;
+        color: #cfd8e3;
+    }
+
+    thead tr:nth-child(1) th {
+    height: 35px;
+}
+
+thead tr:nth-child(1) th {
+    position: sticky;
+    top: 0;
+    background: #0b2e57!important;
+    color:#ffffff!important;
+    font-weight:normal!important;
+    z-index: 3;
+}
+
+th {
+   /* border:  1px solid #ccc;*/
+    padding: 5px;
+}
+td {
+    /*border:  1px solid #ccc;*/
+    padding: 5px;
+}
+.table-rep{    
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+
+.table-rep th {
+    border-right: 1px solid #0f2f52;
+}
+
+.table-rep thead tr th:last-child {
+    border-right: none; /* 🔥 evita el borde cuadrado */
+}
+
+.table-rep thead tr th:first-child {
+    border-top-left-radius: 10px;
+}
+
+.table-rep thead tr th:last-child {
+    border-top-right-radius: 10px;
+}
+.categoria{
+     background-color: #eef3f8;
+}
+    </style>
     <asp:UpdateProgress ID="UpdateProgress1" DisplayAfter="10" runat="server" AssociatedUpdatePanelID="UPContenido">
         <ProgressTemplate>
             <div class="divWaiting" style="background-color: white;">
@@ -89,13 +195,7 @@
                         <asp:LinkButton ID="LB11" runat="server" OnClick="Guardar" CssClass="lnkbtn-action">
                             <i runat="server" id="LB_IMG11" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL11">Calcular</asp:Label>
-                        </asp:LinkButton>
-                        <asp:LinkButton ID="LBExcel" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action">
-                            <asp:Label runat="server" ID="LB_LBLExcel">Excel</asp:Label>
-                        </asp:LinkButton>
-                        <asp:LinkButton ID="LBPdf" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action">
-                            <asp:Label runat="server" ID="LB_LBLPdf">PDF</asp:Label>
-                        </asp:LinkButton>
+                        </asp:LinkButton>                       
                         <asp:LinkButton ID="LB2" runat="server" OnClick="Regresar" CssClass="lnkbtn-action">
                             <i runat="server" id="LB_IMG2" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL2">Salir</asp:Label>
@@ -247,16 +347,19 @@
                                                     <th width='5%'>
                                                         <asp:Label runat="server" ID="Label7"></asp:Label>
                                                     </th>
-                                                    <th width='30%'>
-                                                        <asp:Label runat="server" ID="Label1">ETAPA</asp:Label>
+                                                    <th width='18%'>
+                                                        <asp:Label runat="server" ID="Label9">ETAPA</asp:Label>
                                                     </th>
-                                                    <th width='12%' align="center">
+                                                    <th width='18%'>
+                                                        <asp:Label runat="server" ID="Label1">NOMBRE</asp:Label>
+                                                    </th>
+                                                    <th width='10%' align="center">
                                                         <asp:Label runat="server" ID="Label3">PESO INICIAL (kg)</asp:Label>
                                                     </th>
-                                                    <th width='12%' align="center">
+                                                    <th width='10%' align="center">
                                                         <asp:Label runat="server" ID="Label4">PESO FINAL (kg)</asp:Label>
                                                     </th>
-                                                    <th width='12%' align="center">
+                                                    <th width='10%' align="center">
                                                         <asp:Label runat="server" ID="Label5">EN alimento (kcal/kg)</asp:Label>
                                                     </th>
                                                     <th width='10%' align="center">
@@ -276,8 +379,14 @@
                                             <td align="center ">
                                                 <asp:CheckBox ID="chk" runat="server" AutoPostBack="true" OnCheckedChanged="OnCheckedChanged" />
                                             </td>
+                                             <td align="center" class="justify-content-center">
+                                                <asp:DropDownList runat="server" ID="DDLEtapaFlujo" CssClass="form-control" Width="95%" ClientIDMode="Static">                                                
+                                                </asp:DropDownList>
+                                                <asp:Label runat="server" ID="TBNomEtapaFlujoD" Text='<%# Eval("NomEtapaFlujo")%>' CssClass="control-value bold" Visible="false"></asp:Label>                                                
+                                            </td>
                                             <td align="left " class="fw-bold">
                                                 <asp:Label runat="server" ID="CveEtapa" Text='<%# Eval("CveEtapa")%>' Visible="false"></asp:Label>
+                                                <asp:Label runat="server" ID="CveEtapaFlujo" Text='<%# Eval("CveEtapaFlujo")%>' Visible="false"></asp:Label>
                                                 <asp:Label runat="server" ID="Aplica" Text='<%# Eval("Aplica")%>' Visible="false"></asp:Label>
                                                 <asp:Label runat="server" ID="Fija" Text='<%# Eval("Fija")%>' Visible="false"></asp:Label>
                                                 <asp:Label runat="server" ID="CodALLIX" Text='<%# Eval("CodALLIX")%>' Visible="false"></asp:Label>
@@ -289,17 +398,17 @@
                                                 <asp:Label runat="server" ID="TBNomEtapaD" Text='<%# Eval("NomEtapa")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                             </td>
                                             <td align="center" class="justify-content-center">
-                                                <asp:TextBox ID="TBPesoIni" runat="server" Width="50px" Text='<%# Eval("PesoIni")%>' CssClass="form-control "></asp:TextBox>
+                                                <asp:TextBox ID="TBPesoIni" runat="server" Width="60px" Text='<%# Eval("PesoIni")%>' CssClass="form-control "></asp:TextBox>
                                                 <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtender3" TargetControlID="TBPesoIni" runat="server" FilterType="Custom,Numbers" ValidChars="."></asp:FilteredTextBoxExtender>
                                                 <asp:Label runat="server" ID="TBPesoIniD" Text='<%# Eval("PesoIni")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                             </td>
                                             <td align="center" class="justify-content-center">
-                                                <asp:TextBox ID="TBPesoFin" runat="server" Width="50px" Text='<%# Eval("PesoFin")%>' CssClass="form-control "></asp:TextBox>
+                                                <asp:TextBox ID="TBPesoFin" runat="server" Width="60px" Text='<%# Eval("PesoFin")%>' CssClass="form-control "></asp:TextBox>
                                                 <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtender4" TargetControlID="TBPesoFin" runat="server" FilterType="Custom,Numbers" ValidChars="."></asp:FilteredTextBoxExtender>
                                                 <asp:Label runat="server" ID="TBPesoFinD" Text='<%# Eval("PesoFin")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                             </td>
                                             <td align="center" class="justify-content-center">
-                                                <asp:TextBox ID="TBENAlimento" runat="server" Width="60px" Text='<%# Eval("ENAlimento")%>' Visible="true" CssClass="form-control "></asp:TextBox>
+                                                <asp:TextBox ID="TBENAlimento" runat="server" Width="70px" Text='<%# Eval("ENAlimento")%>' Visible="true" CssClass="form-control "></asp:TextBox>
                                                 <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" TargetControlID="TBENAlimento" runat="server" FilterType="Custom,Numbers" ValidChars="."></asp:FilteredTextBoxExtender>
                                                 <asp:Label runat="server" ID="TBENAlimentoD" Text='<%# Eval("ENAlimento")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                             </td>
@@ -307,7 +416,7 @@
                                                 <asp:Label runat="server" ID="LBLGD_PReferencia"  CssClass="control-value bold"></asp:Label>
                                             </td>
                                             <td align="center" class="justify-content-center">
-                                                <asp:DropDownList runat="server" ID="DDLAjuste" CssClass="form-control" Width="95%" ClientIDMode="Static">                                                
+                                                <asp:DropDownList runat="server" ID="DDLAjuste" CssClass="form-control" Width="90%" ClientIDMode="Static">                                                
                                                 </asp:DropDownList>
                                                 <asp:Label runat="server" ID="TBAjuste" Text='<%# Eval("AjusteGDP")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                                 <asp:Label runat="server" ID="TBAjusteD" Text='<%# Eval("AjusteGDP").ToString + "%"%>' CssClass="control-value bold" Visible="false"></asp:Label>
@@ -350,6 +459,16 @@
                             </table>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="sec2">
+                            <div align="right" style="padding: 3px 20px 3px 3px;">
+                                 <asp:LinkButton ID="LB20" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action">
+                                     <i runat="server" id="LB_IMG20" class=""></i>
+                                    <asp:Label runat="server" ID="LB_LBL20">Excel</asp:Label>
+                                </asp:LinkButton>
+                                <asp:LinkButton ID="LB21" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action">
+                                    <i runat="server" id="LB_IMG21" class=""></i>
+                                    <asp:Label runat="server" ID="LB_LBL21">PDF</asp:Label>
+                                </asp:LinkButton>
+                            </div>
                             <asp:Literal runat="server" ID="PerfilN"></asp:Literal>
                         </div>
 

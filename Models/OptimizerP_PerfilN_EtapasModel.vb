@@ -3,6 +3,7 @@
 Public Class OptimizerP_PerfilN_EtapasModel
     Public Property CvePerfilN As Int64 = 0
     Public Property CveEtapa As Integer = 0
+    Public Property CveEtapaFlujo As Integer = 0
     Public Property NomEtapa As String = ""
     Public Property CodALLIX As String = ""
     Public Property Aplica As String = ""

@@ -1,4 +1,4 @@
-<%@ Page Title="" Language="VB" Async="true" AutoEventWireup="true" MasterPageFile="~/Master_OptimizerP.Master" CodeBehind="OptimizerP_PerfilN_Frm.aspx.vb" Inherits="NukaxanWEB.OptimizerP_PerfilN_Frm" %>
+﻿<%@ Page Title="" Language="VB" Async="true" AutoEventWireup="true" MasterPageFile="~/Master_OptimizerP.Master" CodeBehind="OptimizerP_PerfilN_Frm.aspx.vb" Inherits="NukaxanWEB.OptimizerP_PerfilN_Frm" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -39,19 +39,19 @@
 
             // Buscar la fila actual (tr) y luego el otro campo dentro de esa fila
             var $fila = $txt.closest('tr');
-            var etapa  = $fila.find('.hdn-etapa').val();
-           /* alert(valor + '-' + etapa);*/
+            var etapa = $fila.find('.hdn-etapa').val();
+            /* alert(valor + '-' + etapa);*/
             var $items = $('.repeater-item');
-           /* alert(parseInt(etapa) + 1)*/
-            
-            for (var i = parseInt(etapa) ; i < $items.length; i++) {                
+            /* alert(parseInt(etapa) + 1)*/
+
+            for (var i = parseInt(etapa); i < $items.length; i++) {
                 var $nextItem = $($items[i]);
-                var chkActivo = $nextItem.find('input[type="checkbox"]');              
-                if (chkActivo.prop('checked')) {                    
+                var chkActivo = $nextItem.find('input[type="checkbox"]');
+                if (chkActivo.prop('checked')) {
                     $nextItem.find('.Edad-Ini').val(valor);
                     break;
                 }
-            }            
+            }
         };
         /*AJUSTES*/
         function marcarCambios() {
@@ -61,7 +61,7 @@
                 let ajuste = parseFloat(input.value);
                 let tdAjuste = input.closest("td");
                 let tdcomentario = tdAjuste.nextElementSibling;
-                                                
+
                 let cambiado = Math.abs(ajuste - ref) > 0.000001;
 
                 if (cambiado) {
@@ -92,7 +92,7 @@
                 let dec = x.Decimales || 2;
                 let ref = parseFloat(x.Referencia.toFixed(dec));
                 let aju = parseFloat(x.Ajuste.toFixed(dec));
-                // ? si son iguales despu�s de redondeo ? forzar igualdad
+                // ? si son iguales después de redondeo ? forzar igualdad
                 if (aju === ref) {
                     x.Ajuste = ref;
                 }
@@ -174,7 +174,7 @@
                     `.comentario[data-etapa='${item.Etapa}'][data-variable='${item.Variable}']`
                 );
 
-                // ? 3. Si no existe o est� oculto ? ignorar
+                // ? 3. Si no existe o está oculto ? ignorar
                 if (!inputAjuste || inputAjuste.offsetParent === null) return;
 
                 let dec = item.Decimales || 2;
@@ -186,7 +186,7 @@
                 // ? 4. Detectar cambio real (con tolerancia)
                 let cambioReal = Math.abs(ajuste - referencia) > tolerancia;
 
-                // ? 5. Validar SOLO si el usuario lo toc�
+                // ? 5. Validar SOLO si el usuario lo tocó
                 let fueEditado = inputAjuste.dataset.editado === "1";
 
                 if (cambioReal && fueEditado && comentario.length === 0) {
@@ -206,38 +206,38 @@
         }
         function guardarCambios() {
             let modelo = actualizarModeloDesdeUI();
-           modelo = normalizarModelo(modelo);
+            modelo = normalizarModelo(modelo);
             if (!validarModelo(modelo)) {
                 alert("Debes capturar comentario cuando el ajuste es diferente a la referencia.");
                 return;
             }
-           
-            let id = document.getElementById("JSONId").value;          
+
+            let id = document.getElementById("JSONId").value;
             let usuario = document.getElementById("JSONUsuAct").value;
             $.ajax({
-                         url: '/OptimizerPerfilServices.asmx/GuardarJSONAjuste',  
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        xhrFields: {
-                            withCredentials: true   // ? ENV�A COOKIES DE AUTH
-                        },
-                        data: JSON.stringify({
-                            modelo: modelo,
-                            modulo:'P',
-                            id: parseInt(id),
-                            usuario: usuario
-                        }),
+                url: '/OptimizerPerfilServices.asmx/GuardarJSONAjuste',
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                xhrFields: {
+                    withCredentials: true   // ? ENVÍA COOKIES DE AUTH
+                },
+                data: JSON.stringify({
+                    modelo: modelo,
+                    modulo: 'P',
+                    id: parseInt(id),
+                    usuario: usuario
+                }),
 
-                        success: function (res) {
-                            alert("Guardado correctamente");
-                        },
+                success: function (res) {
+                    alert("Guardado correctamente");
+                },
 
-                        error: function (err) {
-                            console.log(err.responseText);
-                            alert("Error");
-                        }
-                    });
+                error: function (err) {
+                    console.log(err.responseText);
+                    alert("Error");
+                }
+            });
 
         }
 
@@ -256,7 +256,7 @@
             txtIni.css("border", "");
             txtFin.css("border", "");
 
-            // validaci�n
+            // validación
             if (edadFin < edadIni) {
                 txtFin.css("border", "2px solid red");
                 txtIni.css("border", "2px solid red");
@@ -281,7 +281,7 @@
 
                     txtIni.val(valorFinal);
 
-                    // validar la siguiente fila tambi�n
+                    // validar la siguiente fila también
                     validarFila(txtIni);
 
                     break;
@@ -312,7 +312,115 @@
             syncAllEdades();
         });
     </script>
-    
+    <style>
+        .header {
+            background-color: #0b2e57;
+            color: white;
+            padding: 10px 25px 10px 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* 🔥 Alinea todo arriba */
+        }
+
+        .header-left {
+            display: flex;
+            align-items: flex-start; /* 🔥 clave */
+            gap: 5px;
+        }
+
+        .logo-left {
+            width: 85px; /* 🔥 más grande */
+            margin-right: 8px; /* 🔥 más espacio */
+        }
+
+        .header-text h1 {
+            margin: 0;
+            font-size: 26px;
+            letter-spacing: 1px;
+        }
+
+        .subtitulo {
+            color: #18a4ff;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        .cliente {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .divider {
+            width: 2px;
+            height: 65px;
+            background-color: #0f4d8a;
+            margin: 0 25px;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .logo-right {
+            width: 290px;
+            margin-bottom: 8px;
+        }
+
+        .fecha {
+            font-size: 12px;
+            color: #cfd8e3;
+        }
+
+        thead tr:nth-child(1) th {
+            height: 35px;
+        }
+
+        thead tr:nth-child(1) th {
+            position: sticky;
+            top: 0;
+            background: #0b2e57 !important;
+            color: #ffffff !important;
+            font-weight: normal !important;
+            z-index: 3;
+        }
+
+        th {
+            /* border:  1px solid #ccc;*/
+            padding: 5px;
+        }
+
+        td {
+            /*border:  1px solid #ccc;*/
+            padding: 5px;
+        }
+
+        .table-rep {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+
+            .table-rep th {
+                border-right: 1px solid #0f2f52;
+            }
+
+            .table-rep thead tr th:last-child {
+                border-right: none; /* 🔥 evita el borde cuadrado */
+            }
+
+            .table-rep thead tr th:first-child {
+                border-top-left-radius: 10px;
+            }
+
+            .table-rep thead tr th:last-child {
+                border-top-right-radius: 10px;
+            }
+
+        .categoria {
+            background-color: #eef3f8;
+        }
+    </style>
     <asp:UpdateProgress ID="UpdateProgress1" DisplayAfter="10" runat="server" AssociatedUpdatePanelID="UPContenido">
         <ProgressTemplate>
             <div class="divWaiting" style="background-color: white;">
@@ -331,11 +439,11 @@
                 <asp:Label runat="server" ID="gvindexpage" Visible="false"></asp:Label>
                 <asp:Label runat="server" ID="regPId" Visible="false"></asp:Label>
                 <asp:Label runat="server" ID="CodCliente" Visible="false"></asp:Label>
-                 <asp:Label runat="server" ID="CodALLIX" Visible="false"></asp:Label>
+                <asp:Label runat="server" ID="CodALLIX" Visible="false"></asp:Label>
                 <asp:Label runat="server" ID="CveModalidad" Visible="false"></asp:Label>
                 <asp:Label runat="server" ID="CveEstatus" Visible="false"></asp:Label>
                 <asp:Label runat="server" ID="Autor" Visible="false"></asp:Label>
-                <asp:Label runat="server" ID="CvePlan" Visible="false"></asp:Label>                
+                <asp:Label runat="server" ID="CvePlan" Visible="false"></asp:Label>
                 <input type="hidden" id="JSONId" value="<%= regPId.Text %>" />
                 <input type="hidden" id="JSONUsuAct" value="<%= ObjUser.CodUsuario %>" />
                 <div class="navbar-default " style="margin-bottom: 10px; height: 40px;">
@@ -369,15 +477,14 @@
                             <i runat="server" id="LB_IMG11" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL11">Calcular</asp:Label>
                         </asp:LinkButton>
-                        <asp:LinkButton ID="LBExcel" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action">
-                            <asp:Label runat="server" ID="LB_LBLExcel">Excel</asp:Label>
-                        </asp:LinkButton>
-                        <asp:LinkButton ID="LBPdf" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action">
-                            <asp:Label runat="server" ID="LB_LBLPdf">PDF</asp:Label>
-                        </asp:LinkButton>                        <asp:LinkButton ID="LB2" runat="server" OnClick="Regresar" CssClass="lnkbtn-action">
+                        <asp:LinkButton ID="LB2" runat="server" OnClick="Regresar" CssClass="lnkbtn-action">
                             <i runat="server" id="LB_IMG2" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL2">Salir</asp:Label>
                         </asp:LinkButton>
+                         <asp:LinkButton ID="LB21" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action">
+                                    <i runat="server" id="LB_IMG21" class=""></i>
+                                    <asp:Label runat="server" ID="LB_LBL21">PDF</asp:Label>
+                                </asp:LinkButton>
                     </div>
                 </div>
                 <div id="Tabs" role="tabpanel">
@@ -406,17 +513,17 @@
                                     <td width="20%" class="bg-gray semibold"></td>
                                     <td width="30%" class="bg-white"></td>
                                 </tr>
-                                 <tr>
+                                <tr>
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLC1"></asp:Label>
                                     </td>
-                                    <td class="bg-white" >                                        
+                                    <td class="bg-white">
                                         <asp:Label runat="server" ID="TBID" CssClass="control-label color-red"></asp:Label>
                                     </td>
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLC2"></asp:Label>
                                     </td>
-                                    <td class="bg-white">                                       
+                                    <td class="bg-white">
                                         <asp:Label runat="server" ID="TBNomEstatusD" CssClass="control-label "></asp:Label>
                                     </td>
                                 </tr>
@@ -448,12 +555,12 @@
                                         </asp:DropDownList>
                                         <asp:Label runat="server" ID="TBNomModalidadD" CssClass="control-label "></asp:Label>
                                     </td>
-                                   
+
                                 </tr>
                             </table>
                             <br />
                             <div class="divsec-captura">
-                                <asp:Label runat="server" ID="SECTitulo2"  CssClass="control-label"></asp:Label>
+                                <asp:Label runat="server" ID="SECTitulo2" CssClass="control-label"></asp:Label>
                             </div>
                             <table class="table-condensed" border="1" style="border: solid 1px gray; width: 100%;">
                                 <tr style="visibility: collapse;">
@@ -471,7 +578,7 @@
                                         </asp:DropDownList>
                                         <asp:Label runat="server" ID="TBReferenciaD" CssClass="control-label"></asp:Label>
 
-                                    </td>                               
+                                    </td>
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLC11"></asp:Label>
                                     </td>
@@ -533,11 +640,11 @@
                                             <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" runat="server" FilterType="Custom,Numbers" TargetControlID="TBDesperdicio" ValidChars="." />
                                         </div>
                                     </td>
-                                </tr>                               
+                                </tr>
                             </table>
                             <br />
                             <div class="divsec-captura">
-                                <asp:Label runat="server" ID="SECTitulo3"  CssClass="control-label"></asp:Label>
+                                <asp:Label runat="server" ID="SECTitulo3" CssClass="control-label"></asp:Label>
                             </div>
                             <div align="left" style="display: block;">
                                 <asp:Repeater ID="rptEtapas" runat="server">
@@ -552,7 +659,7 @@
                                                         <asp:Label runat="server" ID="Label1">ETAPA</asp:Label>
                                                     </th>
                                                     <th width='22%'>
-                                                        <asp:Label runat="server" ID="Label2">NONBRE CLIENTE</asp:Label>
+                                                        <asp:Label runat="server" ID="Label2">NOMBRE</asp:Label>
                                                     </th>
                                                     <th width='17%' align="center">
                                                         <asp:Label runat="server" ID="Label3">EDAD INICIAL (dias)</asp:Label>
@@ -567,19 +674,21 @@
                                             </thead>
                                     </HeaderTemplate>
                                     <ItemTemplate>
-                                        <tr  class="fila-etapa">
+                                        <tr class="fila-etapa">
                                             <td align="center ">
                                                 <asp:CheckBox ID="chk" runat="server" AutoPostBack="true" OnCheckedChanged="OnCheckedChanged" CssClass="chk-etapa" />
                                             </td>
-                                             <td align="left " class="fw-bold">
-                                                  <asp:Label runat="server" ID="CveEtapa" Text='<%# Eval("CveEtapa")%>' Visible="false"></asp:Label>
+                                            <td align="center" class="justify-content-center">
+                                                <asp:DropDownList runat="server" ID="DDLEtapaFlujo" CssClass="form-control" Width="95%" ClientIDMode="Static">
+                                                </asp:DropDownList>
+                                                <asp:Label runat="server" ID="TBNomEtapaFlujoD" Text='<%# Eval("NomEtapaFlujo")%>' CssClass="control-value bold" Visible="false"></asp:Label>
+                                            </td>
+                                            <td align="left " class="fw-bold">
+                                                <asp:Label runat="server" ID="CveEtapa" Text='<%# Eval("CveEtapa")%>' Visible="false"></asp:Label>
+                                                <asp:Label runat="server" ID="CveEtapaFlujo" Text='<%# Eval("CveEtapaFlujo")%>' Visible="false"></asp:Label>
                                                 <asp:Label runat="server" ID="Aplica" Text='<%# Eval("Aplica")%>' Visible="false"></asp:Label>
                                                 <asp:Label runat="server" ID="Fija" Text='<%# Eval("Fija")%>' Visible="false"></asp:Label>
                                                 <asp:Label runat="server" ID="CodALLIX" Text='<%# Eval("CodALLIX")%>' Visible="false"></asp:Label>
-
-                                            </td>
-                                            <td align="left " class="fw-bold">
-                                               
                                                 <asp:TextBox ID="TBNomEtapa" runat="server" Width="95%" Text='<%# Eval("NomEtapa")%>' CssClass="form-control "></asp:TextBox>
                                                 <asp:Label runat="server" ID="TBNomEtapaD" Text='<%# Eval("NomEtapa")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                             </td>
@@ -606,19 +715,19 @@
                                 </asp:Repeater>
                             </div>
                             <br />
-                             <div class="divsec-captura">
-                                <asp:Label runat="server" ID="SECTitulo4"  CssClass="control-label"></asp:Label>
+                            <div class="divsec-captura">
+                                <asp:Label runat="server" ID="SECTitulo4" CssClass="control-label"></asp:Label>
                             </div>
                             <table class="table-condensed" border="1" style="border: solid 1px gray; width: 100%;">
                                 <tr style="visibility: collapse;">
                                     <td width="20%" class="bg-gray semibold"></td>
-                                    <td width="80%" class="bg-white"></td>                                    
+                                    <td width="80%" class="bg-white"></td>
                                 </tr>
                                 <tr>
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLG22"></asp:Label>
                                     </td>
-                                    <td class="bg-white" colspan="3">                                        
+                                    <td class="bg-white" colspan="3">
                                         <asp:Label runat="server" ID="TBFecAltaD" CssClass="control-label color-blue"></asp:Label>
                                     </td>
                                 </tr>
@@ -626,18 +735,23 @@
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLG23"></asp:Label>
                                     </td>
-                                    <td class="bg-white" colspan="3">                                        
+                                    <td class="bg-white" colspan="3">
                                         <asp:Label runat="server" ID="TBFecActD" CssClass="control-label color-blue"></asp:Label>
                                     </td>
                                 </tr>
                             </table>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="sec2">
-                            <div align="right" style="padding:3px 20px 3px 3px;">
+                            <div align="right" style="padding: 3px 20px 3px 3px;">
                                 <asp:LinkButton ID="LB19" runat="server" OnClientClick="guardarCambios(); return false;" CssClass="lnkbtn-action">
                                     <i runat="server" id="LB_IMG19" class=""></i>
                                     <asp:Label runat="server" ID="LB_LBL19">Guardar Ajuste</asp:Label>
-                                </asp:LinkButton>                                
+                                </asp:LinkButton>
+                                 <asp:LinkButton ID="LB20" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action">
+                                     <i runat="server" id="LB_IMG20" class=""></i>
+                                    <asp:Label runat="server" ID="LB_LBL20">Excel</asp:Label>
+                                </asp:LinkButton>
+                               
                             </div>
                             <asp:Literal runat="server" ID="PerfilN"></asp:Literal>
                         </div>

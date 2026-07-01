@@ -67,6 +67,7 @@ Public Class OptimizerP_PerfilN_Etapas
         Dim ObjModel As New OptimizerP_PerfilN_EtapasModel
         ObjModel.CvePerfilN = dr("CvePerfilN")
         ObjModel.CveEtapa = dr("CveEtapa")
+        ObjModel.CveEtapaFlujo = dr("CveEtapaFlujo")
         ObjModel.NomEtapa = dr("NomEtapa")
         ObjModel.CodALLIX = dr("CodALLIX")
         ObjModel.Aplica = dr("Aplica")
