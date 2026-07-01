@@ -40,10 +40,42 @@ Public Class OptimizerP_ProgramaA_Frm
         iList.Add(New DatosGrid() With {.Tipo = 1, .Campo = "TBDuracionMin", .Valida = "S", .ValidaCeros = "N"})
         iList.Add(New DatosGrid() With {.Tipo = 1, .Campo = "TBDuracionMax", .Valida = "S", .ValidaCeros = "N"})
 
+        RegistrarDescargaDirecta()
+
         If Not Page.IsPostBack Then
             DatosLoad()
         End If
+        Response.ContentEncoding = System.Text.Encoding.UTF8
+        Response.Charset = "utf-8"
     End Sub
+    Private Sub RegistrarDescargaDirecta()
+        RegistrarControlDescarga("LBExcel")
+        RegistrarControlDescarga("LBPdf")
+    End Sub
+    Private Sub RegistrarControlDescarga(controlId As String)
+        Dim scriptManager = System.Web.UI.ScriptManager.GetCurrent(Page)
+        If scriptManager Is Nothing Then Exit Sub
+
+        Dim control = BuscarControlRecursivo(Me, controlId)
+        If Not control Is Nothing Then
+            scriptManager.RegisterPostBackControl(control)
+        End If
+    End Sub
+
+    Private Function BuscarControlRecursivo(parent As System.Web.UI.Control, controlId As String) As System.Web.UI.Control
+        If parent Is Nothing Then Return Nothing
+
+        Dim control = parent.FindControl(controlId)
+        If Not control Is Nothing Then Return control
+
+        For Each child As System.Web.UI.Control In parent.Controls
+            control = BuscarControlRecursivo(child, controlId)
+            If Not control Is Nothing Then Return control
+        Next
+
+        Return Nothing
+    End Function
+
     Sub DatosLoad()
         regPId.Text = "0"
         filtroview.Text = ""
@@ -382,8 +414,8 @@ Public Class OptimizerP_ProgramaA_Frm
             TBDiasPigmentoD.Text = DuracionPigmento.ToString("N0")
 
             CostoPonderado.Text = ObjR.Resultado.CostoPonderado.ToString("C2")
-            'CostoTotalAlimento.Text = ObjR.Resultado.CostoTotalAlimento.ToString("C2")
-            'Ca.Text = ObjR.Resultado.Ca.ToString("N2")
+            CostoTotalAlimento.Text = ObjR.Resultado.CostoTotalAlimento.ToString("C2")
+            Ca.Text = ObjR.Resultado.Ca.ToString("N2")
             CostoKiloProducido.Text = ObjR.Resultado.CostokiloProducido.ToString("N2")
             Utilidad.Text = ObjR.Resultado.Utilidad.ToString("N2")
 
@@ -452,7 +484,7 @@ Public Class OptimizerP_ProgramaA_Frm
             wgv = 0
             dtCol.AsEnumerable.ToList.ForEach(Sub(r)
                                                   Dim bfield As BoundField = New BoundField()
-                                                  bfield.HeaderText = If(r("Posicion") = 1, "", "PRESUPUESTO - " + r("Titulo"))
+                                                  bfield.HeaderText = If(r("Posicion") = 1, "", r("Titulo"))
                                                   bfield.DataField = r("Campo")
                                                   bfield.HeaderStyle.Width = Unit.Percentage(r("Ancho"))
                                                   bfield.ItemStyle.Width = Unit.Percentage(r("Ancho"))
@@ -690,14 +722,14 @@ Public Class OptimizerP_ProgramaA_Frm
     End Sub
     Sub MostrarPrograma()
         LlenaRPT_Resultado()
-        tbl_resultado.Visible = True
+        pnlResultado.Visible = True
         DefineGV()
         LlenaGV()
     End Sub
     Sub LimpiaOptimizado()
         rptResultado.DataSource = Nothing
         rptResultado.DataBind()
-        tbl_resultado.Visible = False
+        pnlResultado.Visible = False
 
         gv.DataSource = Nothing
         gv.DataBind()
@@ -768,6 +800,20 @@ Public Class OptimizerP_ProgramaA_Frm
     End Function
 
 
+    Sub DescargarExcel()
+        DescargarArchivoReporte("excel", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+    End Sub
+    Sub DescargarPdf()
+        DescargarArchivoReporte("pdf", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+    End Sub
+    Private Sub DescargarArchivoReporte(formato As String, versionReporte As Integer, baseApiUrl As String)
+        Try
+            If regPId.Text = "0" Then Throw New Exception("No se encontró el identificador del perfil para generar el archivo.")
+            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, versionReporte, "PerfilNutricional")
+        Catch ex As Exception
+            Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
+        End Try
+    End Sub
     '--MODAL---
     Sub Alertas(Titulo As String, Mensaje As String, Refrescar As Boolean, Tipo As Integer)
         ModalAlert(MPEAlerta, MPEBody, BAlertOK, BAlertCancel, Titulo, If(IsNumeric(Mensaje), New Mensajes().FindById("0", 0, CInt(Mensaje)).NomMensaje, Mensaje), Refrescar, Tipo)

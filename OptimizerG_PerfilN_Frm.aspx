@@ -346,8 +346,13 @@ td {
 .table-rep thead tr th:last-child {
     border-top-right-radius: 10px;
 }
+ .table-rep tfoot th {
+                background: #0b2e57 !important;
+                color: #ffffff !important;
+                font-weight: normal !important;
+            }
 .categoria{
-     background-color: #eef3f8;
+     background-color: #dce9f5;
 }
     </style>
     <asp:UpdateProgress ID="UpdateProgress1" DisplayAfter="10" runat="server" AssociatedUpdatePanelID="UPContenido">
@@ -727,6 +732,10 @@ td {
                     </div>
                 </asp:Panel>
             </ContentTemplate>
+             <Triggers>
+                <asp:PostBackTrigger ControlID="LB20" />
+                <asp:PostBackTrigger ControlID="LB21" />
+            </Triggers>
         </asp:UpdatePanel>
     </div>
 </asp:Content>

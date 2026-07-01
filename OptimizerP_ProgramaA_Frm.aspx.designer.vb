@@ -662,6 +662,60 @@ Partial Public Class OptimizerP_ProgramaA_Frm
     Protected WithEvents TBFecActD As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control LB20.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB20 As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control LB_IMG20.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB_IMG20 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
+    '''<summary>
+    '''Control LB_LBL20.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB_LBL20 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control LB21.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB21 As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control LB_IMG21.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB_IMG21 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
+    '''<summary>
+    '''Control LB_LBL21.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB_LBL21 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control rptResultado.
     '''</summary>
     '''<remarks>
@@ -671,13 +725,22 @@ Partial Public Class OptimizerP_ProgramaA_Frm
     Protected WithEvents rptResultado As Global.System.Web.UI.WebControls.Repeater
 
     '''<summary>
-    '''Control tbl_resultado.
+    '''Control pnlResultado.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents tbl_resultado As Global.System.Web.UI.HtmlControls.HtmlTable
+    Protected WithEvents pnlResultado As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''Control Label15.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label15 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control CostoPonderado.

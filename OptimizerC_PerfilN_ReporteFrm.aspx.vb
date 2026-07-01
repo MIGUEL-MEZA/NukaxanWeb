@@ -189,7 +189,7 @@ Public Class OptimizerC_PerfilN_ReporteFrm
         Acciones(True, True, "0")
 
         Dim ObjM As OptimizerC_ProgramaAModel = New OptimizerC_ProgramaA().FindById(0, Convert.ToInt64(regPId.Text), "")
-        LB15.Visible = If(ObjM Is Nothing, False, True)
+        LB22.Visible = If(ObjM Is Nothing, False, True)
 
     End Sub
     Sub LlenaRegistro()
@@ -267,7 +267,7 @@ Dim ObjM As OptimizerC_PerfilNModel = New OptimizerC_PerfilN().FindById(Convert.
 
             For Each cat In categorias
                 Dim nombreCategoria = cat.First().NomCategoria
-                sb.Append("<tr style='background-color:#e1effd!important;font-weight:bold;'>")
+                sb.Append("<tr style='background-color:#dce9f5!important;font-weight:bold;'>")
                 sb.Append("<td colspan='" & (etapas.Count + 1) & "'>" & nombreCategoria & "</td>")
                 sb.Append("</tr>")
                 Dim variables = cat.GroupBy(Function(x) x.Variable).ToList()

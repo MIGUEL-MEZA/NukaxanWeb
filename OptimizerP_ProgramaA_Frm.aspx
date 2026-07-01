@@ -136,6 +136,11 @@ td {
 .table-rep thead tr th:last-child {
     border-top-right-radius: 10px;
 }
+ .table-rep tfoot th,.table-rep tfoot td {
+                background: #0b2e57 !important;
+                color: #ffffff !important;
+                font-weight: normal !important;
+            }
 .categoria{
      background-color: #eef3f8;
 }
@@ -458,6 +463,16 @@ td {
                             </table>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="sec2" >
+                             <div align="right" style="padding: 3px 20px 3px 3px;">                               
+                                <asp:LinkButton ID="LB20" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action">
+                                    <i runat="server" id="LB_IMG20" class=""></i>
+                                    <asp:Label runat="server" ID="LB_LBL20">Excel</asp:Label>
+                                </asp:LinkButton>
+                                <asp:LinkButton ID="LB21" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action">
+                                    <i runat="server" id="LB_IMG21" class=""></i>
+                                    <asp:Label runat="server" ID="LB_LBL21">PDF</asp:Label>
+                                </asp:LinkButton>
+                            </div>
                             <div align="left" style="display: block;">
                                 <asp:Repeater ID="rptResultado" runat="server">
                                     <HeaderTemplate>
@@ -550,38 +565,46 @@ td {
                                 </asp:Repeater>
                             </div>
                             <br />
-                            <table runat="server" id="tbl_resultado" cellpadding='3' border="1" class="table table-condensed  table-sm " style="width:50%!important;">
-                                <thead>
-                                    <tr>
-                                        <th width="60%" style="text-align:left!important;">COSTO PONDERADO ALIMENTO:</th>
-                                        <td width="40%"><asp:Label runat="server" ID="CostoPonderado"></asp:Label></td>
-                                    </tr>
-                                     <tr>
-                                        <th style="text-align:left!important;">COSTO TOTAL DE ALIMENTO:</th>
-                                        <td><asp:Label runat="server" ID="CostoTotalAlimento"></asp:Label></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="text-align:left!important;">C.A:</th>
-                                        <td><asp:Label runat="server" ID="Ca"></asp:Label></td>
-                                    </tr>
-                                    <tr>
-                                        <th style="text-align:left!important;">COSTO DE PRODUCCIÓN:</th>
-                                        <td><asp:Label runat="server" ID="CostoKiloProducido"></asp:Label></td>
-                                    </tr>
-                                     <tr>
-                                        <th style="text-align:left!important;">UTILIDAD POR CONCEPTO DE ALIMENTO:</th>
-                                        <td><asp:Label runat="server" ID="Utilidad"></asp:Label></td>
-                                    </tr>
-                                     <tr>
-                                        <th style="text-align:left!important;">ROI:</th>
-                                        <td><asp:Label runat="server" ID="Roi"></asp:Label></td>
-                                    </tr>
-                                     <tr>
-                                        <th style="text-align:left!important;">GDP (Kg):</th>
-                                        <td><asp:Label runat="server" ID="Gdp"></asp:Label></td>
-                                    </tr>                                     
-                                </thead>
-                            </table>
+                            <asp:Panel ID="pnlResultado" runat="server">
+                                <table id="tbl_resultado" cellpadding='3' border="1" class="table table-condensed  table-sm table-rep" style="width: 50%!important;">
+                                    <thead>
+                                        <tr>
+                                            <th width="60%" style="text-align: left!important;"></th>
+                                            <th width="40%"><asp:Label runat="server" ID="Label15"></asp:Label></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="text-align: left!important;">COSTO PONDERADO ALIMENTO:</td>
+                                            <td><asp:Label runat="server" ID="CostoPonderado"></asp:Label></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: left!important;">COSTO TOTAL DE ALIMENTO:</td>
+                                            <td><asp:Label runat="server" ID="CostoTotalAlimento"></asp:Label></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: left!important;">C.A:</td>
+                                            <td><asp:Label runat="server" ID="Ca"></asp:Label></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: left!important;">COSTO DE PRODUCCIÓN:</td>
+                                            <td><asp:Label runat="server" ID="CostoKiloProducido"></asp:Label></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: left!important;">UTILIDAD POR CONCEPTO DE ALIMENTO:</td>
+                                            <td><asp:Label runat="server" ID="Utilidad"></asp:Label></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: left!important;">ROI:</td>
+                                            <td><asp:Label runat="server" ID="Roi"></asp:Label></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: left!important;">GDP (Kg):</td>
+                                            <td><asp:Label runat="server" ID="Gdp"></asp:Label></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </asp:Panel>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="sec3" >
                             <div align="left" style="display: block;">
@@ -632,6 +655,10 @@ td {
                     </div>
                 </asp:Panel>
             </ContentTemplate>
+             <Triggers>
+                <asp:PostBackTrigger ControlID="LB20" />
+                <asp:PostBackTrigger ControlID="LB21" />
+            </Triggers>
         </asp:UpdatePanel>
     </div>
 </asp:Content>

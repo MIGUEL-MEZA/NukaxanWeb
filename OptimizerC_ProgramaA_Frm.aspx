@@ -34,6 +34,120 @@
             });
         };
     </script>
+     <style>
+        .header {
+            background-color: #0b2e57;
+            color: white;
+            padding: 10px 25px 10px 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* 🔥 Alinea todo arriba */
+        }
+
+        .header-left {
+            display: flex;
+            align-items: flex-start; /* 🔥 clave */
+            gap: 5px;
+        }
+
+        .logo-left {
+            width: 85px; /* 🔥 más grande */
+            margin-right: 8px; /* 🔥 más espacio */
+        }
+
+        .header-text h1 {
+            margin: 0;
+            font-size: 26px;
+            letter-spacing: 1px;
+        }
+
+        .subtitulo {
+            color: #18a4ff;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        .cliente {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .divider {
+            width: 2px;
+            height: 65px;
+            background-color: #0f4d8a;
+            margin: 0 25px;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .logo-right {
+            width: 290px;
+            margin-bottom: 8px;
+        }
+
+        .fecha {
+            font-size: 12px;
+            color: #cfd8e3;
+        }
+
+        thead tr:nth-child(1) th {
+            height: 35px;
+        }
+
+        thead tr:nth-child(1) th {
+            position: sticky;
+            top: 0;
+            background: #0b2e57 !important;
+            color: #ffffff !important;
+            font-weight: normal !important;
+            z-index: 3;
+        }
+
+        th {
+            /* border:  1px solid #ccc;*/
+            padding: 5px;
+        }
+
+        td {
+            /*border:  1px solid #ccc;*/
+            padding: 5px;
+        }
+
+        .table-rep {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+
+            .table-rep th {
+                border-right: 1px solid #0f2f52;
+            }
+
+            .table-rep thead tr th:last-child {
+                border-right: none; /* 🔥 evita el borde cuadrado */
+            }
+
+            .table-rep thead tr th:first-child {
+                border-top-left-radius: 10px;
+            }
+
+            .table-rep thead tr th:last-child {
+                border-top-right-radius: 10px;
+            }
+
+            .table-rep tfoot th {
+                background: #0b2e57 !important;
+                color: #ffffff !important;
+                font-weight: normal !important;
+            }
+        .categoria {
+            background-color: #dce9f5;
+        }
+    </style>
     <asp:UpdateProgress ID="UpdateProgress1" DisplayAfter="10" runat="server" AssociatedUpdatePanelID="UPContenido">
         <ProgressTemplate>
             <div class="divWaiting" style="background-color: white;">

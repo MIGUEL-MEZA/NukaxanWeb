@@ -42,10 +42,41 @@ Public Class OptimizerG_ProgramaA_ReporteFrm
         iList.Add(New DatosGrid() With {.Tipo = 0, .Campo = "PesoHuevo", .Valida = "N", .ValidaCeros = "N"})
         iList.Add(New DatosGrid() With {.Tipo = 0, .Campo = "Produccion", .Valida = "N", .ValidaCeros = "N"})
 
+        RegistrarDescargaDirecta()
+
         If Not Page.IsPostBack Then
             DatosLoad()
         End If
+        Response.ContentEncoding = System.Text.Encoding.UTF8
+        Response.Charset = "utf-8"
     End Sub
+    Private Sub RegistrarDescargaDirecta()
+        RegistrarControlDescarga("LBExcel")
+        RegistrarControlDescarga("LBPdf")
+    End Sub
+    Private Sub RegistrarControlDescarga(controlId As String)
+        Dim scriptManager = System.Web.UI.ScriptManager.GetCurrent(Page)
+        If scriptManager Is Nothing Then Exit Sub
+
+        Dim control = BuscarControlRecursivo(Me, controlId)
+        If Not control Is Nothing Then
+            scriptManager.RegisterPostBackControl(control)
+        End If
+    End Sub
+
+    Private Function BuscarControlRecursivo(parent As System.Web.UI.Control, controlId As String) As System.Web.UI.Control
+        If parent Is Nothing Then Return Nothing
+
+        Dim control = parent.FindControl(controlId)
+        If Not control Is Nothing Then Return control
+
+        For Each child As System.Web.UI.Control In parent.Controls
+            control = BuscarControlRecursivo(child, controlId)
+            If Not control Is Nothing Then Return control
+        Next
+
+        Return Nothing
+    End Function
     Sub DatosLoad()
         regPId.Text = "0"
         filtroview.Text = ""
@@ -301,7 +332,20 @@ Public Class OptimizerG_ProgramaA_ReporteFrm
         Response.Redirect(New RedirectPaginas().FindById(Plataforma + "-61-1").PaginaURL.Replace("@Id", Codif(ObjM.CvePerfilN.ToString)).Replace("@filtro", Codif(filtro)).Replace("@pageIndex", gvindexpage.Text), True)
     End Sub
 
-
+    Sub DescargarExcel()
+        DescargarArchivoReporte("excel", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+    End Sub
+    Sub DescargarPdf()
+        DescargarArchivoReporte("pdf", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+    End Sub
+    Private Sub DescargarArchivoReporte(formato As String, versionReporte As Integer, baseApiUrl As String)
+        Try
+            If regPId.Text = "0" Then Throw New Exception("No se encontró el identificador del perfil para generar el archivo.")
+            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, versionReporte, "PerfilNutricional")
+        Catch ex As Exception
+            Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
+        End Try
+    End Sub
     '--MODAL---
     Sub Alertas(Titulo As String, Mensaje As String, Refrescar As Boolean, Tipo As Integer)
         ModalAlert(MPEAlerta, MPEBody, BAlertOK, BAlertCancel, Titulo, If(IsNumeric(Mensaje), New Mensajes().FindById("0", 0, CInt(Mensaje)).NomMensaje, Mensaje), Refrescar, Tipo)

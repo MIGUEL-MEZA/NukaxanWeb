@@ -188,7 +188,15 @@ td {
                         <asp:LinkButton ID="LB16" runat="server" OnClick="MostrarPerfil" CssClass="lnkbtn-action">
                             <i runat="server" id="LB_IMG16" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL16">Ver Perfil</asp:Label>
-                        </asp:LinkButton>                       
+                        </asp:LinkButton>
+                         <asp:LinkButton ID="LB20" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action">
+                            <i runat="server" id="LB_IMG20" class=""></i>
+                            <asp:Label runat="server" ID="LB_LBL20">Excel</asp:Label>
+                        </asp:LinkButton>
+                        <asp:LinkButton ID="LB21" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action">
+                            <i runat="server" id="LB_IMG21" class=""></i>
+                            <asp:Label runat="server" ID="LB_LBL21">PDF</asp:Label>
+                        </asp:LinkButton>
                         <asp:LinkButton ID="LB2" runat="server" OnClick="Regresar" CssClass="lnkbtn-action">
                             <i runat="server" id="LB_IMG2" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL2">Salir</asp:Label>
@@ -549,6 +557,10 @@ td {
                     </div>
                 </asp:Panel>
             </ContentTemplate>
+             <Triggers>
+                <asp:PostBackTrigger ControlID="LB20" />
+                <asp:PostBackTrigger ControlID="LB21" />
+            </Triggers>
         </asp:UpdatePanel>
     </div>
 </asp:Content>

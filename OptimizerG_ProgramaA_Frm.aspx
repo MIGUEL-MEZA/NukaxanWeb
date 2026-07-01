@@ -431,6 +431,16 @@ td {
                             </table>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="sec2">
+                            <div align="right" style="padding:0px 20px 3px 3px;">                                
+                                  <asp:LinkButton ID="LB20" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action">
+                                     <i runat="server" id="LB_IMG20" class=""></i>
+                                    <asp:Label runat="server" ID="LB_LBL20">Excel</asp:Label>
+                                </asp:LinkButton>
+                                <asp:LinkButton ID="LB21" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action">
+                                    <i runat="server" id="LB_IMG21" class=""></i>
+                                    <asp:Label runat="server" ID="LB_LBL21">PDF</asp:Label>
+                                </asp:LinkButton>
+                            </div>
                             <div align="left" style="display: block;">
                                 <asp:Repeater ID="rptResultado" runat="server">
                                     <HeaderTemplate>
@@ -771,6 +781,10 @@ td {
                     </div>
                 </asp:Panel>
             </ContentTemplate>
+             <Triggers>
+                <asp:PostBackTrigger ControlID="LB20" />
+                <asp:PostBackTrigger ControlID="LB21" />
+            </Triggers>
         </asp:UpdatePanel>
     </div>
 </asp:Content>

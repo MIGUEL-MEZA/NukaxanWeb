@@ -630,7 +630,7 @@ Public Class OptimizerC_PerfilN_Frm
                 Dim nombreCategoria = grupoVariables.First().First().NomCategoria
 
                 If Not String.IsNullOrWhiteSpace(nombreCategoria) Then
-                    sb.Append("<tr style='background-color:#e1effd!important;font-weight:bold;'>")
+                    sb.Append("<tr style='background-color:#dce9f5!important;font-weight:bold;'>")
                     sb.Append("<td colspan='" & (etapas.Count + 1).ToString() & "'>" & nombreCategoria & "</td>")
                     sb.Append("</tr>")
                 End If

@@ -137,8 +137,13 @@ td {
 .table-rep thead tr th:last-child {
     border-top-right-radius: 10px;
 }
+ .table-rep tfoot th {
+                background: #0b2e57 !important;
+                color: #ffffff !important;
+                font-weight: normal !important;
+            }
 .categoria{
-     background-color: #eef3f8;
+     background-color: #dce9f5;
 }
     </style>
     <asp:UpdateProgress ID="UpdateProgress1" DisplayAfter="10" runat="server" AssociatedUpdatePanelID="UPContenido">
@@ -177,10 +182,10 @@ td {
                             class="icon-bar"></span><span class="icon-bar"></span>
                     </button>                    
                     <div class="collapse navbar-collapse navbar-right navbar-right" id="bar-action">                       
-                         <asp:LinkButton ID="LB15" runat="server" OnClick="MostrarPrograma" CssClass="lnkbtn-action">
-                            <i runat="server" id="LB_IMG15" class=""></i>
-                            <asp:Label runat="server" ID="LB_LBL15">Ver Programa</asp:Label>
-                        </asp:LinkButton>
+                          <asp:LinkButton ID="LB22" runat="server" OnClick="MostrarPrograma" CssClass="lnkbtn-action">
+                            <i runat="server" id="LB_IMG22" class=""></i>
+                            <asp:Label runat="server" ID="LB_LBL22">Ver Programa</asp:Label>
+                         </asp:LinkButton>
                         <asp:LinkButton ID="LBExcel" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action">
                             <asp:Label runat="server" ID="LB_LBLExcel">Excel</asp:Label>
                         </asp:LinkButton>
