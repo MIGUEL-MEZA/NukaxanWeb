@@ -21,14 +21,66 @@
         }
         $(document).ready(function () {
             $('[id*=DDLCliente]').select2();
+            inicializarTabsPrograma();
 
         });
+
+        function actualizarBotonesReportePrograma(tabKey) {
+            var buttons = $("[id$='LB20'],[id$='LB21']");
+            var disabled = tabKey === 'parametros';
+
+            buttons.each(function () {
+                var button = $(this);
+                button.data('disabled', disabled);
+                button.toggleClass('lnkbtn-action_disabled', disabled);
+                button.css({
+                    'pointer-events': disabled ? 'none' : '',
+                    'opacity': disabled ? '0.6' : '',
+                    'cursor': disabled ? 'not-allowed' : 'pointer'
+                });
+            });
+        }
+
+        function inicializarTabsPrograma() {
+            var tabName = $("#TabName");
+            if (!tabName.length) {
+                return;
+            }
+
+            if (!tabName.val()) {
+                tabName.val('parametros');
+            }
+
+            $('#myTab a[data-toggle="tab"]').off('shown.bs.tab.programa').on('shown.bs.tab.programa', function (e) {
+                var href = $(e.target).attr('href');
+                var selectedTab = 'parametros';
+                if (href === '#sec2') {
+                    selectedTab = 'presupuesto';
+                } else if (href === '#sec3') {
+                    selectedTab = 'comparativo';
+                }
+
+                tabName.val(selectedTab);
+                actualizarBotonesReportePrograma(selectedTab);
+            });
+
+            if (tabName.val() === 'comparativo') {
+                $('#tab3').tab('show');
+            } else if (tabName.val() === 'presupuesto') {
+                $('#tab2').tab('show');
+            } else {
+                $('#tab1').tab('show');
+            }
+
+            actualizarBotonesReportePrograma(tabName.val());
+        }
 
         var prm = Sys.WebForms.PageRequestManager.getInstance();
         if (prm != null) {
             prm.add_endRequest(function (sender, e) {
                 if (sender._postBackSettings.panelsToUpdate != null) {
                     $("[id*=DDLCliente]").select2({ dropdownAutoWidth: true });
+                    inicializarTabsPrograma();
 
                 }
             });
@@ -187,9 +239,17 @@ td {
                               <i runat="server" id="LB_IMG14" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL14">Obtener Datos NUFEED</asp:Label>
                         </asp:LinkButton>
-                      <asp:LinkButton ID="LB12" runat="server" OnClick="Guardar" CssClass="lnkbtn-action">
+                        <asp:LinkButton ID="LB12" runat="server" OnClick="Guardar" CssClass="lnkbtn-action">
                              <i runat="server" id="LB_IMG12" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL12">Calcular</asp:Label>
+                        </asp:LinkButton>
+                        <asp:LinkButton ID="LB20" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action">
+                            <i runat="server" id="LB_IMG20" class=""></i>
+                            <asp:Label runat="server" ID="LB_LBL20">Excel</asp:Label>
+                        </asp:LinkButton>
+                        <asp:LinkButton ID="LB21" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action">
+                            <i runat="server" id="LB_IMG21" class=""></i>
+                            <asp:Label runat="server" ID="LB_LBL21">PDF</asp:Label>
                         </asp:LinkButton>
                         <asp:LinkButton ID="LB2" runat="server" OnClick="Regresar"  CssClass="lnkbtn-action">
                             <i runat="server" id="LB_IMG2" class=""></i>
@@ -463,16 +523,6 @@ td {
                             </table>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="sec2" >
-                             <div align="right" style="padding: 3px 20px 3px 3px;">                               
-                                <asp:LinkButton ID="LB20" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action">
-                                    <i runat="server" id="LB_IMG20" class=""></i>
-                                    <asp:Label runat="server" ID="LB_LBL20">Excel</asp:Label>
-                                </asp:LinkButton>
-                                <asp:LinkButton ID="LB21" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action">
-                                    <i runat="server" id="LB_IMG21" class=""></i>
-                                    <asp:Label runat="server" ID="LB_LBL21">PDF</asp:Label>
-                                </asp:LinkButton>
-                            </div>
                             <div align="left" style="display: block;">
                                 <asp:Repeater ID="rptResultado" runat="server">
                                     <HeaderTemplate>

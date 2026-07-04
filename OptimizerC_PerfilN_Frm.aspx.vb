@@ -46,8 +46,8 @@ Public Class OptimizerC_PerfilN_Frm
         End If
     End Sub
         Private Sub RegistrarDescargaDirecta()
-        RegistrarControlDescarga("LBExcel")
-        RegistrarControlDescarga("LBPdf")
+        RegistrarControlDescarga("LB20")
+        RegistrarControlDescarga("LB21")
     End Sub
 
     Private Sub RegistrarControlDescarga(controlId As String)
@@ -765,4 +765,5 @@ Public Class OptimizerC_PerfilN_Frm
         ' Verifies that the control is rendered
     End Sub
 End Class
+
 

@@ -499,6 +499,10 @@ td {
                     </div>
                 </asp:Panel>
             </ContentTemplate>
+            <Triggers>
+                <asp:PostBackTrigger ControlID="LB20" />
+                <asp:PostBackTrigger ControlID="LB21" />
+            </Triggers>
         </asp:UpdatePanel>
     </div>
 </asp:Content>

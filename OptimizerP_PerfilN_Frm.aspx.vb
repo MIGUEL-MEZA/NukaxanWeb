@@ -1,4 +1,4 @@
-Imports System.Web.DynamicData
+﻿Imports System.Web.DynamicData
 Imports Newtonsoft.Json
 Imports System.Configuration
 Imports NukaxanWEB.Libreria
@@ -275,7 +275,7 @@ Public Class OptimizerP_PerfilN_Frm
                 CodCliente.Text = ""
                 CodALLIX.Text = ""
                 TBID.Text = "POR ASIGNAR"
-                TBNomEstatusD.Text = "EN EDICI�N"
+                TBNomEstatusD.Text = "EN EDICIÓN"
                 TBFecAltaD.Text = Now.ToString("dd/MM/yyyy") + " | " + ObjUser.NomUsuario
                 TBFecActD.Text = Now.ToString("dd/MM/yyyy") + " | " + ObjUser.NomUsuario
                 LlenaRPT_Etapas()
@@ -623,7 +623,7 @@ Public Class OptimizerP_PerfilN_Frm
                 Function(g) New With {.Etapa = g.Key, .NombreEtapa = g.First().NombreEtapa}).OrderBy(Function(x) x.Etapa).ToList()
 
 
-            Dim categorias = modeloCaptura.OrderBy(Function(x) x.CveCategoria).ThenBy(Function(x) x.Variable).GroupBy(Function(x) x.CveCategoria).ToList()
+            Dim categorias = modeloCaptura.OrderBy(Function(x) x.CveCategoria).ThenBy(Function(x) x.Posicion).ThenBy(Function(x) x.Variable).GroupBy(Function(x) x.CveCategoria).ToList()
 
             Dim w As String = (250 + ((100 + 100 + 150) * etapas.Count)).ToString + "px"
             Dim sb As StringBuilder = New StringBuilder()
@@ -677,7 +677,7 @@ td {
             sb.Append("</thead><tbody>")
 
             For Each categoria In categorias
-                Dim grupoVariables = categoria.GroupBy(Function(x) x.Variable).ToList()
+                Dim grupoVariables = categoria.GroupBy(Function(x) x.Variable).OrderBy(Function(g) g.First().Posicion).ThenBy(Function(g) g.Key).ToList()
                 Dim nombreCategoria = grupoVariables.First().First().NomCategoria
 
                 If Not String.IsNullOrWhiteSpace(nombreCategoria) Then
@@ -835,6 +835,7 @@ td {
         ' Verifies that the control is rendered
     End Sub
 End Class
+
 
 
 

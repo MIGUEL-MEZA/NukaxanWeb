@@ -43,10 +43,41 @@ Public Class OptimizerC_ProgramaA_Frm
         iList.Add(New DatosGrid() With {.Tipo = 1, .Campo = "TBDuracionMin", .Valida = "N", .ValidaCeros = "N"})
         iList.Add(New DatosGrid() With {.Tipo = 1, .Campo = "TBDuracionMax", .Valida = "N", .ValidaCeros = "N"})
 
+        RegistrarDescargaDirecta()
+
         If Not Page.IsPostBack Then
             DatosLoad()
         End If
+        Response.ContentEncoding = System.Text.Encoding.UTF8
+        Response.Charset = "utf-8"
     End Sub
+    Private Sub RegistrarDescargaDirecta()
+        RegistrarControlDescarga("LB20")
+        RegistrarControlDescarga("LB21")
+    End Sub
+    Private Sub RegistrarControlDescarga(controlId As String)
+        Dim scriptManager = System.Web.UI.ScriptManager.GetCurrent(Page)
+        If scriptManager Is Nothing Then Exit Sub
+
+        Dim control = BuscarControlRecursivo(Me, controlId)
+        If Not control Is Nothing Then
+            scriptManager.RegisterPostBackControl(control)
+        End If
+    End Sub
+
+    Private Function BuscarControlRecursivo(parent As System.Web.UI.Control, controlId As String) As System.Web.UI.Control
+        If parent Is Nothing Then Return Nothing
+
+        Dim control = parent.FindControl(controlId)
+        If Not control Is Nothing Then Return control
+
+        For Each child As System.Web.UI.Control In parent.Controls
+            control = BuscarControlRecursivo(child, controlId)
+            If Not control Is Nothing Then Return control
+        Next
+
+        Return Nothing
+    End Function
     Sub DatosLoad()
         regPId.Text = "0"
         filtroview.Text = ""
@@ -840,6 +871,28 @@ Public Class OptimizerC_ProgramaA_Frm
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
         End Try
         Return lstEtapas
+    End Function
+
+    Sub DescargarExcel()
+        DescargarArchivoReporte("excel", ConfigurationManager.AppSettings("WSOptimizer"))
+    End Sub
+    Sub DescargarPdf()
+        DescargarArchivoReporte("pdf", ConfigurationManager.AppSettings("WSOptimizer"))
+    End Sub
+    Private Sub DescargarArchivoReporte(formato As String, baseApiUrl As String)
+        Try
+            If regPId.Text = "0" Then Throw New Exception("No se encontró el identificador del perfil para generar el archivo.")
+            Dim seccion As String = GetSeccionReporteSeleccionada()
+            Dim prefijo As String = If(seccion = "comparativo", "ProgramaAlimentacion_Comparativo", "ProgramaAlimentacion")
+            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, 0, prefijo, "programaalimentacion", seccion)
+        Catch ex As Exception
+            Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
+        End Try
+    End Sub
+    Private Function GetSeccionReporteSeleccionada() As String
+        Dim tabActual As String = TabName.Value.Trim().ToLowerInvariant()
+        If tabActual = "comparativo" Then Return "comparativo"
+        Return "presupuesto"
     End Function
 
 

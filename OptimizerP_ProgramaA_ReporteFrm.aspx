@@ -21,14 +21,38 @@
         }
         $(document).ready(function () {
             $('[id*=DDLCliente]').select2();
+            inicializarTabsPrograma();
 
         });
+
+        function inicializarTabsPrograma() {
+            var tabName = $("#TabName");
+            if (!tabName.length) {
+                return;
+            }
+
+            if (!tabName.val()) {
+                tabName.val('presupuesto');
+            }
+
+            $('#myTab a[data-toggle="tab"]').off('shown.bs.tab.programa').on('shown.bs.tab.programa', function (e) {
+                var href = $(e.target).attr('href');
+                tabName.val(href === '#sec2' ? 'comparativo' : 'presupuesto');
+            });
+
+            if (tabName.val() === 'comparativo') {
+                $('#tab3').tab('show');
+            } else {
+                $('#tab2').tab('show');
+            }
+        }
 
         var prm = Sys.WebForms.PageRequestManager.getInstance();
         if (prm != null) {
             prm.add_endRequest(function (sender, e) {
                 if (sender._postBackSettings.panelsToUpdate != null) {
                     $("[id*=DDLCliente]").select2({ dropdownAutoWidth: true });
+                    inicializarTabsPrograma();
 
                 }
             });
@@ -411,6 +435,10 @@ td {
                     </div>
                 </asp:Panel>
             </ContentTemplate>
+            <Triggers>
+                <asp:PostBackTrigger ControlID="LB20" />
+                <asp:PostBackTrigger ControlID="LB21" />
+            </Triggers>
         </asp:UpdatePanel>
     </div>
 </asp:Content>

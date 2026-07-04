@@ -49,8 +49,8 @@ Public Class OptimizerP_ProgramaA_Frm
         Response.Charset = "utf-8"
     End Sub
     Private Sub RegistrarDescargaDirecta()
-        RegistrarControlDescarga("LBExcel")
-        RegistrarControlDescarga("LBPdf")
+        RegistrarControlDescarga("LB20")
+        RegistrarControlDescarga("LB21")
     End Sub
     Private Sub RegistrarControlDescarga(controlId As String)
         Dim scriptManager = System.Web.UI.ScriptManager.GetCurrent(Page)
@@ -390,6 +390,7 @@ Public Class OptimizerP_ProgramaA_Frm
             If tmp <> "" Then tmp = Left(tmp, Len(tmp) - 1)
 
             Dim dt As DataTable = New Optimizer_Presupuesto_Resultado().FindAll(2, tmp)
+            AplicarNombresEtapasPrograma(dt)
             rptResultado.DataSource = dt
             rptResultado.DataBind()
 
@@ -427,6 +428,54 @@ Public Class OptimizerP_ProgramaA_Frm
             rptResultado.DataBind()
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
         End Try
+    End Sub
+    Private Sub AplicarNombresEtapasPrograma(dt As DataTable)
+        If dt Is Nothing Then Exit Sub
+        If Not dt.Columns.Contains("NomEtapa") OrElse Not dt.Columns.Contains("CveEtapa") Then Exit Sub
+
+        Dim etapas As Dictionary(Of Integer, String) = rptEtapas.Items.Cast(Of RepeaterItem)() _
+            .Where(Function(p) TryCast(p.FindControl("Aplica"), Label).Text = "S") _
+            .Select(Function(p) New With {
+                .CveEtapa = CInt(TryCast(p.FindControl("CveEtapa"), Label).Text),
+                .NomEtapa = TryCast(p.FindControl("NomEtapa"), Label).Text.Trim()
+            }) _
+            .Where(Function(p) p.NomEtapa <> "") _
+            .GroupBy(Function(p) p.CveEtapa) _
+            .ToDictionary(Function(g) g.Key, Function(g) g.First().NomEtapa)
+
+        For Each dr As DataRow In dt.Rows
+            If dr("CveEtapa") Is DBNull.Value Then Continue For
+
+            Dim cveEtapa As Integer = CInt(dr("CveEtapa"))
+            If etapas.ContainsKey(cveEtapa) Then
+                dr("NomEtapa") = etapas(cveEtapa)
+            End If
+        Next
+    End Sub
+    Private Function ObtenerNombresEtapasAplicadas() As List(Of String)
+        Return rptEtapas.Items.Cast(Of RepeaterItem)() _
+            .Where(Function(p) TryCast(p.FindControl("Aplica"), Label).Text = "S") _
+            .Select(Function(p) TryCast(p.FindControl("NomEtapa"), Label).Text.Trim()) _
+            .Where(Function(nombre) nombre <> "") _
+            .ToList()
+    End Function
+    Private Sub AplicarNombresEtapasComparativo(grid As GridView)
+        If grid Is Nothing OrElse grid.Rows.Count = 0 Then Exit Sub
+
+        Dim nombres As List(Of String) = ObtenerNombresEtapasAplicadas()
+        Dim indice As Integer = 0
+
+        For Each row As GridViewRow In grid.Rows
+            If row.RowType <> DataControlRowType.DataRow Then Continue For
+
+            If indice >= nombres.Count Then
+                row.Visible = False
+                Continue For
+            End If
+
+            row.Cells(0).Text = nombres(indice)
+            indice += 1
+        Next
     End Sub
     Protected Sub RPTOnItemDataBound(ByVal sender As Object, ByVal e As RepeaterItemEventArgs) Handles rptEtapas.ItemDataBound
         If e.Item.ItemType = ListItemType.Item OrElse e.Item.ItemType = ListItemType.AlternatingItem Then
@@ -513,6 +562,7 @@ Public Class OptimizerP_ProgramaA_Frm
             dt = New Reportes().Datos(CInt(Plataforma), CInt(31), regPId.Text)
             gv2.DataSource = dt
             gv2.DataBind()
+            AplicarNombresEtapasComparativo(gv2)
 
             Dim total(gv2.Columns.Count - 1) As Double
 
@@ -538,11 +588,16 @@ Public Class OptimizerP_ProgramaA_Frm
             'e.Row.Cells(0).Style.Add("cursor", "pointer")
             e.Row.Cells(0).Font.Bold = True
             e.Row.Cells(1).Font.Bold = True
-            If rptEtapas.Items.Cast(Of RepeaterItem)().Where(Function(p) TryCast(p.FindControl("CveEtapa"), Label).Text = (e.Row.RowIndex + 1).ToString And TryCast(p.FindControl("Aplica"), Label).Text = "S").Count = 0 Then
-                e.Row.Visible = False
-            End If
-            For i = 1 To 7
-                Math.Round(CDbl(e.Row.Cells(i).Text), 3).ToString("N2")
+            For i = 1 To e.Row.Cells.Count - 1
+                Dim headerText As String = gv2.HeaderRow.Cells(i).Text.Trim().ToUpperInvariant()
+                Dim valor As Double = 0
+                Double.TryParse(e.Row.Cells(i).Text.Replace("$", "").Replace(",", ""), valor)
+
+                If headerText.Contains("COSTO") Then
+                    e.Row.Cells(i).Text = valor.ToString("C2")
+                Else
+                    e.Row.Cells(i).Text = Math.Round(valor, 3).ToString("N2")
+                End If
             Next
         End If
     End Sub
@@ -553,10 +608,16 @@ Public Class OptimizerP_ProgramaA_Frm
             'e.Row.Cells(0).Style.Add("cursor", "pointer")
             e.Row.Cells(0).Font.Bold = True
             e.Row.Cells(1).Font.Bold = True
-            For i = 1 To 7
-                If New ArrayList({0, 7, 8, 9, 10}).IndexOf(e.Row.RowIndex) >= 0 Then e.Row.Cells(i).Text = CDbl(e.Row.Cells(i).Text).ToString("C2")
-                If New ArrayList({1, 2, 3, 4, 5, 6, 11}).IndexOf(e.Row.RowIndex) >= 0 Then e.Row.Cells(i).Text = Math.Round(CDbl(e.Row.Cells(i).Text), 3).ToString("N2")
-
+            Dim etiqueta As String = e.Row.Cells(0).Text.Trim().Replace(" ", "").Replace("_", "").ToUpperInvariant()
+            Dim formatoMoneda As Boolean = New ArrayList({"PRECIOVENTA", "COSTOTOTALALIMENTO", "COSTOPONDERADO", "COSTOKILOPRODUCIDO"}).IndexOf(etiqueta) >= 0
+            For i = 1 To e.Row.Cells.Count - 1
+                Dim valor As Double = 0
+                Double.TryParse(e.Row.Cells(i).Text.Replace("$", "").Replace(",", ""), valor)
+                If formatoMoneda Then
+                    e.Row.Cells(i).Text = valor.ToString("C2")
+                Else
+                    e.Row.Cells(i).Text = Math.Round(valor, 3).ToString("N2")
+                End If
             Next
             If e.Row.RowIndex = 2 Then e.Row.Visible = False
         End If
@@ -801,19 +862,26 @@ Public Class OptimizerP_ProgramaA_Frm
 
 
     Sub DescargarExcel()
-        DescargarArchivoReporte("excel", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+        DescargarArchivoReporte("excel", ConfigurationManager.AppSettings("WSOptimizerPollos"))
     End Sub
     Sub DescargarPdf()
-        DescargarArchivoReporte("pdf", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+        DescargarArchivoReporte("pdf", ConfigurationManager.AppSettings("WSOptimizerPollos"))
     End Sub
-    Private Sub DescargarArchivoReporte(formato As String, versionReporte As Integer, baseApiUrl As String)
+    Private Sub DescargarArchivoReporte(formato As String, baseApiUrl As String)
         Try
             If regPId.Text = "0" Then Throw New Exception("No se encontró el identificador del perfil para generar el archivo.")
-            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, versionReporte, "PerfilNutricional")
+            Dim seccion As String = GetSeccionReporteSeleccionada()
+            Dim prefijo As String = If(seccion = "comparativo", "ProgramaAlimentacion_Comparativo", "ProgramaAlimentacion")
+            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, 0, prefijo, "programaalimentacion", seccion)
         Catch ex As Exception
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
         End Try
     End Sub
+    Private Function GetSeccionReporteSeleccionada() As String
+        Dim tabActual As String = TabName.Value.Trim().ToLowerInvariant()
+        If tabActual = "comparativo" Then Return "comparativo"
+        Return "presupuesto"
+    End Function
     '--MODAL---
     Sub Alertas(Titulo As String, Mensaje As String, Refrescar As Boolean, Tipo As Integer)
         ModalAlert(MPEAlerta, MPEBody, BAlertOK, BAlertCancel, Titulo, If(IsNumeric(Mensaje), New Mensajes().FindById("0", 0, CInt(Mensaje)).NomMensaje, Mensaje), Refrescar, Tipo)

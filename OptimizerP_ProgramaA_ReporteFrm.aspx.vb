@@ -41,8 +41,8 @@ Public Class OptimizerP_ProgramaA_ReporteFrm
         Response.Charset = "utf-8"
     End Sub
     Private Sub RegistrarDescargaDirecta()
-        RegistrarControlDescarga("LBExcel")
-        RegistrarControlDescarga("LBPdf")
+        RegistrarControlDescarga("LB20")
+        RegistrarControlDescarga("LB21")
     End Sub
     Private Sub RegistrarControlDescarga(controlId As String)
         Dim scriptManager = System.Web.UI.ScriptManager.GetCurrent(Page)
@@ -262,6 +262,7 @@ Public Class OptimizerP_ProgramaA_ReporteFrm
             If tmp <> "" Then tmp = Left(tmp, Len(tmp) - 1)
 
             Dim dt As DataTable = New Optimizer_Presupuesto_Resultado().FindAll(2, tmp)
+            AplicarNombresEtapasPrograma(dt, lstP)
             rptResultado.DataSource = dt
             rptResultado.DataBind()
 
@@ -286,6 +287,51 @@ Public Class OptimizerP_ProgramaA_ReporteFrm
             rptResultado.DataBind()
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
         End Try
+    End Sub
+    Private Sub AplicarNombresEtapasPrograma(dt As DataTable, etapas As List(Of OptimizerP_ProgramaA_EtapasModel))
+        If dt Is Nothing OrElse etapas Is Nothing Then Exit Sub
+        If Not dt.Columns.Contains("NomEtapa") OrElse Not dt.Columns.Contains("CveEtapa") Then Exit Sub
+
+        Dim etapasAplicadas As Dictionary(Of Integer, String) = etapas _
+            .Where(Function(p) p.Aplica = "S" AndAlso p.NomEtapa <> "") _
+            .GroupBy(Function(p) p.CveEtapa) _
+            .ToDictionary(Function(g) g.Key, Function(g) g.First().NomEtapa.Trim())
+
+        For Each dr As DataRow In dt.Rows
+            If dr("CveEtapa") Is DBNull.Value Then Continue For
+
+            Dim cveEtapa As Integer = CInt(dr("CveEtapa"))
+            If etapasAplicadas.ContainsKey(cveEtapa) Then
+                dr("NomEtapa") = etapasAplicadas(cveEtapa)
+            End If
+        Next
+    End Sub
+    Private Function ObtenerNombresEtapasAplicadas() As List(Of String)
+        Dim objReg As OptimizerP_ProgramaAModel = New OptimizerP_ProgramaA().FindById(Convert.ToInt64(regPId.Text), 0, "")
+        Dim etapas As List(Of OptimizerP_ProgramaA_EtapasModel) = New OptimizerP_ProgramaA_Etapas().FindlstAll(objReg.CodCliente, Convert.ToInt64(regPId.Text), Convert.ToInt64(objReg.CvePerfilN))
+
+        Return etapas _
+            .Where(Function(p) p.Aplica = "S" AndAlso p.NomEtapa <> "") _
+            .Select(Function(p) p.NomEtapa.Trim()) _
+            .ToList()
+    End Function
+    Private Sub AplicarNombresEtapasComparativo(grid As GridView)
+        If grid Is Nothing OrElse grid.Rows.Count = 0 Then Exit Sub
+
+        Dim nombres As List(Of String) = ObtenerNombresEtapasAplicadas()
+        Dim indice As Integer = 0
+
+        For Each row As GridViewRow In grid.Rows
+            If row.RowType <> DataControlRowType.DataRow Then Continue For
+
+            If indice >= nombres.Count Then
+                row.Visible = False
+                Continue For
+            End If
+
+            row.Cells(0).Text = nombres(indice)
+            indice += 1
+        Next
     End Sub
 
     Sub DefineGV()
@@ -340,6 +386,7 @@ Public Class OptimizerP_ProgramaA_ReporteFrm
             dt = New Reportes().Datos(CInt(Plataforma), CInt(31), regPId.Text)
             gv2.DataSource = dt
             gv2.DataBind()
+            AplicarNombresEtapasComparativo(gv2)
 
             Dim total(gv2.Columns.Count - 1) As Double
 
@@ -434,19 +481,26 @@ Public Class OptimizerP_ProgramaA_ReporteFrm
         Response.Redirect(New RedirectPaginas().FindById(Plataforma + "-61-1").PaginaURL.Replace("@Id", Codif(ObjM.CvePerfilN)).Replace("@filtro", Codif(filtro)).Replace("@pageIndex", gvindexpage.Text), True)
     End Sub
     Sub DescargarExcel()
-        DescargarArchivoReporte("excel", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+        DescargarArchivoReporte("excel", ConfigurationManager.AppSettings("WSOptimizerPollos"))
     End Sub
     Sub DescargarPdf()
-        DescargarArchivoReporte("pdf", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+        DescargarArchivoReporte("pdf", ConfigurationManager.AppSettings("WSOptimizerPollos"))
     End Sub
-    Private Sub DescargarArchivoReporte(formato As String, versionReporte As Integer, baseApiUrl As String)
+    Private Sub DescargarArchivoReporte(formato As String, baseApiUrl As String)
         Try
             If regPId.Text = "0" Then Throw New Exception("No se encontró el identificador del perfil para generar el archivo.")
-            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, versionReporte, "PerfilNutricional")
+            Dim seccion As String = GetSeccionReporteSeleccionada()
+            Dim prefijo As String = If(seccion = "comparativo", "ProgramaAlimentacion_Comparativo", "ProgramaAlimentacion")
+            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, 0, prefijo, "programaalimentacion", seccion)
         Catch ex As Exception
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
         End Try
     End Sub
+    Private Function GetSeccionReporteSeleccionada() As String
+        Dim tabActual As String = TabName.Value.Trim().ToLowerInvariant()
+        If tabActual = "comparativo" Then Return "comparativo"
+        Return "presupuesto"
+    End Function
 
     '--MODAL---
     Sub Alertas(Titulo As String, Mensaje As String, Refrescar As Boolean, Tipo As Integer)

@@ -679,15 +679,15 @@ Public Class OptimizerG_ProgramaA_Frm
     End Function
 
     Sub DescargarExcel()
-        DescargarArchivoReporte("excel", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+        DescargarArchivoReporte("excel", ConfigurationManager.AppSettings("WSOptimizerGallinas"))
     End Sub
     Sub DescargarPdf()
-        DescargarArchivoReporte("pdf", 2, ConfigurationManager.AppSettings("WSOptimizerPollos"))
+        DescargarArchivoReporte("pdf", ConfigurationManager.AppSettings("WSOptimizerGallinas"))
     End Sub
-    Private Sub DescargarArchivoReporte(formato As String, versionReporte As Integer, baseApiUrl As String)
+    Private Sub DescargarArchivoReporte(formato As String, baseApiUrl As String)
         Try
             If regPId.Text = "0" Then Throw New Exception("No se encontró el identificador del perfil para generar el archivo.")
-            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, versionReporte, "PerfilNutricional")
+            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, 0, "ProgramaAlimentacion", "programaalimentacion", "presupuesto")
         Catch ex As Exception
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
         End Try

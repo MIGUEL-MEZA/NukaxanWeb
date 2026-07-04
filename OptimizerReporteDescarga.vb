@@ -1,3 +1,4 @@
+Imports System.Collections.Generic
 Imports System.IO
 Imports System.Net
 Imports System.Text
@@ -6,6 +7,10 @@ Imports System.Web.UI
 
 Public Class OptimizerReporteDescarga
     Public Shared Sub Descargar(page As Page, baseApiUrl As String, cvePerfilN As Long, formato As String, versionReporte As Integer, prefijoArchivo As String)
+        Descargar(page, baseApiUrl, cvePerfilN, formato, versionReporte, prefijoArchivo, "perfilnutricional", Nothing)
+    End Sub
+
+    Public Shared Sub Descargar(page As Page, baseApiUrl As String, cvePerfilN As Long, formato As String, versionReporte As Integer, prefijoArchivo As String, rutaReporte As String, seccion As String)
         If page Is Nothing Then Throw New ArgumentNullException(NameOf(page))
         If String.IsNullOrWhiteSpace(baseApiUrl) Then Throw New Exception("No se encontró la configuración del servicio para descargar el reporte.")
 
@@ -16,7 +21,13 @@ Public Class OptimizerReporteDescarga
         Dim contentType As String = If(formatoNormalizado = "excel",
                                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                                        "application/pdf")
-        Dim url As String = baseApiUrl.TrimEnd("/"c) + "/reportes/perfilnutricional/" + cvePerfilN.ToString() + "/" + formatoNormalizado + "?versionReporte=" + versionReporte.ToString()
+        Dim rutaNormalizada As String = rutaReporte.Trim().Trim("/"c)
+        Dim queryParts As New List(Of String)
+        If versionReporte > 0 Then queryParts.Add("versionReporte=" + versionReporte.ToString())
+        If Not String.IsNullOrWhiteSpace(seccion) Then queryParts.Add("seccion=" + HttpUtility.UrlEncode(seccion))
+
+        Dim queryString As String = If(queryParts.Count > 0, "?" + String.Join("&", queryParts), "")
+        Dim url As String = baseApiUrl.TrimEnd("/"c) + "/reportes/" + rutaNormalizada + "/" + cvePerfilN.ToString() + "/" + formatoNormalizado + queryString
 
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls
 

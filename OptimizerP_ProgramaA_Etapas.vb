@@ -10,12 +10,27 @@ Public Class OptimizerP_ProgramaA_Etapas
     Public Function getSQL(CodCliente As String, CvePlan As Int64, CvePerfil As Int64) As String
         Dim sb As New StringBuilder
 
-        sb.Append(" DECLARE @CodCliente varchar(50)='" + CodCliente + "'")
-        sb.Append(" DECLARE @CvePlan int=" + CvePlan.ToString)
-        sb.Append(" DECLARE @CvePerfil int=" + CvePerfil.ToString)
-        sb.Append(" DECLARE @Estatus int=0")
-        sb.Append(" DECLARE @Mensaje varchar(250)=''")
-        sb.Append(" EXEC spc_OptimizerP_ProgramaA_Etapas @CodCliente,@CvePlan,@CvePerfil,@Estatus Output,@Mensaje Output")
+        sb.Append(" SELECT ")
+        sb.Append(" ISNULL(PP.CvePlan,0) as CvePlan,")
+        sb.Append(" tbl.CveEtapa,")
+        sb.Append(" Et.NomEtapa,")
+        sb.Append(" CASE WHEN PP.CvePlan IS NULL THEN 'N' ELSE ISNULL(PP.Aplica,'N') END as Aplica,")
+        sb.Append(" ISNULL(PP.Costo,0) as Costo,")
+        sb.Append(" ISNULL(PP.EM,0) as EM,")
+        sb.Append(" ISNULL(PP.SIDLYS,0) as SIDLYS,")
+        sb.Append(" ISNULL(PP.DuracionMin,0) as DuracionMin,")
+        sb.Append(" ISNULL(PP.DuracionMax,0) as DuracionMax,")
+        sb.Append(" PP.FecAct,")
+        sb.Append(" ISNULL(PP.UsuAct,'') as UsuAct,")
+        sb.Append(" ISNULL(OG.NomOpcion,'') as NomAplica,")
+        sb.Append(" ISNULL(Et.CodALLIX,'') as CodALLIX,")
+        sb.Append(" ISNULL(U.NomUsuario,'') as NomUsuAct")
+        sb.Append(" FROM CatOptimizerP_Etapas tbl")
+        sb.Append(" LEFT JOIN OptimizerP_PlanA_Etapas PP ON PP.CveEtapa=tbl.CveEtapa AND PP.CvePlan=" + CvePlan.ToString)
+        sb.Append(" INNER JOIN OptimizerP_PerfilN_Etapas Et ON Et.CvePerfilN=" + CvePerfil.ToString + " AND Et.CveEtapa=tbl.CveEtapa")
+        sb.Append(" LEFT JOIN CatOpcionesGenerales OG ON OG.CveOpcion = PP.Aplica AND OG.Categoria=1")
+        sb.Append(" LEFT JOIN Usuarios U ON U.CodUsuario = PP.UsuAct")
+        sb.Append(" ORDER BY tbl.CveEtapa")
 
         Return sb.ToString
     End Function

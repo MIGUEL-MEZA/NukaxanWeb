@@ -1,4 +1,4 @@
-Imports System.Data
+﻿Imports System.Data
 Imports Microsoft.Ajax.Utilities
 Imports Newtonsoft.Json
 Imports NukaxanWEB
@@ -18,6 +18,7 @@ Public Class OptimizerP_PerfilN
         Public Property Referencia As Double
         Public Property Ajuste As Double
         Public Property Comentario As String
+        Public Property Posicion As Integer
         Public Property Mostrar As String
         Public Property CveCategoria As Integer
         Public Property EditarAjuste As String
@@ -393,6 +394,7 @@ Dim NomVariable As String = If(infoVar IsNot Nothing, infoVar.NomVariable, "")
                     .Referencia = valorReferencia,
                     .Ajuste = valorAjuste,
                     .Comentario = motivo,
+                    .Posicion = If(infoVar IsNot Nothing, infoVar.Posicion, variable.Posicion),
                     .Mostrar = variable.MostrarCliente,
                     .CveCategoria = cveCategoria,
                     .EditarAjuste = editarAjuste,
@@ -408,3 +410,5 @@ Dim NomVariable As String = If(infoVar IsNot Nothing, infoVar.NomVariable, "")
         Return resultado
     End Function
 End Class
+
+
