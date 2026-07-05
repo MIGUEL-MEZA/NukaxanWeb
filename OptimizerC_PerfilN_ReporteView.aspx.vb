@@ -123,7 +123,8 @@ Public Class OptimizerC_PerfilN_ReporteView
         Next
 
         'Filtros-------
-        TBFiltroGen.Attributes.Add("placeholder", lstFiltros.Find(Function(p) p.CveControl = 0).Etiqueta)
+        Dim filtroGeneral As Consultas_FiltrosModel = lstFiltros.Find(Function(p) p.CveControl = 0)
+        TBFiltroGen.Attributes.Add("placeholder", If(filtroGeneral Is Nothing, "Buscar", filtroGeneral.Etiqueta))
         TBFiltroGen.Font.Italic = True
         For Each a As Consultas_FiltrosModel In lstFiltros.Where(Function(p) p.CveControl > 0)
             Dim LBL As Label = UPContenido.FindControl("LBLF" + a.CveControl.ToString)
@@ -137,12 +138,15 @@ Public Class OptimizerC_PerfilN_ReporteView
         Next
 
         'COLUMNAS-----------------
-        Dim col_title() As String = lstEtiquetas.Find(Function(p) p.CvePlataforma.ToString = Plataforma And p.CveMenu.ToString = menu And p.CveEtiqueta = 2 And p.CveTipo = 5).NomEtiqueta.Split("|")
-        If col_title.Count = gv1.Columns.Count And gv1.Rows.Count > 0 Then
-            For i = 0 To gv1.Columns.Count - 1
-                gv1.HeaderRow.Cells(i).Text = col_title(i)
-                gv1.Columns(i).HeaderText = col_title(i)
-            Next
+        Dim etiquetaColumnas As EtiquetasModel = lstEtiquetas.Find(Function(p) p.CvePlataforma.ToString = Plataforma And p.CveMenu.ToString = menu And p.CveEtiqueta = 2 And p.CveTipo = 5)
+        If Not etiquetaColumnas Is Nothing AndAlso etiquetaColumnas.NomEtiqueta <> "" Then
+            Dim col_title() As String = etiquetaColumnas.NomEtiqueta.Split("|")
+            If col_title.Count = gv1.Columns.Count And gv1.Rows.Count > 0 Then
+                For i = 0 To gv1.Columns.Count - 1
+                    gv1.HeaderRow.Cells(i).Text = col_title(i)
+                    gv1.Columns(i).HeaderText = col_title(i)
+                Next
+            End If
         End If
 
     End Sub

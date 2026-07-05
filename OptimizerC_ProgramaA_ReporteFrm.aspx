@@ -430,7 +430,7 @@ td {
                         <div role="tabpanel" class="tab-pane" id="sec3" >
                             <div align="left" style="display: block;">
                                 <div class="divsec-captura">
-                                    <asp:Label runat="server" ID="SECTitulo6" CssClass="control-label"></asp:Label>
+                                    <asp:Label runat="server" ID="SECTitulo6" CssClass="control-label">PRESUPUESTO POR CERDO</asp:Label>
                                 </div>                                                                
                                 <asp:GridView ID="gv2" runat="server" AutoGenerateColumns="false" ShowHeader="true" 
                                      Width="100%" ShowFooter="true" AllowPaging="false" CellPadding="1" CssClass="table table-condensed  table-sm table-rep">                                     
@@ -443,7 +443,7 @@ td {
                             <br />
                              <div align="left" style="display: block;">
                                 <div class="divsec-captura">
-                                    <asp:Label runat="server" ID="SECTitulo7" CssClass="control-label"></asp:Label>
+                                    <asp:Label runat="server" ID="SECTitulo7" CssClass="control-label">VARIABLES ECONÓMICAS</asp:Label>
                                 </div>    
                                  <asp:GridView ID="gv" runat="server" AutoGenerateColumns="false" ShowHeader="true" 
                                      Width="100%" ShowFooter="false" AllowPaging="false" CellPadding="1" CssClass="table table-condensed  table-sm table-rep">

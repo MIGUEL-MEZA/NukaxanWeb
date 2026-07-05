@@ -245,7 +245,7 @@ Dim ObjM As OptimizerC_PerfilNModel = New OptimizerC_PerfilN().FindById(Convert.
             Dim etapas = modeloCaptura.GroupBy(Function(x) x.Etapa).Select(
                 Function(g) New With {.Etapa = g.Key, .NombreEtapa = g.First().NombreEtapa}).OrderBy(Function(x) x.Etapa).ToList()
 
-            Dim categorias = modeloCaptura.FindAll(Function(p) p.ReporteInterno = "S").OrderBy(Function(x) x.CveCategoria).GroupBy(Function(x) x.CveCategoria).ToList()
+            Dim categorias = modeloCaptura.FindAll(Function(p) p.ReporteInterno = "S").GroupBy(Function(x) x.CveCategoria).ToList()
 
             'Dim variables = modeloCaptura.GroupBy(Function(x) x.Variable).ToList()
 
