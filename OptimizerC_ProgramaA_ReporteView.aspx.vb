@@ -4,11 +4,11 @@ Imports System.Web.Services.Description
 Imports NukaxanWEB.Libreria
 Imports WebGrease.Css
 
-Public Class OptimizerG_ProgramaA_View
+Public Class OptimizerC_ProgramaA_ReporteView
     Inherits Page
     Private ObjUser As UsuarioModel
-    Private Plataforma As String = "43"
-    Private menu As String = "3"
+    Private Plataforma As String = "41"
+    Private menu As String = "62"
 
     'Variables de GridView
     Public gv As GridView
@@ -70,7 +70,7 @@ Public Class OptimizerG_ProgramaA_View
         'Titulo
         Dim lstMenu As MenuModel = New Menu().FindById(ObjUser.CveRol, Plataforma, -1, menu)
         'Dim PageTitle As Label = DirectCast(Master.FindControl("PageTitle"), Label)
-        PageTitle.Text = lstMenu.NomMenu
+        PageTitle.Text = "Programa de Alimentación - Reporte" 'lstMenu.NomMenu
 
         '--ACCIONES--
         For Each a As Controles_AccionesModel In lstAcciones
@@ -165,8 +165,6 @@ Public Class OptimizerG_ProgramaA_View
         Call New Catalogos().LlenaOptimizer_Modalidad(DDLFiltroModalidad)
     End Sub
     Sub SeguridadLoad()
-        'sec_mensaje.Visible = If(Not IsRow, True, False)
-        'gvbody.Visible = If(IsRow, True, False)
 
     End Sub
 
@@ -190,19 +188,34 @@ Public Class OptimizerG_ProgramaA_View
             e.Row.Cells(2).Font.Bold = True
             e.Row.Cells(2).Style.Add("cursor", "pointer")
 
-            For Each a As Controles_AccionesModel In lstAcciones.Where(Function(p) p.CveTipo = 3)
-                Dim IB As ImageButton = TryCast(e.Row.FindControl("IB" + a.CveAccion.ToString), ImageButton)
-                If Not IB Is Nothing Then
-                    IB.ImageUrl = "~/Content/Image/" + a.Icono
-                    IB.Attributes.Add("Width", a.IconoSize.Split("x")(0) + "px!important")
-                    IB.Attributes.Add("Height", a.IconoSize.Split("x")(1) + "px!important")
-                    IB.ToolTip = a.ToolTip
-                    If a.ValidaClick = "S" Then IB.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
-                End If
-
-            Next
+            Dim btn As Button = CType(e.Row.FindControl("btnDblClick"), Button)
+            e.Row.Attributes("ondblclick") = Page.ClientScript.GetPostBackClientHyperlink(btn, "")
+            e.Row.Attributes("style") = "cursor:pointer"
+            e.Row.ToolTip = "Da doble click para ver el reporte."
 
         End If
+    End Sub
+    Protected Sub gv1_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gv1.RowCommand
+
+        If e.CommandName = "RowDblClick" Then
+
+            Dim index As Integer = Convert.ToInt32(e.CommandArgument)
+            Dim keyId As String = gv1.DataKeys(index).Value.ToString()
+
+            LlenaFiltros()
+
+            Dim filtro As String = DDLFiltroCliente.SelectedValue + "|1"
+
+            Response.Redirect(
+            New RedirectPaginas().FindById(Plataforma + "-" + menu + "-1").PaginaURL _
+            .Replace("@Id", Codif(keyId)) _
+            .Replace("@CvePN", Codif("0")) _
+            .Replace("@filtro", Codif(filtro)) _
+            .Replace("@pageIndex", gvindexpage.Text),
+        True)
+
+        End If
+
     End Sub
     Protected Sub GVDataBound(ByVal sender As Object, ByVal e As EventArgs) Handles gv1.DataBound
         gv = gv1
@@ -240,7 +253,7 @@ Public Class OptimizerG_ProgramaA_View
         Dim dt As DataTable
         Try
             gv1.PageIndex = 0
-            dt = New OptimizerG_ProgramaA().FindAll(0, 0, ObjUser.CodUsuario)
+            dt = New OptimizerC_ProgramaA().FindAll(0, 0, ObjUser.CodUsuario)
             Session("DatosGV") = dt
             LlenaGV(dt)
         Catch ex As Exception
@@ -374,7 +387,6 @@ Public Class OptimizerG_ProgramaA_View
                                                  lst.Add(r("NomModalidad"))
                                                  lst.Add(r("NomCliente"))
                                                  lst.Add(r("NomReferencia"))
-                                                 lst.Add(r("NomParametro"))
                                                  lst.Add(CDate(r("FecAct")).ToString("dd/MM/yyyy"))
                                                  lst.Add(r("NomUsuAct"))
                                                  lstValores.Add(lst)
@@ -420,8 +432,8 @@ Public Class OptimizerG_ProgramaA_View
         Dim gvrow As GridViewRow = sender.NamingContainer
         Dim keyId As String = gv1.DataKeys(gvrow.RowIndex).Value.ToString()
         LlenaFiltros()
-        Dim filtro As String = DDLFiltroCliente.SelectedValue + "|1|0" 'String.Join("|", (lstFiltros.Select(Function(a) a.Valor).ToList()))
-        Response.Redirect(New RedirectPaginas().FindById(Plataforma + "-" + menu + "-1").PaginaURL.Replace("@Id", Codif(keyId)).Replace("@CvePN", Codif("0")).Replace("@filtro", Codif(filtro)).Replace("@pageIndex", gvindexpage.Text), True)
+        Dim filtro As String = DDLFiltroCliente.SelectedValue + "|1" 'String.Join("|", (lstFiltros.Select(Function(a) a.Valor).ToList()))
+        Response.Redirect(New RedirectPaginas().FindById(Plataforma + "-" + menu + "-1").PaginaURL.Replace("@Id", Codif(keyId)).Replace("@filtro", Codif(filtro)).Replace("@pageIndex", gvindexpage.Text), True)
     End Sub
     Sub Eliminar(ByVal sender As Object, ByVal e As EventArgs)
         Dim IsResult As Boolean = False
@@ -535,7 +547,6 @@ Public Class OptimizerG_ProgramaA_View
                 Next
 
         End Select
-
     End Sub
     Sub mpe_open()
         MPEbody_Obs.Visible = False

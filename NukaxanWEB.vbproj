@@ -317,6 +317,8 @@
     <Content Include="OptimizerP_PerfilN_View.aspx" />
     <Content Include="OptimizerP_PerfilN_Frm.aspx" />
     <Content Include="OptimizerP_Home.aspx" />
+    <Content Include="OptimizerC_ProgramaA_ReporteFrm.aspx" />
+    <Content Include="OptimizerC_ProgramaA_ReporteView.aspx" />
     <Content Include="OptimizerC_ProgramaA_View.aspx" />
     <Content Include="OptimizerC_PerfilN_View.aspx" />
     <Content Include="Content\Image\icono-N.svg" />
@@ -1931,6 +1933,20 @@
     </Compile>
     <Compile Include="OptimizerP_Home.aspx.vb">
       <DependentUpon>OptimizerP_Home.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OptimizerC_ProgramaA_ReporteFrm.aspx.designer.vb">
+      <DependentUpon>OptimizerC_ProgramaA_ReporteFrm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OptimizerC_ProgramaA_ReporteFrm.aspx.vb">
+      <DependentUpon>OptimizerC_ProgramaA_ReporteFrm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OptimizerC_ProgramaA_ReporteView.aspx.designer.vb">
+      <DependentUpon>OptimizerC_ProgramaA_ReporteView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OptimizerC_ProgramaA_ReporteView.aspx.vb">
+      <DependentUpon>OptimizerC_ProgramaA_ReporteView.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="OptimizerC_ProgramaA_View.aspx.designer.vb">

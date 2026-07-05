@@ -51,8 +51,8 @@ Public Class OptimizerG_ProgramaA_Frm
         Response.Charset = "utf-8"
     End Sub
     Private Sub RegistrarDescargaDirecta()
-        RegistrarControlDescarga("LBExcel")
-        RegistrarControlDescarga("LBPdf")
+        RegistrarControlDescarga("LB20")
+        RegistrarControlDescarga("LB21")
     End Sub
     Private Sub RegistrarControlDescarga(controlId As String)
         Dim scriptManager = System.Web.UI.ScriptManager.GetCurrent(Page)
@@ -169,9 +169,8 @@ Public Class OptimizerG_ProgramaA_Frm
         LBLCostoKGProducido.Text = "COSTO POR KG PRODUCIDO, $/KG HUEVO"
         'LBAEPT4.Text = "CONVERSIÓN ALIMENTICIA (CRIANZA + POSTURA)"
         'LBAEPT5.Text = "MASA DE HUEVO TOTAL, KG/AVE"
-        LBLCostoProgramaAlimTotal.Text = "COSTO PROGAMA DE ALIMENTACIÓN TOTAL, $/AVE"
-        'LBAEPT7.Text = "CONSUMO TOTAL DE ALIMENTO, KG/PARVADA"
-        'LBAEPT8.Text = "COSTO PROGAMA DE ALIMENTACIÓN TOTAL, $/PARVADA"
+        LBLCostoProgramaAlimTotal.Text = "COSTO PROGRAMA DE ALIMENTACIÓN TOTAL, $/AVE"
+
         LBLPrecioVentaHuevo.Text = "PRECIO VENTA ($/Kg huevo)"
         LBLMasaHuevoKGParvada.Text = "MASA DE HUEVO, KG/PARVADA"
         LBLIngresoxVentaHuevo.Text = "INGRESO POR VENTA DE HUEVO, $/PARVADA"
@@ -180,13 +179,13 @@ Public Class OptimizerG_ProgramaA_Frm
 
         LBAEPC1.Text = "COSTO PONDERADO DEL ALIMENTO CRIANZA, $"
         LBAEPC2.Text = "CONSUMO DE ALIMENTO CRIANZA, KG/AVE"
-        LBAEPC3.Text = "COSTO PROGAMA DE ALIMENTACIÓN CRIANZA, $/POLLITA"
+        LBAEPC3.Text = "COSTO PROGRAMA DE ALIMENTACIÓN CRIANZA, $/POLLITA"
 
         LBAEPP1.Text = "COSTO PONDERADO DEL ALIMENTO POSTURA, $/KG"
         LBAEPP2.Text = "CONSUMO TOTAL DE ALIMENTO POSTURA, KG/AVE"
         LBAEPP3.Text = "COSTO POR KG PRODUCIDO, $/KG HUEVO"
         LBAEPP4.Text = "CONVERSIÓN ALIMENTICIA"
-        LBAEPP5.Text = "COSTO PROGAMA DE ALIMENTACIÓN POSTURA, $/AVE"
+        LBAEPP5.Text = "COSTO PROGRAMA DE ALIMENTACIÓN POSTURA, $/AVE"
         LBAEPP6.Text = "MASA DE HUEVO TOTAL, KG/AVE"
         LBAEPP7.Text = "INGRESO POR VENTA DE HUEVO, $/AVE"
         LBAEPP8.Text = "UTILIDAD POR CONCEPTO DE ALIMENTACIÓN, $"
@@ -687,11 +686,24 @@ Public Class OptimizerG_ProgramaA_Frm
     Private Sub DescargarArchivoReporte(formato As String, baseApiUrl As String)
         Try
             If regPId.Text = "0" Then Throw New Exception("No se encontró el identificador del perfil para generar el archivo.")
-            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, 0, "ProgramaAlimentacion", "programaalimentacion", "presupuesto")
+            Dim seccion As String = GetSeccionReporteSeleccionada()
+            If seccion <> "presupuesto" Then
+                Throw New Exception("La descarga solo está disponible en la pestaña de presupuesto optimizado.")
+            End If
+
+            OptimizerReporteDescarga.Descargar(Me, baseApiUrl, Convert.ToInt64(regPId.Text), formato, 0, "ProgramaAlimentacion", "programaalimentacion", seccion)
         Catch ex As Exception
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
         End Try
     End Sub
+    Private Function GetSeccionReporteSeleccionada() As String
+        Dim tabActual As String = TabName.Value.Trim().ToLowerInvariant()
+        If tabActual = "presupuesto" Then
+            Return "presupuesto"
+        End If
+
+        Return "parametros"
+    End Function
     '--MODAL---
     Sub Alertas(Titulo As String, Mensaje As String, Refrescar As Boolean, Tipo As Integer)
         ModalAlert(MPEAlerta, MPEBody, BAlertOK, BAlertCancel, Titulo, If(IsNumeric(Mensaje), New Mensajes().FindById("0", 0, CInt(Mensaje)).NomMensaje, Mensaje), Refrescar, Tipo)

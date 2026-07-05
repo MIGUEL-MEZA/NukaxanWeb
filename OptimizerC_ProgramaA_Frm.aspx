@@ -270,7 +270,7 @@
                             <a class="nav-link" id="tab2" href="#sec2" aria-controls="sec2" role="tab" data-toggle="tab">PRESUPUESTO OPTIMIZADO</a>
                         </li>
                          <li class="nav-item" runat="server">
-                            <a class="nav-link" id="tab3" href="#sec3" aria-controls="sec3" role="tab" data-toggle="tab"">COMPARATIVO</a>
+                            <a class="nav-link" id="tab3" href="#sec3" aria-controls="sec3" role="tab" data-toggle="tab">COMPARATIVO</a>
                         </li>                      
                     </ul>
                     <!-- Tab panes -->
