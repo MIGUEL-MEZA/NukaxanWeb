@@ -241,6 +241,7 @@
     <Content Include="Content\Image\icon_edit_rela.png" />
     <Content Include="Content\Image\logo-nuptimizer.svg" />
     <Content Include="Content\Image\logo_prodaves.png" />
+    <Content Include="Controls\Nuptimizer_Flujo_PerfilC_.ascx" />
     <Content Include="Nireo_CatCurvasCalibracion_View.aspx" />
     <Content Include="OptimizerG_PerfilN_View.aspx" />
     <Content Include="OptimizerG_PerfilN_Frm.aspx" />
@@ -1270,6 +1271,13 @@
     <Compile Include="Consultas.vb" />
     <Compile Include="Controles_Acciones.vb" />
     <Compile Include="Controles_Captura.vb" />
+    <Compile Include="Controls\Nuptimizer_Flujo_PerfilC_.ascx.designer.vb">
+      <DependentUpon>Nuptimizer_Flujo_PerfilC_.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Nuptimizer_Flujo_PerfilC_.ascx.vb">
+      <DependentUpon>Nuptimizer_Flujo_PerfilC_.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="DataBase.vb" />
     <Compile Include="Etiquetas.vb" />
     <Compile Include="General_Excel.vb" />
@@ -2401,7 +2409,3 @@
   </Target>
   -->
 </Project>
-
-
-
-
