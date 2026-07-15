@@ -1350,6 +1350,10 @@
     <Compile Include="Models\WSOptimizerG_PlanA_Response_APTModel.vb" />
     <Compile Include="Models\WSOptimizerG_ResultadoModel.vb" />
     <Compile Include="Models\WSOptimizerG_ResponsePlan.vb" />
+    <Compile Include="Models\WSOptimizerC_Format_RequestModel.vb" />
+    <Compile Include="Models\WSOptimizerC_Format_RequestEtapaModel.vb" />
+    <Compile Include="Models\WSOptimizerC_Format_ResponseModel.vb" />
+    <Compile Include="Models\WSOptimizerC_Format_FormulaResponseModel.vb" />
     <Compile Include="Models\WSOptimizerP_ResultadoModel.vb" />
     <Compile Include="Models\WSOptimizerP_ResponsePlan.vb" />
     <Compile Include="Models\WSOptimizerP_ResponseModel.vb" />
