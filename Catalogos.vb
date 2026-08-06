@@ -478,6 +478,20 @@ Public Class Catalogos
     End Sub
 
     'OPTIMIZER-CERDOS
+    Public Sub LlenaOptimizer_AccionesFlujo(DDLControl As Control, filtro As String)
+        Dim dt As DataTable
+        Dim sb As New StringBuilder
+        Try
+            sb.Append(" EXEC spc_Catalogos 45,'" + If(filtro = "", "", " AND CveAccion IN(" + filtro + ")") + "'")
+            dt = execQuery(sb.ToString)
+            Call subControl_fill(DDLControl, dt, "CveAccion", "NomAccion", True)
+
+        Catch ex As Exception
+            strError = CleanSpecialCharacter(ex.Message)
+        Finally
+            dt = Nothing
+        End Try
+    End Sub
     Public Sub LlenaOptimizer_Modalidad(DDLControl As Control)
         Dim dt As DataTable
         Dim sb As New StringBuilder

@@ -22,6 +22,7 @@ Public Class OptimizerC_PerfilN
         Public Property MostrarValores As String = ""
         Public Property EnvioFlujo As String = ""
         Public Property NomCategoria As String = ""
+        Public Property PosicionC As Integer = 0
     End Class
     Dim strSQLExe As String = ""
     Public strError As String = ""
@@ -298,6 +299,7 @@ Public Class OptimizerC_PerfilN
             Dim infoVar = lstVariables.FirstOrDefault(Function(v) v.CveVariable = variable.NoVariable)
             Dim cveCategoria As Integer = If(infoVar IsNot Nothing, infoVar.CveCategoria, 0)
             Dim nomCategoria As String = If(infoVar IsNot Nothing, infoVar.NomCategoria, "")
+            Dim PosicionC As Integer = If(infoVar IsNot Nothing, infoVar.Posicion, "")
             Dim reporteInterno As String = If(infoVar IsNot Nothing, infoVar.ReporteInterno, "N")
             Dim reporteExterno As String = If(infoVar IsNot Nothing, infoVar.ReporteExterno, "N")
             Dim envioFlujo As String = If(infoVar IsNot Nothing, infoVar.EnvioFlujo, "N")
@@ -332,7 +334,8 @@ Public Class OptimizerC_PerfilN
                     .ReporteExterno = reporteExterno,
                     .MostrarValores = mostrarValores,
                     .EnvioFlujo = envioFlujo,
-                    .NomCategoria = nomCategoria
+                    .NomCategoria = nomCategoria,
+                    .PosicionC = PosicionC
                 })
             Next
         Next

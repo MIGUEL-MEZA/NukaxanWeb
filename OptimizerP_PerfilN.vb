@@ -27,6 +27,7 @@ Public Class OptimizerP_PerfilN
         Public Property MostrarValores As String = ""
         Public Property EnvioFlujo As String = ""
         Public Property NomCategoria As String = ""
+        Public Property PosicionC As Integer = 0
     End Class
 
     Public Function getSQL(CvePerfilN As Int64, CodUsuario As String) As String
@@ -367,6 +368,7 @@ Public Class OptimizerP_PerfilN
             Dim editarAjuste As String = If(infoVar IsNot Nothing, infoVar.EditarAjuste, "N")
             Dim cveCategoria As Integer = If(infoVar IsNot Nothing, infoVar.CveCategoria, 0)
             Dim nomCategoria As String = If(infoVar IsNot Nothing, infoVar.NomCategoria, "")
+            Dim PosicionC As Integer = If(infoVar IsNot Nothing, infoVar.Posicion, "")
             Dim reporteInterno As String = If(infoVar IsNot Nothing, infoVar.ReporteInterno, "N")
             Dim reporteExterno As String = If(infoVar IsNot Nothing, infoVar.ReporteExterno, "N")
             Dim envioFlujo As String = If(infoVar IsNot Nothing, infoVar.EnvioFlujo, "N")
@@ -402,7 +404,8 @@ Dim NomVariable As String = If(infoVar IsNot Nothing, infoVar.NomVariable, "")
                     .ReporteExterno = reporteExterno,
                     .MostrarValores = mostrarValores,
                     .EnvioFlujo = envioFlujo,
-                    .NomCategoria = nomCategoria
+                    .NomCategoria = nomCategoria,
+                    .PosicionC = PosicionC
                 })
             Next
         Next

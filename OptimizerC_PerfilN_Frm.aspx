@@ -22,7 +22,7 @@
         }
         $(document).ready(function () {
             $('[id*=DDLCliente]').select2();
-           
+
             //$("#MainContent_LB4").hide();
             //$("#MainContent_LB11").show();
         });
@@ -31,140 +31,176 @@
             prm.add_endRequest(function (sender, e) {
                 if (sender._postBackSettings.panelsToUpdate != null) {
                     $("[id*=DDLCliente]").select2({ dropdownAutoWidth: true });
-                   
+
                 }
             });
         };
+        function configurarBotones() {
+            var tabActivo = $('#myTab li.active').attr('id');
+            console.log('Tab activo:', tabActivo);
+            if (tabActivo == 'li_tab1') {
+                $('#<%= LB15.ClientID %>').show(); //Programa
+                $('#<%= LB11.ClientID %>').show(); //Calcular
+                $('#<%= LB2.ClientID %>').show(); //Salir
+                $('#<%= LB18.ClientID %>').hide(); //Enviar
+                $('#<%= LB20.ClientID %>').hide(); // Excel
+                $('#<%= LB21.ClientID %>').hide(); // PDF
+            }
+            else {
+                $('#<%= LB15.ClientID %>').hide(); //Programa
+                $('#<%= LB11.ClientID %>').hide(); //Calcular
+                $('#<%= LB2.ClientID %>').show(); //Salir
+                $('#<%= LB18.ClientID %>').show(); //Enviar
+                $('#<%= LB20.ClientID %>').show(); // Excel
+                $('#<%= LB21.ClientID %>').show(); // PDF                    
+            }
+        }
+        function restaurarTab() {
+            var tab = $('#<%= TabName.ClientID %>').val();
+
+            console.log("Restaurando:", tab);
+
+            if (tab) {
+                $('#' + tab).tab('show');
+            }
+        }
+
+        function inicializarTabs() {
+
+            $('#myTab a').off('shown.bs.tab');
+
+            $('#myTab a').on('shown.bs.tab', function (e) {
+
+                var tabId = $(e.target).attr('id');
+
+                console.log("Guardando:", tabId);
+
+                $('#<%= TabName.ClientID %>').val(tabId);
+
+                configurarBotones();
+            });
+
+            restaurarTab();
+            configurarBotones();
+        }
 
         $(document).ready(function () {
-
-            // Tab Requerimientos
-            $('#tab1').on('shown.bs.tab', function () {
-                $('#LB20').hide(); // Excel
-                $('#LB21').hide(); // PDF
-                $('#LB22').show(); // Ver Programa
-            });
-
-            // Tab Perfil
-            $('#tab2').on('shown.bs.tab', function () {
-                $('#LB20').show(); // Excel
-                $('#LB21').show(); // PDF
-                $('#LB22').hide(); // Ver Programa
-            });
-
+            inicializarTabs();
         });
 
     </script>
-     <style>
-    .header {
-        background-color: #0b2e57;
-        color: white;
-        padding: 10px 25px 10px 15px;
-        border-radius: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start; /* 🔥 Alinea todo arriba */
-    }
+    <style>
+        .header {
+            padding: 10px 25px 10px 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* 🔥 Alinea todo arriba */
+        }
 
-    .header-left {
-        display: flex;
-        align-items: flex-start; /* 🔥 clave */
-        gap: 5px;
-    }
+        .header-left {
+            display: flex;
+            align-items: flex-start; /* 🔥 clave */
+            gap: 5px;
+        }
 
-    .logo-left {
-        width: 85px;             /* 🔥 más grande */
-        margin-right: 8px;      /* 🔥 más espacio */        
-    }
+        .logo-left {
+            width: 85px; /* 🔥 más grande */
+            margin-right: 8px; /* 🔥 más espacio */
+        }
 
-    .header-text h1 {
-        margin: 0;
-        font-size: 26px;
-        letter-spacing: 1px;
-    }
+        .header-text h1 {
+            margin: 0;
+            font-size: 26px;
+            letter-spacing: 1px;
+        }
 
-    .subtitulo {
-        color: #18a4ff;
-        font-size: 13px;
-        margin-top: 3px;
-    }
+        .subtitulo {
+            color: #18a4ff;
+            font-size: 13px;
+            margin-top: 3px;
+        }
 
-    .cliente {
-        font-size: 12px;
-        margin-top: 4px;
-    }
+        .cliente {
+            font-size: 12px;
+            margin-top: 4px;
+        }
 
-    .divider {
-        width: 2px;
-        height: 65px;
-        background-color: #0f4d8a;
-        margin: 0 25px;
-    }
+        .divider {
+            width: 2px;
+            height: 65px;
+            background-color: #0f4d8a;
+            margin: 0 25px;
+        }
 
-    .header-right {
-        text-align: right;
-    }
+        .header-right {
+            text-align: right;
+        }
 
-    .logo-right {
-        width: 290px;
-        margin-bottom: 8px;
-    }
+        .logo-right {
+            width: 290px;
+            margin-bottom: 8px;
+        }
 
-    .fecha {
-        font-size: 12px;
-        color: #cfd8e3;
-    }
+        .fecha {
+            font-size: 12px;
+            color: #cfd8e3;
+        }
 
-    thead tr:nth-child(1) th {
-    height: 35px;
-}
+        thead tr:nth-child(1) th {
+            height: 35px;
+        }
 
-thead tr:nth-child(1) th {
-    position: sticky;
-    top: 0;
-    background: #0b2e57!important;
-    color:#ffffff!important;
-    font-weight:normal!important;
-    z-index: 3;
-}
+        thead tr:nth-child(1) th {
+            position: sticky;
+            top: 0;
+            background: #0b2e57 !important;
+            color: #ffffff !important;
+            font-weight: normal !important;
+            z-index: 3;
+        }
 
-th {
-   /* border:  1px solid #ccc;*/
-    padding: 5px;
-}
-td {
-    /*border:  1px solid #ccc;*/
-    padding: 5px;
-}
-.table-rep{    
-    border-collapse: separate;
-    border-spacing: 0;
-}
+        th {
+            /* border:  1px solid #ccc;*/
+            padding: 5px;
+        }
+
+        td {
+            /*border:  1px solid #ccc;*/
+            padding: 5px;
+        }
+
+        .table-rep {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
 
 
-.table-rep th {
-    border-right: 1px solid #0f2f52;
-}
+            .table-rep th {
+                border-right: 1px solid #0f2f52;
+            }
 
-.table-rep thead tr th:last-child {
-    border-right: none; /* 🔥 evita el borde cuadrado */
-}
+            .table-rep thead tr th:last-child {
+                border-right: none; /* 🔥 evita el borde cuadrado */
+            }
 
-.table-rep thead tr th:first-child {
-    border-top-left-radius: 10px;
-}
+            .table-rep thead tr th:first-child {
+                border-top-left-radius: 10px;
+            }
 
-.table-rep thead tr th:last-child {
-    border-top-right-radius: 10px;
-}
- .table-rep tfoot th {
+            .table-rep thead tr th:last-child {
+                border-top-right-radius: 10px;
+            }
+
+            .table-rep tfoot th {
                 background: #0b2e57 !important;
                 color: #ffffff !important;
                 font-weight: normal !important;
             }
-.categoria{
-     background-color: #dce9f5!important;
-}
+
+        .categoria {
+            background-color: #dce9f5 !important;
+        }
     </style>
     <asp:UpdateProgress ID="UpdateProgress1" DisplayAfter="10" runat="server" AssociatedUpdatePanelID="UPContenido">
         <ProgressTemplate>
@@ -188,7 +224,7 @@ td {
                 <asp:Label runat="server" ID="CveModalidad" Visible="false"></asp:Label>
                 <asp:Label runat="server" ID="CveEstatus" Visible="false"></asp:Label>
                 <asp:Label runat="server" ID="CvePlan" Visible="false"></asp:Label>
-                <asp:Label runat="server" ID="Autor" Visible="false"></asp:Label>                
+                <asp:Label runat="server" ID="Autor" Visible="false"></asp:Label>
                 <div class="navbar-default " style="margin-bottom: 10px; height: 40px;">
                     <div class="navbar-left">
                         <asp:Label runat="server" ID="PageTitulo" CssClass="page-title"></asp:Label>
@@ -204,21 +240,13 @@ td {
                             <i runat="server" id="LB_IMG15" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL15">Ver Programa</asp:Label>
                         </asp:LinkButton>
-                        <asp:LinkButton ID="LB18" runat="server" OnClick="Enviar" CssClass="lnkbtn-action" ClientIDMode="Static">
-                            <i runat="server" id="LB_IMG18" class=""></i>
-                            <asp:Label runat="server" ID="LB_LBL18">Enviar Perfil</asp:Label>
-                        </asp:LinkButton>
-                        <asp:LinkButton ID="LB17" runat="server" OnClick="Guardar" CssClass="lnkbtn-action" ClientIDMode="Static">
-                            <i runat="server" id="LB_IMG17" class=""></i>
-                            <asp:Label runat="server" ID="LB_LBL17">Editar</asp:Label>
-                        </asp:LinkButton>
-                        <asp:LinkButton ID="LB7" runat="server" OnClick="Guardar" CssClass="lnkbtn-action" ClientIDMode="Static">
-                            <i runat="server" id="LB_IMG7" class=""></i>
-                            <asp:Label runat="server" ID="LB_LBL7">Cerrar</asp:Label>
-                        </asp:LinkButton>
                         <asp:LinkButton ID="LB11" runat="server" OnClick="Guardar" CssClass="lnkbtn-action" ClientIDMode="Static">
                             <i runat="server" id="LB_IMG11" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL11">Calcular</asp:Label>
+                        </asp:LinkButton>
+                        <asp:LinkButton ID="LB18" runat="server" OnClick="AbrirEnviaPerfil" CssClass="lnkbtn-action" ClientIDMode="Static">
+                            <i runat="server" id="LB_IMG18" class=""></i>
+                            <asp:Label runat="server" ID="LB_LBL18">Enviar Perfil</asp:Label>
                         </asp:LinkButton>
                         <asp:LinkButton ID="LB20" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action" ClientIDMode="Static">
                             <i runat="server" id="LB_IMG20" class=""></i>
@@ -237,10 +265,10 @@ td {
                 <div id="Tabs" role="tabpanel">
                     <!-- Nav tabs -->
                     <ul class="nav nav-pills" id="myTab" role="tablist">
-                        <li class="nav-item active" runat="server" id="li_tab1">
+                        <li class="nav-item active" runat="server" id="li_tab1" clientidmode="Static">
                             <a class="nav-link" id="tab1" href="#sec1" aria-controls="sec1" role="tab" data-toggle="tab">REQUERIMIENTOS</a>
                         </li>
-                        <li class="nav-item" runat="server" id="li_tab2">
+                        <li class="nav-item" runat="server" id="li_tab2" clientidmode="Static">
                             <a class="nav-link" id="tab2" href="#sec2" aria-controls="sec2" role="tab" data-toggle="tab">PERFIL</a>
                         </li>
                         <%-- <li class="nav-item" runat="server">
@@ -250,8 +278,8 @@ td {
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="sec1">
-                             <div class="divsec-captura">
-                                <asp:Label runat="server" ID="SECTitulo1"  CssClass="control-label"></asp:Label>
+                            <div class="divsec-captura">
+                                <asp:Label runat="server" ID="SECTitulo1" CssClass="control-label"></asp:Label>
                             </div>
                             <table class="table-condensed" border="1" style="border: solid 1px gray; width: 100%;">
                                 <tr style="visibility: collapse;">
@@ -264,13 +292,13 @@ td {
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLC1"></asp:Label>
                                     </td>
-                                    <td class="bg-white" >                                        
+                                    <td class="bg-white">
                                         <asp:Label runat="server" ID="TBID" CssClass="control-label color-red"></asp:Label>
                                     </td>
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLC2"></asp:Label>
                                     </td>
-                                    <td class="bg-white">                                       
+                                    <td class="bg-white">
                                         <asp:Label runat="server" ID="TBNomEstatusD" CssClass="control-label "></asp:Label>
                                     </td>
                                 </tr>
@@ -297,7 +325,7 @@ td {
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLC7"></asp:Label>
                                     </td>
-                                    <td class="bg-white" >
+                                    <td class="bg-white">
                                         <asp:DropDownList ID="DDLModalidad" runat="server" AutoPostBack="true" CssClass="form-control" Width="95%" ClientIDMode="Static">
                                         </asp:DropDownList>
                                         <asp:Label runat="server" ID="TBNomModalidadD" CssClass="control-label "></asp:Label>
@@ -305,10 +333,10 @@ td {
                                     <%--<td class="bg-gray semibold"></td>
                                     <td class="bg-white" ></td>--%>
                                 </tr>
-                                </table>
+                            </table>
                             <br />
                             <div class="divsec-captura">
-                                <asp:Label runat="server" ID="SECTitulo2"  CssClass="control-label"></asp:Label>
+                                <asp:Label runat="server" ID="SECTitulo2" CssClass="control-label"></asp:Label>
                             </div>
                             <table class="table-condensed" border="1" style="border: solid 1px gray; width: 100%;">
                                 <tr style="visibility: collapse;">
@@ -316,7 +344,7 @@ td {
                                     <td width="30%" class="bg-white"></td>
                                     <td width="20%" class="bg-gray semibold"></td>
                                     <td width="30%" class="bg-white"></td>
-                                </tr>                                 
+                                </tr>
                                 <tr>
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLC9"></asp:Label>
@@ -326,7 +354,7 @@ td {
                                         </asp:DropDownList>
                                         <asp:Label runat="server" ID="TBReferenciaD" CssClass="control-label"></asp:Label>
 
-                                    </td>                                
+                                    </td>
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLC11"></asp:Label></td>
                                     <td class="bg-white">
@@ -336,7 +364,7 @@ td {
                                             <span runat="server" id="TBEspacioU" class="tb-unidad">m2/Cerdo</span>
                                             <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" runat="server" FilterType="Custom,Numbers" TargetControlID="TBEspacio" ValidChars="." />
                                         </div>
-                                    </td>  
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="bg-gray semibold">
@@ -351,7 +379,7 @@ td {
                                             <asp:FilteredTextBoxExtender ID="FTE1" runat="server" FilterType="Custom,Numbers" TargetControlID="TBTemperatura" ValidChars="." />
                                         </div>
                                     </td>
-                                                                 
+
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLC15"></asp:Label>
                                     </td>
@@ -367,8 +395,8 @@ td {
                                 </tr>
                             </table>
                             <br />
-                             <div class="divsec-captura">
-                                <asp:Label runat="server" ID="SECTitulo3"  CssClass="control-label"></asp:Label>
+                            <div class="divsec-captura">
+                                <asp:Label runat="server" ID="SECTitulo3" CssClass="control-label"></asp:Label>
                             </div>
                             <div align="left" style="display: block;">
                                 <asp:Repeater ID="rptEtapas" runat="server">
@@ -411,10 +439,10 @@ td {
                                             <td align="center ">
                                                 <asp:CheckBox ID="chk" runat="server" AutoPostBack="true" OnCheckedChanged="OnCheckedChanged" />
                                             </td>
-                                             <td align="center" class="justify-content-center">
-                                                <asp:DropDownList runat="server" ID="DDLEtapaFlujo" CssClass="form-control" Width="95%" ClientIDMode="Static">                                                
+                                            <td align="center" class="justify-content-center">
+                                                <asp:DropDownList runat="server" ID="DDLEtapaFlujo" CssClass="form-control" Width="95%" ClientIDMode="Static">
                                                 </asp:DropDownList>
-                                                <asp:Label runat="server" ID="TBNomEtapaFlujoD" Text='<%# Eval("NomEtapaFlujo")%>' CssClass="control-value bold" Visible="false"></asp:Label>                                                
+                                                <asp:Label runat="server" ID="TBNomEtapaFlujoD" Text='<%# Eval("NomEtapaFlujo")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                             </td>
                                             <td align="left " class="fw-bold">
                                                 <asp:Label runat="server" ID="CveEtapa" Text='<%# Eval("CveEtapa")%>' Visible="false"></asp:Label>
@@ -445,16 +473,16 @@ td {
                                                 <asp:Label runat="server" ID="TBENAlimentoD" Text='<%# Eval("ENAlimento")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                             </td>
                                             <td align="center" class="justify-content-center">
-                                                <asp:Label runat="server" ID="LBLGD_PReferencia"  CssClass="control-value bold"></asp:Label>
+                                                <asp:Label runat="server" ID="LBLGD_PReferencia" CssClass="control-value bold"></asp:Label>
                                             </td>
                                             <td align="center" class="justify-content-center">
-                                                <asp:DropDownList runat="server" ID="DDLAjuste" CssClass="form-control" Width="90%" ClientIDMode="Static">                                                
+                                                <asp:DropDownList runat="server" ID="DDLAjuste" CssClass="form-control" Width="90%" ClientIDMode="Static">
                                                 </asp:DropDownList>
                                                 <asp:Label runat="server" ID="TBAjuste" Text='<%# Eval("AjusteGDP")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                                 <asp:Label runat="server" ID="TBAjusteD" Text='<%# Eval("AjusteGDP").ToString + "%"%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                             </td>
                                             <td align="center" class="justify-content-center">
-                                                <asp:Label runat="server" ID="LBLGD_PAjustada"  CssClass="control-value bold"></asp:Label>
+                                                <asp:Label runat="server" ID="LBLGD_PAjustada" CssClass="control-value bold"></asp:Label>
                                             </td>
                                         </tr>
                                     </ItemTemplate>
@@ -464,19 +492,19 @@ td {
                                 </asp:Repeater>
                             </div>
                             <br />
-                             <div class="divsec-captura">
-                                <asp:Label runat="server" ID="SECTitulo4"  CssClass="control-label"></asp:Label>
+                            <div class="divsec-captura">
+                                <asp:Label runat="server" ID="SECTitulo4" CssClass="control-label"></asp:Label>
                             </div>
                             <table class="table-condensed" border="1" style="border: solid 1px gray; width: 100%;">
                                 <tr style="visibility: collapse;">
                                     <td width="20%" class="bg-gray semibold"></td>
-                                    <td width="80%" class="bg-white"></td>                                    
+                                    <td width="80%" class="bg-white"></td>
                                 </tr>
                                 <tr>
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLG17"></asp:Label>
                                     </td>
-                                    <td class="bg-white" colspan="3">                                        
+                                    <td class="bg-white" colspan="3">
                                         <asp:Label runat="server" ID="TBFecAltaD" CssClass="control-label color-blue"></asp:Label>
                                     </td>
                                 </tr>
@@ -484,13 +512,13 @@ td {
                                     <td class="bg-gray semibold">
                                         <asp:Label runat="server" ID="LBLG18"></asp:Label>
                                     </td>
-                                    <td class="bg-white" colspan="3">                                        
+                                    <td class="bg-white" colspan="3">
                                         <asp:Label runat="server" ID="TBFecActD" CssClass="control-label color-blue"></asp:Label>
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="sec2">                            
+                        <div role="tabpanel" class="tab-pane" id="sec2">
                             <asp:Literal runat="server" ID="PerfilN"></asp:Literal>
                         </div>
 
@@ -499,6 +527,7 @@ td {
                 </div>
 
                 <%--SHOW POPUP--%>
+
                 <asp:Label runat="server" ID="mpe_regId" Visible="false"></asp:Label>
                 <asp:Label runat="server" ID="mpe_op" Visible="false"></asp:Label>
                 <asp:LinkButton Text="" ID="lnkshowdata" runat="server" />
@@ -513,6 +542,65 @@ td {
                             <asp:Button runat="server" ID="BAlertOK" CssClass="btn-action" OnClick="mpe_action" CommandArgument="alert_refresh" Width="80px" UseSubmitBehavior="false" />
                             <asp:Button runat="server" ID="BAlertCancel" CssClass="btn-action" OnClick="mpe_action" Style="margin-left: 5px;" CommandArgument="alert_close" Width="80px" />
                         </div>
+                    </div>
+                </asp:Panel>
+                <asp:ModalPopupExtender ID="MPECaptura" runat="server" PopupControlID="pnlCaptura" TargetControlID="lnkshowdata2"
+                    BackgroundCssClass="modalBackground">
+                </asp:ModalPopupExtender>
+                <asp:Panel ID="pnlCaptura" runat="server" CssClass="modalPopup" Style="display: none;">
+                    <div class="modalPopup_header">
+                        <asp:Label runat="server" ID="lblMPE_title"></asp:Label>
+                    </div>
+                    <div id="MPEBody_Captura" runat="server" class="modalPopup_body" align="left" style="margin-bottom:20px;">
+                       <%-- <div align="left" style="display: block; width: 100%; overflow-y: scroll; height: 300px;">--%>
+                            <asp:Repeater ID="rptPerfilFlujo" runat="server">
+                                <HeaderTemplate>
+                                    <table width='100%' cellpadding='3' border="1" class="datagrid">
+                                        <thead>
+                                            <tr>
+                                                <th width='20%'>
+                                                    <asp:Label runat="server" ID="Label1">ETAPA</asp:Label>
+                                                </th>
+                                                <th width='20%'>
+                                                    <asp:Label runat="server" ID="Label2">NOMBRE</asp:Label>
+                                                </th>
+                                                <th width='25%'>
+                                                    <asp:Label runat="server" ID="Label3">ACCIÓN</asp:Label>
+                                                </th>
+                                                <th width='35%'>
+                                                    <asp:Label runat="server" ID="Label4">COMENTARIOS</asp:Label>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                </HeaderTemplate>
+                                <ItemTemplate>
+                                    <tr>
+                                         <td align="left" >                                         
+                                            <asp:Label runat="server" ID="CveEtapaFlujo" Text='<%# Eval("CveEtapaFlujo")%>' Visible="false"></asp:Label>
+                                            <asp:Label runat="server" ID="NomEtapaFlujo" Text='<%# Eval("NomEtapaFlujo")%>' CssClass="control-value"></asp:Label>
+                                        </td>
+                                         <td align="left" >
+                                             <asp:Label runat="server" ID="CveEtapa" Text='<%# Eval("CveEtapa")%>' Visible="false"></asp:Label>
+                                           <asp:Label runat="server" ID="TBNomEtapa" Text='<%# Eval("NomEtapa")%>' CssClass="control-value"></asp:Label>
+                                        </td>
+                                        <td align="center" class="justify-content-center">
+                                            <asp:DropDownList runat="server" ID="DDLAccionFlujo" CssClass="form-control" Width="95%" ClientIDMode="Static">
+                                            </asp:DropDownList>                                            
+                                        </td>
+                                        <td align="left " class="fw-bold">                                            
+                                            <asp:TextBox ID="TBComentarios"  runat="server" Width="95%" Text='' CssClass="form-control "></asp:TextBox>                                            
+                                        </td>                                        
+                                    </tr>
+                                </ItemTemplate>
+                                <FooterTemplate>
+                                    </table>
+                                </FooterTemplate>
+                            </asp:Repeater>
+                       <%-- </div>--%>
+                    </div>
+                    <div class="modalPopup_footer" align="center">
+                        <asp:Button runat="server" ID="BTNP16" CssClass="btn-action" OnClick="mpe_action" CommandArgument="action_save" Width="80px" UseSubmitBehavior="false" />
+                        <asp:Button runat="server" ID="BTNP15" CssClass="btn-action" OnClick="mpe_action" Style="margin-left: 5px;" CommandArgument="action_close" Width="80px" UseSubmitBehavior="false" />
                     </div>
                 </asp:Panel>
             </ContentTemplate>

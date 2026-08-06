@@ -149,87 +149,6 @@ Partial Public Class OptimizerC_PerfilN_Frm
     Protected WithEvents LB_LBL15 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control LB18.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LB18 As Global.System.Web.UI.WebControls.LinkButton
-
-    '''<summary>
-    '''Control LB_IMG18.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LB_IMG18 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
-
-    '''<summary>
-    '''Control LB_LBL18.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LB_LBL18 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control LB17.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LB17 As Global.System.Web.UI.WebControls.LinkButton
-
-    '''<summary>
-    '''Control LB_IMG17.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LB_IMG17 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
-
-    '''<summary>
-    '''Control LB_LBL17.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LB_LBL17 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control LB7.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LB7 As Global.System.Web.UI.WebControls.LinkButton
-
-    '''<summary>
-    '''Control LB_IMG7.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LB_IMG7 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
-
-    '''<summary>
-    '''Control LB_LBL7.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents LB_LBL7 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
     '''Control LB11.
     '''</summary>
     '''<remarks>
@@ -255,6 +174,33 @@ Partial Public Class OptimizerC_PerfilN_Frm
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents LB_LBL11 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control LB18.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB18 As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control LB_IMG18.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB_IMG18 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
+    '''<summary>
+    '''Control LB_LBL18.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LB_LBL18 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control LB20.
@@ -831,4 +777,67 @@ Partial Public Class OptimizerC_PerfilN_Frm
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents BAlertCancel As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''Control MPECaptura.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents MPECaptura As Global.AjaxControlToolkit.ModalPopupExtender
+
+    '''<summary>
+    '''Control pnlCaptura.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents pnlCaptura As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''Control lblMPE_title.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblMPE_title As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control MPEBody_Captura.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents MPEBody_Captura As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
+    '''<summary>
+    '''Control rptPerfilFlujo.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents rptPerfilFlujo As Global.System.Web.UI.WebControls.Repeater
+
+    '''<summary>
+    '''Control BTNP16.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents BTNP16 As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''Control BTNP15.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents BTNP15 As Global.System.Web.UI.WebControls.Button
 End Class

@@ -74,6 +74,7 @@ Public Class OptimizerP_PerfilN_Etapas
         ObjModel.EdadIni = dr("EdadIni")
         ObjModel.EdadFin = dr("EdadFin")
         ObjModel.EMAlimento = dr("EMAlimento")
+        ObjModel.NomEtapaFlujo = dr("NomEtapaFlujo")
 
         'Bitacora
         ObjModel.FecAct = If(IsDBNull(dr("FecAct")), "", CDate(dr("FecAct")).ToString("dd/MM/yyyy HH:mm"))

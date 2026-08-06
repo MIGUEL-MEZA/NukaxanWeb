@@ -112,14 +112,14 @@ Public Class OptimizerC_ProgramaA_Frm
                     If Not BTN Is Nothing Then
                         BTN.ToolTip = a.ToolTip
                         BTN.Text = a.NomAccion
-                        If a.ValidaMensaje = "S" Then BTN.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
+                        If a.ValidaClick = "S" Then BTN.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
                     End If
 
                     Dim BTNP As Button = TryCast(UPContenido.FindControl("BTNP" + a.CveTipo.ToString + a.CveAccion.ToString), Button)
                     If Not BTNP Is Nothing Then
                         BTNP.ToolTip = a.ToolTip
                         BTNP.Text = a.NomAccion
-                        If a.ValidaMensaje = "S" Then BTNP.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
+                        If a.ValidaClick = "S" Then BTNP.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
                     End If
 
                 Case 2  'LinkButton
@@ -132,13 +132,13 @@ Public Class OptimizerC_ProgramaA_Frm
                         LB_IMG.Style("font-size") = a.IconoSize + "!important"
                         LB.ToolTip = a.ToolTip
                         LB_LBL.Text = a.NomAccion
-                        If a.ValidaMensaje = "S" Then LB.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
+                        If a.ValidaClick = "S" Then LB.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
                     End If
 
                 Case 3  'ImageButton
                     Dim IB As ImageButton = TryCast(UPContenido.FindControl("IB" + a.CveAccion.ToString), ImageButton)
                     IB.ToolTip = a.ToolTip
-                    If a.ValidaMensaje = "S" Then IB.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
+                    If a.ValidaClick = "S" Then IB.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
             End Select
         Next
 

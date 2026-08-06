@@ -1,5 +1,6 @@
 ﻿Imports System.Configuration
 Imports System.Web.DynamicData
+Imports System.Web.Script.Serialization
 Imports Microsoft.Ajax.Utilities
 Imports Newtonsoft.Json
 Imports NukaxanWEB.Libreria
@@ -40,12 +41,12 @@ Public Class OptimizerC_PerfilN_Frm
         iList.Add(New DatosGrid() With {.Tipo = 2, .Campo = "DDLAjuste", .Valida = "S", .ValidaCeros = "N"})
 
         RegistrarDescargaDirecta()
-
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "ConfigurarBotones", "inicializarTabs();", True)
         If Not Page.IsPostBack Then
             DatosLoad()
         End If
     End Sub
-        Private Sub RegistrarDescargaDirecta()
+    Private Sub RegistrarDescargaDirecta()
         RegistrarControlDescarga("LB20")
         RegistrarControlDescarga("LB21")
     End Sub
@@ -103,14 +104,14 @@ Public Class OptimizerC_PerfilN_Frm
                     If Not BTN Is Nothing Then
                         BTN.ToolTip = a.ToolTip
                         BTN.Text = a.NomAccion
-                        If a.ValidaMensaje = "S" Then BTN.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
+                        If a.ValidaClick = "S" Then BTN.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
                     End If
 
                     Dim BTNP As Button = TryCast(UPContenido.FindControl("BTNP" + a.CveTipo.ToString + a.CveAccion.ToString), Button)
                     If Not BTNP Is Nothing Then
                         BTNP.ToolTip = a.ToolTip
                         BTNP.Text = a.NomAccion
-                        If a.ValidaMensaje = "S" Then BTNP.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
+                        If a.ValidaClick = "S" Then BTNP.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
                     End If
 
                 Case 2  'LinkButton
@@ -123,13 +124,13 @@ Public Class OptimizerC_PerfilN_Frm
                         LB_IMG.Style("font-size") = a.IconoSize + "!important"
                         LB.ToolTip = a.ToolTip
                         LB_LBL.Text = a.NomAccion
-                        If a.ValidaMensaje = "S" Then LB.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
+                        If a.ValidaClick = "S" Then LB.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
                     End If
 
                 Case 3  'ImageButton
                     Dim IB As ImageButton = TryCast(UPContenido.FindControl("IB" + a.CveAccion.ToString), ImageButton)
                     IB.ToolTip = a.ToolTip
-                    If a.ValidaMensaje = "S" Then IB.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
+                    If a.ValidaClick = "S" Then IB.OnClientClick = "return confirm('" + a.ValidaMensaje + "');"
             End Select
         Next
 
@@ -196,20 +197,22 @@ Public Class OptimizerC_PerfilN_Frm
         Call New Catalogos().LlenaOptimizer_Modalidad(DDLModalidad)
         DDLModalidad.SelectedValue = 2
         Call New Catalogos().LlenaOptimizer_Referencia(DDLReferencia)
+
     End Sub
     Protected Sub DDLModalidad_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DDLModalidad.SelectedIndexChanged
-        SeguridadLoad()
+        'SeguridadLoad()
     End Sub
     Sub Acciones(op As Boolean, op2 As Boolean, arrAction As String)
         Dim lb As New LinkButton
         Dim arr2() As String = arrAction.Split(",")
-        Dim arr(6) As String
-        arr(0) = "LB2"
-        arr(1) = "LB11"
-        arr(2) = "LB7"
-        arr(3) = "LB17"
-        arr(4) = "LB18"
-        arr(5) = "LB15"
+        Dim arr(5) As String
+        arr(0) = "LB2"  'Salir
+        arr(1) = "LB15" 'MostrasPrograma
+        arr(2) = "LB11" 'Calcular
+        arr(3) = "LB18" 'Enviar
+        arr(4) = "LB20" 'Excel
+        arr(5) = "LB21" 'PDF
+
         For i = 0 To UBound(arr)
             For j = 0 To UBound(arr2)
                 If i = CInt(arr2(j)) Then
@@ -249,25 +252,25 @@ Public Class OptimizerC_PerfilN_Frm
         'iList.Add(New DatosGrid() With {.Tipo = 0, .Campo = "LBLGD_PAjustada", .Valida = "N", .ValidaCeros = "N"})
 
         If regPId.Text = "0" Then 'Nuevo
-            Acciones(True, True, "0,1")
-            Controles(True)
+            Acciones(True, True, "0,2") 'Regresar|Cacular
             DDLCliente.Visible = True
             TBNomClienteD.Visible = False
             SeguridadRPT(True, rptEtapas, lstc)
         ElseIf regPId.Text <> "0" And IsEstatus And (IsAutor Or IsAdm) Then
-            Acciones(True, True, "0,1,4,5")
+            Acciones(True, True, "0,1,2,3,4,5") 'Regresar|VerPrograma|Cacular
+            Controles(True)
             Controles(True)
             DDLCliente.Visible = False
             TBNomClienteD.Visible = True
             SeguridadRPT(True, rptEtapas, lstc)
-            LB18.Visible = If(CodALLIX.Text <> "" And DDLModalidad.SelectedValue.ToString = "1", True, False)
+            'LB18.Visible = If(CodALLIX.Text <> "" And DDLModalidad.SelectedValue.ToString = "1", True, False)
         ElseIf regPId.Text <> "0" And Not IsEstatus And (IsAutor Or IsAdm) Then
-            Acciones(True, True, "0,5")
+            Acciones(True, True, "0,1,4,5") 'Regresar|VerPrograma
             Controles(False)
             SeguridadRPT(False, rptEtapas, lstc)
             LB15.Visible = If(CvePlan.Text <> "0", True, False)
         Else
-            Acciones(True, True, "0,5")
+            Acciones(True, True, "0,1,4,5") 'Regresar|VerPrograma
             Controles(False)
             SeguridadRPT(False, rptEtapas, lstc)
             LB15.Visible = If(CvePlan.Text <> "0", True, False)
@@ -533,6 +536,7 @@ Public Class OptimizerC_PerfilN_Frm
         Dim Isresult As Boolean
         Dim formulasok As String = ""
         Try
+            Exit Sub
             Dim ObjR As OptimizerC_PerfilN_ResultadoModel = New OptimizerC_PerfilN_Resultado().FindById(CInt(regPId.Text))
             Dim ObjR2 As ResponseModel = JsonConvert.DeserializeObject(Of ResponseModel)(ObjR.Response)
             'Dim ObjR2 As List(Of ResponseDataModel) = (JsonConvert.DeserializeObject(Of ResponseModel)(ObjR.Response)).Variables.OrderBy(Function(p) p.Posicion).ToList
@@ -597,6 +601,54 @@ Public Class OptimizerC_PerfilN_Frm
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
         End Try
     End Sub
+    Sub AbrirEnviaPerfil()
+        Dim IsResult As Boolean
+        Try
+            'IsResult = GuardaDatos()
+            'If IsResult Then
+            mpe_op.Text = "action_enviar"
+            mpe_clean()
+            mpe_open()
+            'End If
+        Catch ex As Exception
+            Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
+        End Try
+
+    End Sub
+
+    Async Sub EnviaPerfil()
+        Try
+            Dim etapas As New List(Of WSOptimizerC_Format_RequestEtapaModel)
+            rptPerfilFlujo.Items.Cast(Of RepeaterItem)().ToList.ForEach(Sub(r)
+                                                                            Dim CveEtapaFlujo As String = TryCast(r.FindControl("CveEtapaFlujo"), Label).Text
+                                                                            Dim CveEtapa As String = TryCast(r.FindControl("CveEtapa"), Label).Text
+                                                                            Dim CveAccion As String = TryCast(r.FindControl("DDLAccionFlujo"), DropDownList).SelectedValue
+                                                                            Dim TBComentarios As String = TryCast(r.FindControl("TBComentarios"), TextBox).Text
+                                                                            If CveAccion <> "3" Then
+                                                                                etapas.Add(New WSOptimizerC_Format_RequestEtapaModel With {
+                                                                           .CveEtapa = Convert.ToInt32(CveEtapaFlujo),
+                                                                           .CveAccion = Convert.ToInt32(CveAccion),
+                                                                           .CveEstatus = 1,
+                                                                           .Nota = TBComentarios
+                                                                           })
+                                                                            End If
+                                                                        End Sub)
+            Dim request As New WSOptimizerC_Format_RequestModel
+            request.CvePerfilN = Convert.ToInt64(regPId.Text)
+            request.Etapas = etapas
+            request.UsuAct = ObjUser.CodUsuario
+
+            Dim Obj As New Interfaz_Optimizer()
+            Dim ObjR As WSOptimizerC_Format_ResponseModel = Await Obj.GeneraFormat(request)
+            If Obj.WSEstatus Then
+                Alertas("", "58", True, 2)
+            Else
+                Alertas("", "34", True, 3)
+            End If
+        Catch ex As Exception
+            Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
+        End Try
+    End Sub
     Sub MostrarPrograma()
         Dim filtro As String = filtroview.Text
         Response.Redirect(New RedirectPaginas().FindById(Plataforma + "-3-1").PaginaURL.Replace("@Id", Codif(CvePlan.Text)).Replace("@CvePN", Codif(regPId.Text)).Replace("@filtro", Codif(filtro)).Replace("@pageIndex", gvindexpage.Text), True)
@@ -609,7 +661,7 @@ Public Class OptimizerC_PerfilN_Frm
             ClientScript.RegisterStartupScript(Me.GetType(), "initModeloCerdos", "var modeloCaptura = " & jsonCaptura & ";", True)
 
             Dim etapas = modeloCaptura.GroupBy(Function(x) x.Etapa).Select(Function(g) New With {.Etapa = g.Key, .NombreEtapa = g.First().NombreEtapa}).OrderBy(Function(x) x.Etapa).ToList()
-            Dim categorias = modeloCaptura.OrderBy(Function(x) x.CveCategoria).ThenBy(Function(x) x.Variable).GroupBy(Function(x) x.CveCategoria).ToList()
+            Dim categorias = modeloCaptura.OrderBy(Function(x) x.PosicionC).ThenBy(Function(x) x.Variable).GroupBy(Function(x) x.CveCategoria).ToList()
             Dim w As String = (350 + (170 * Math.Max(etapas.Count, 1))).ToString() + "px"
             Dim sb As New StringBuilder()
 
@@ -724,6 +776,69 @@ Public Class OptimizerC_PerfilN_Frm
     Sub Alertas(Titulo As String, Mensaje As String, Refrescar As Boolean, Tipo As Integer)
         ModalAlert(MPEAlerta, MPEBody, BAlertOK, BAlertCancel, Titulo, If(IsNumeric(Mensaje), New Mensajes().FindById("0", 0, CInt(Mensaje)).NomMensaje, Mensaje), Refrescar, Tipo)
     End Sub
+    Sub mpe_close()
+        MPECaptura.Hide()
+    End Sub
+    Sub mpe_clean()
+        mpe_regId.Text = "0"
+        Select Case mpe_op.Text
+            Case "action_enviar"
+                Try
+                    Dim tmp_modalidad As String = DDLModalidad.SelectedValue.ToString
+                    Dim tmp_op As String = If(tmp_modalidad = "1", "1,2,3", "1,3")
+                    rptPerfilFlujo.DataSource = New OptimizerC_PerfilN_Etapas().FindlstAll(CodCliente.Text, CInt(regPId.Text)).Where(Function(p) p.Aplica = "S").ToList
+                    rptPerfilFlujo.DataBind()
+                    rptPerfilFlujo.Items.Cast(Of RepeaterItem)().ToList.ForEach(Sub(r)
+                                                                                    Dim DDLAccionFlujo As DropDownList = TryCast(r.FindControl("DDLAccionFlujo"), DropDownList)
+                                                                                    Call New Catalogos().LlenaOptimizer_AccionesFlujo(DDLAccionFlujo, tmp_op)
+                                                                                End Sub)
+                Catch ex As Exception
+                    rptPerfilFlujo.DataSource = Nothing
+                    rptPerfilFlujo.DataBind()
+                    Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
+                End Try
+        End Select
+    End Sub
+    Sub mpe_open()
+        MPEBody_Captura.Visible = False
+        BTNP15.Visible = True
+        BTNP16.Visible = False
+
+        Select Case mpe_op.Text
+            Case "action_enviar"
+                MPEBody_Captura.Visible = True
+                lblMPE_title.Text = "Envia Perfil"
+                pnlCaptura.Width = 750
+                pnlCaptura.Height = 370
+                BTNP16.Visible = True
+                BTNP16.Text = lstAcciones.Find(Function(p) p.CveTipo = 1 And p.CveAccion = 11).NomAccion
+                BTNP16.ToolTip = lstAcciones.Find(Function(p) p.CveTipo = 1 And p.CveAccion = 11).ToolTip
+        End Select
+        MPECaptura.Show()
+    End Sub
+    Function mpe_valida() As Boolean
+        Dim IsResult As Boolean = False
+        Dim msg As String = ""
+        Try
+            Select Case mpe_op.Text
+                Case "action_enviar"
+                    Dim sinaccion As Integer = rptPerfilFlujo.Items.Cast(Of RepeaterItem)().Where(Function(a) TryCast(a.FindControl("DDLAccionFlujo"), DropDownList).Text = "").Count
+                    If sinaccion > 0 Then msg = lstErrores.Find(Function(p) p.CveMensaje = 57).NomMensaje
+                    'If Not lst Is Nothing Then msg = lst.Mensaje
+            End Select
+
+            If msg <> "" Then
+                ScriptManager.RegisterStartupScript(Me, Me.GetType(), "Validation", "alert('" + msg + "');", True)
+                MPECaptura.Show()
+            Else
+                IsResult = True
+            End If
+        Catch ex As Exception
+            ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "Validation", "alert('" + ex.Message.Replace("'", "") + "');", True)
+            MPECaptura.Show()
+        End Try
+        Return IsResult
+    End Function
     Sub mpe_action(ByVal sender As Object, ByVal e As EventArgs)
         Dim btn As Button = sender
         Dim op As String = btn.CommandArgument
@@ -733,8 +848,18 @@ Public Class OptimizerC_PerfilN_Frm
             Case "alert_refresh"
                 MPEAlerta.Hide()
                 Refrescar()
-                'Case "action_close" : MPECaptura.Hide()
+            Case "action_close" : MPECaptura.Hide()
+            Case "action_save"
+                MPECaptura.Hide()
+                Select Case mpe_op.Text
+                    Case "action_enviar"
+                        If mpe_valida() Then EnviaPerfil()
+                End Select
+            Case Else
+                MPEAlerta.Hide()
+                MPECaptura.Hide()
         End Select
+        'ScriptManager.RegisterStartupScript(Me, Me.GetType(), "ConfigurarBotones", "inicializarTabs();", True)
     End Sub
 
     Protected Sub OnCheckedChanged(sender As Object, e As EventArgs)

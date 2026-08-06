@@ -78,6 +78,7 @@ Public Class OptimizerG_PerfilN_Etapas
         ObjModel.EdadFin = dr("EdadFin")
         ObjModel.EMAlimento = dr("EMAlimento")
         ObjModel.PesoHuevo = dr("PesoHuevo")
+        ObjModel.NomEtapaFlujo = dr("NomEtapaFlujo")
 
         'Bitacora
         ObjModel.FecAct = If(IsDBNull(dr("FecAct")), "", CDate(dr("FecAct")).ToString("dd/MM/yyyy HH:mm"))

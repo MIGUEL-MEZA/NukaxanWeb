@@ -10,6 +10,7 @@ Public Class OptimizerP_PerfilN_EtapasModel
     Public Property EdadIni As Double = 0
     Public Property EdadFin As Double = 0
     Public Property EMAlimento As Double = 0
+    Public Property NomEtapaFlujo As String = ""
 
     'Bitacora
     Public Property FecAct As String = ""

@@ -12,6 +12,7 @@ Public Class OptimizerC_PerfilN_EtapasModel
     Public Property PesoFin As Double = 0
     Public Property ENAlimento As Double = 0
     Public Property PorcGDP As Integer = 0
+    Public Property NomEtapaFlujo As String = ""
 
     'Bitacora
     Public Property FecAct As String = ""
