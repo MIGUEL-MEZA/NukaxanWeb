@@ -61,31 +61,38 @@ Public Class OptimizerP_CatVariables
     End Function
     Public Function FillModel(dr As DataRow) As OptimizerP_CatVariablesModel
         Dim ObjModel As New OptimizerP_CatVariablesModel
-        ObjModel.CveVariable = dr("CveVariable")
-        ObjModel.NomVariable = dr("NomVariable")
-        ObjModel.Posicion = dr("Posicion")
-        ObjModel.CodALLIX = dr("CodALLIX")
-        ObjModel.CodFormat = dr("CodFormat")
-        ObjModel.FactorValMax = dr("FactorValMax")
-        ObjModel.Nutriente = dr("Nutriente")
-        ObjModel.Decimales = dr("Decimales")
-        ObjModel.MostrarCliente = dr("MostrarCliente")
-        ObjModel.CveCategoria = dr("CveCategoria")
-        ObjModel.EditarAjuste = dr("EditarAjuste")
-        ObjModel.ReporteInterno = dr("ReporteInterno")
-        ObjModel.ReporteExterno = dr("ReporteExterno")
-        ObjModel.EnvioFlujo = dr("EnvioFlujo")
-        ObjModel.NomCategoria = dr("NomCategoria")
-        ObjModel.PosicionC = dr("PosicionC")
+        ObjModel.CveVariable = GetFieldValue(dr, "CveVariable", 0)
+        ObjModel.NomVariable = GetFieldValue(dr, "NomVariable", "")
+        ObjModel.Posicion = GetFieldValue(dr, "Posicion", 0)
+        ObjModel.CodALLIX = GetFieldValue(dr, "CodALLIX", "")
+        ObjModel.CodFormat = GetFieldValue(dr, "CodFormat", "")
+        ObjModel.FactorValMax = GetFieldValue(dr, "FactorValMax", 0.0)
+        ObjModel.Nutriente = GetFieldValue(dr, "Nutriente", "")
+        ObjModel.Decimales = GetFieldValue(dr, "Decimales", 2)
+        ObjModel.MostrarCliente = GetFieldValue(dr, "MostrarCliente", "")
+        ObjModel.CveCategoria = GetFieldValue(dr, "CveCategoria", 0)
+        ObjModel.EditarAjuste = GetFieldValue(dr, "EditarAjuste", "N")
+        ObjModel.ReporteInterno = GetFieldValue(dr, "ReporteInterno", "N")
+        ObjModel.ReporteExterno = GetFieldValue(dr, "ReporteExterno", "N")
+        ObjModel.EnvioFlujo = GetFieldValue(dr, "EnvioFlujo", "N")
+        ObjModel.NomCategoria = GetFieldValue(dr, "NomCategoria", "")
+        ObjModel.PosicionC = GetFieldValue(dr, "PosicionC", 0)
 
         'Bitacora
         If dr.Table.Columns.Contains("FecAct") AndAlso Not IsDBNull(dr("FecAct")) Then
             ObjModel.FecAct = CDate(dr("FecAct")).ToString("dd/MM/yyyy HH:mm")
         End If
-        ObjModel.UsuAct = dr("UsuAct")
+        ObjModel.UsuAct = GetFieldValue(dr, "UsuAct", 0)
 
         Return ObjModel
     End Function
 
+    Private Function GetFieldValue(Of T)(dr As DataRow, columnName As String, defaultValue As T) As T
+        If dr Is Nothing OrElse dr.Table Is Nothing OrElse Not dr.Table.Columns.Contains(columnName) OrElse IsDBNull(dr(columnName)) Then
+            Return defaultValue
+        End If
+
+        Return CType(Convert.ChangeType(dr(columnName), GetType(T)), T)
+    End Function
 
 End Class

@@ -629,7 +629,10 @@ Public Class OptimizerG_PerfilN_Frm
                 Function(g) New With {.Etapa = g.Key, .NombreEtapa = g.First().NombreEtapa}).OrderBy(Function(x) x.Etapa).ToList()
 
 
-            Dim categorias = modeloCaptura.OrderBy(Function(x) x.CveCategoria).ThenBy(Function(x) x.Variable).GroupBy(Function(x) x.CveCategoria).ToList()
+            Dim categorias = modeloCaptura.OrderBy(Function(x) x.PosicionC).
+                ThenBy(Function(x) x.Variable).
+                GroupBy(Function(x) x.CveCategoria).
+                ToList()
 
             Dim w As String = (250 + ((100 + 100 + 150) * etapas.Count)).ToString + "px"
             Dim sb As StringBuilder = New StringBuilder()
