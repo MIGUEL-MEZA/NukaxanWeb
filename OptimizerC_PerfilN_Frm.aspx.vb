@@ -661,8 +661,10 @@ Public Class OptimizerC_PerfilN_Frm
             ClientScript.RegisterStartupScript(Me.GetType(), "initModeloCerdos", "var modeloCaptura = " & jsonCaptura & ";", True)
 
             Dim etapas = modeloCaptura.GroupBy(Function(x) x.Etapa).Select(Function(g) New With {.Etapa = g.Key, .NombreEtapa = g.First().NombreEtapa}).OrderBy(Function(x) x.Etapa).ToList()
-            'Dim categorias = modeloCaptura.OrderBy(Function(x) x.PosicionC).ThenBy(Function(x) x.Variable).GroupBy(Function(x) x.CveCategoria).ToList()
-            Dim categorias = modeloCaptura.OrderBy(Function(x) x.PosicionC).GroupBy(Function(x) x.CveCategoria).ToList()
+            Dim categorias = modeloCaptura.OrderBy(Function(x) x.PosicionC).
+                ThenBy(Function(x) x.Variable).
+                GroupBy(Function(x) x.CveCategoria).
+                ToList()
             Dim w As String = (350 + (170 * Math.Max(etapas.Count, 1))).ToString() + "px"
             Dim sb As New StringBuilder()
 
