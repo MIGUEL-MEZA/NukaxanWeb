@@ -17,4 +17,5 @@
     Public Property NomCategoria As String = ""
     Public Property FecAct As String = ""
     Public Property UsuAct As Integer = 0
+    Public Property PosicionC As Integer = 0
 End Class

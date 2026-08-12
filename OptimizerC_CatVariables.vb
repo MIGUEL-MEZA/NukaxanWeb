@@ -77,6 +77,8 @@ Public Class OptimizerC_CatVariables
         ObjModel.EnvioFlujo = GetFieldValue(dr, "EnvioFlujo", "N")
         ObjModel.MostrarValores = GetFieldValue(dr, "MostrarValores", "")
         ObjModel.NomCategoria = GetFieldValue(dr, "NomCategoria", "")
+        ObjModel.PosicionC = GetFieldValue(dr, "PosicionC", "")
+
         If dr.Table.Columns.Contains("FecAct") AndAlso Not IsDBNull(dr("FecAct")) Then
             ObjModel.FecAct = CDate(dr("FecAct")).ToString("dd/MM/yyyy HH:mm")
         End If

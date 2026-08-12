@@ -76,6 +76,7 @@ Public Class OptimizerP_CatVariables
         ObjModel.ReporteExterno = dr("ReporteExterno")
         ObjModel.EnvioFlujo = dr("EnvioFlujo")
         ObjModel.NomCategoria = dr("NomCategoria")
+        ObjModel.PosicionC = dr("PosicionC")
 
         'Bitacora
         If dr.Table.Columns.Contains("FecAct") AndAlso Not IsDBNull(dr("FecAct")) Then

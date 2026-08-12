@@ -299,7 +299,7 @@ Public Class OptimizerC_PerfilN
             Dim infoVar = lstVariables.FirstOrDefault(Function(v) v.CveVariable = variable.NoVariable)
             Dim cveCategoria As Integer = If(infoVar IsNot Nothing, infoVar.CveCategoria, 0)
             Dim nomCategoria As String = If(infoVar IsNot Nothing, infoVar.NomCategoria, "")
-            Dim PosicionC As Integer = If(infoVar IsNot Nothing, infoVar.Posicion, "")
+            Dim PosicionC As Integer = If(infoVar IsNot Nothing, infoVar.PosicionC, 0)
             Dim reporteInterno As String = If(infoVar IsNot Nothing, infoVar.ReporteInterno, "N")
             Dim reporteExterno As String = If(infoVar IsNot Nothing, infoVar.ReporteExterno, "N")
             Dim envioFlujo As String = If(infoVar IsNot Nothing, infoVar.EnvioFlujo, "N")
