@@ -430,6 +430,7 @@ Public Class Libreria
                                                                                                                           If c.Tipo = 2 Then obj = TryCast(p.FindControl(c.Nombre), TextBox)
                                                                                                                           If c.Tipo = 2 Then obj2 = TryCast(p.FindControl(c.Nombre + "D"), Label)
                                                                                                                           If c.Tipo = 3 Then obj = TryCast(p.FindControl(c.Nombre), DropDownList)
+                                                                                                                          If c.Tipo = 3 Then obj2 = TryCast(p.FindControl(c.Nombre.Replace("DDL", "TB") + "D"), Label)
                                                                                                                           If c.Tipo = 4 Then obj = TryCast(p.FindControl(c.Nombre), ComboBox)
                                                                                                                           If c.Tipo = 5 Then obj = TryCast(p.FindControl(c.Nombre), ImageButton)
                                                                                                                           If c.Tipo = 6 Then obj = TryCast(p.FindControl(c.Nombre), LinkButton)

@@ -442,7 +442,7 @@
                                             <td align="center" class="justify-content-center">
                                                 <asp:DropDownList runat="server" ID="DDLEtapaFlujo" CssClass="form-control" Width="95%" ClientIDMode="Static">
                                                 </asp:DropDownList>
-                                                <asp:Label runat="server" ID="TBNomEtapaFlujoD" Text='<%# Eval("NomEtapaFlujo")%>' CssClass="control-value bold" Visible="false"></asp:Label>
+                                                <asp:Label runat="server" ID="TBEtapaFlujoD" Text='<%# Eval("NomEtapaFlujo")%>' CssClass="control-value bold" Visible="false"></asp:Label>
                                             </td>
                                             <td align="left " class="fw-bold">
                                                 <asp:Label runat="server" ID="CveEtapa" Text='<%# Eval("CveEtapa")%>' Visible="false"></asp:Label>

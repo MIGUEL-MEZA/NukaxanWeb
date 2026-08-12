@@ -62,9 +62,11 @@ Public Class OptimizerC_CatVariables
     Public Function FillModel(dr As DataRow) As OptimizerC_CatVariablesModel
         Dim ObjModel As New OptimizerC_CatVariablesModel
         ObjModel.CveVariable = GetFieldValue(dr, "CveVariable", 0)
-        ObjModel.CodALLIX = GetFieldValue(dr, "CodALLIX", "")
         ObjModel.NomVariable = GetFieldValue(dr, "NomVariable", "")
         ObjModel.Posicion = GetFieldValue(dr, "Posicion", 0)
+        ObjModel.CodALLIX = GetFieldValue(dr, "CodALLIX", "")
+        ObjModel.CodFormat = GetFieldValue(dr, "CodFormat", "")
+        ObjModel.FactorValMax = GetFieldValue(dr, "FactorValMax", "")
         ObjModel.TipoNutriente = GetFieldValue(dr, "TipoNutriente", GetFieldValue(dr, "Nutriente", ""))
         ObjModel.Decimales = GetFieldValue(dr, "Decimales", 2)
         ObjModel.MostrarCliente = GetFieldValue(dr, "MostrarCliente", "")
@@ -72,10 +74,9 @@ Public Class OptimizerC_CatVariables
         ObjModel.EditarAjuste = GetFieldValue(dr, "EditarAjuste", "N")
         ObjModel.ReporteInterno = GetFieldValue(dr, "ReporteInterno", "S")
         ObjModel.ReporteExterno = GetFieldValue(dr, "ReporteExterno", "S")
-        ObjModel.MostrarValores = GetFieldValue(dr, "MostrarValores", "")
         ObjModel.EnvioFlujo = GetFieldValue(dr, "EnvioFlujo", "N")
+        ObjModel.MostrarValores = GetFieldValue(dr, "MostrarValores", "")
         ObjModel.NomCategoria = GetFieldValue(dr, "NomCategoria", "")
-
         If dr.Table.Columns.Contains("FecAct") AndAlso Not IsDBNull(dr("FecAct")) Then
             ObjModel.FecAct = CDate(dr("FecAct")).ToString("dd/MM/yyyy HH:mm")
         End If

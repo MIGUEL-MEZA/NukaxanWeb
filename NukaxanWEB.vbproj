@@ -243,6 +243,7 @@
     <Content Include="Content\Image\logo_prodaves.png" />
     <Content Include="Controls\Nuptimizer_Flujo_PerfilC_.ascx" />
     <Content Include="Nireo_CatCurvasCalibracion_View.aspx" />
+    <Content Include="Nufeed_Format_Carga.aspx" />
     <Content Include="OptimizerG_PerfilN_View.aspx" />
     <Content Include="OptimizerG_PerfilN_Frm.aspx" />
     <Content Include="OptimizerG_PerfilN_ReporteFrm.aspx" />
@@ -1388,6 +1389,13 @@
     <Compile Include="Nireo_CatEquiposBIAS.vb" />
     <Compile Include="Nireo_CatOrigenes.vb" />
     <Compile Include="Nukaxan_PerfilCliente.vb" />
+    <Compile Include="Nufeed_Format_Carga.aspx.designer.vb">
+      <DependentUpon>Nufeed_Format_Carga.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Nufeed_Format_Carga.aspx.vb">
+      <DependentUpon>Nufeed_Format_Carga.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="OptimizerG_PerfilN.vb" />
     <Compile Include="OptimizerReporteDescarga.vb" />
     <Compile Include="OptimizerG_PerfilN_View.aspx.designer.vb">

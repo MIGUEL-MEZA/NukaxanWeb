@@ -13,7 +13,7 @@ Public Class Interfaz_Optimizer
     Public client = New HttpClient()
     Public path As String
     Public content_type As String = "application/json"
-    Public Shared strError As String = ""
+    Public strError As String = ""
     Public WSEstatus As Boolean = False
 
     'Private WsUsuario As New WSUsuarioModel

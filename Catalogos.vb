@@ -863,4 +863,34 @@ Public Class Catalogos
         End Try
     End Sub
 
+    'NUFEED
+    Public Sub Nufeed_CargaFormula_Plataforma(DDLControl As Control)
+        Dim dt As DataTable
+        Dim sb As New StringBuilder
+        Try
+            sb.Append(" EXEC spc_Catalogos 30,''")
+            dt = execQuery(sb.ToString)
+            Call subControl_fill(DDLControl, dt, "CvePlataForma", "NomPlataforma", True)
+
+        Catch ex As Exception
+            strError = CleanSpecialCharacter(ex.Message)
+        Finally
+            dt = Nothing
+        End Try
+    End Sub
+    Public Sub Nufeed_CargaFormula_Clientes(DDLControl As Control, CvePlataforma As String)
+        Dim dt As DataTable
+        Dim sb As New StringBuilder
+        Try
+            sb.Append(" EXEC spc_Catalogos 31,'" + CvePlataforma + "'")
+            dt = execQuery(sb.ToString)
+            Call subControl_fill(DDLControl, dt, "CodCliente", "NomClienteR", True)
+
+        Catch ex As Exception
+            strError = CleanSpecialCharacter(ex.Message)
+        Finally
+            dt = Nothing
+        End Try
+    End Sub
+
 End Class

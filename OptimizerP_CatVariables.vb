@@ -62,9 +62,11 @@ Public Class OptimizerP_CatVariables
     Public Function FillModel(dr As DataRow) As OptimizerP_CatVariablesModel
         Dim ObjModel As New OptimizerP_CatVariablesModel
         ObjModel.CveVariable = dr("CveVariable")
-        ObjModel.CodALLIX = dr("CodALLIX")
         ObjModel.NomVariable = dr("NomVariable")
         ObjModel.Posicion = dr("Posicion")
+        ObjModel.CodALLIX = dr("CodALLIX")
+        ObjModel.CodFormat = dr("CodFormat")
+        ObjModel.FactorValMax = dr("FactorValMax")
         ObjModel.Nutriente = dr("Nutriente")
         ObjModel.Decimales = dr("Decimales")
         ObjModel.MostrarCliente = dr("MostrarCliente")
@@ -73,10 +75,13 @@ Public Class OptimizerP_CatVariables
         ObjModel.ReporteInterno = dr("ReporteInterno")
         ObjModel.ReporteExterno = dr("ReporteExterno")
         ObjModel.EnvioFlujo = dr("EnvioFlujo")
+        ObjModel.MostrarValores = dr("MostrarValores")
         ObjModel.NomCategoria = dr("NomCategoria")
 
         'Bitacora
-        ObjModel.FecAct = CDate(dr("FecAct")).ToString("dd/MM/yyyy HH:mm")
+        If dr.Table.Columns.Contains("FecAct") AndAlso Not IsDBNull(dr("FecAct")) Then
+            ObjModel.FecAct = CDate(dr("FecAct")).ToString("dd/MM/yyyy HH:mm")
+        End If
         ObjModel.UsuAct = dr("UsuAct")
 
         Return ObjModel

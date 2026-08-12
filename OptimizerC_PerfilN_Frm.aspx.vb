@@ -643,7 +643,7 @@ Public Class OptimizerC_PerfilN_Frm
             If Obj.WSEstatus Then
                 Alertas("", "58", True, 2)
             Else
-                Alertas("", "34", True, 3)
+                Alertas("", Obj.strError, True, 3)
             End If
         Catch ex As Exception
             Alertas("", CleanSpecialCharacter(ex.Message), False, 4)
