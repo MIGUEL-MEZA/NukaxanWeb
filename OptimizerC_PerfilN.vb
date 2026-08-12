@@ -14,6 +14,7 @@ Public Class OptimizerC_PerfilN
         Public Property Referencia As Double
         Public Property Ajuste As Double
         Public Property Comentario As String
+        Public Property Posicion As Integer
         Public Property Mostrar As String
         Public Property CveCategoria As Integer
         Public Property EditarAjuste As String
@@ -327,6 +328,7 @@ Public Class OptimizerC_PerfilN
                     .Referencia = valorReferencia,
                     .Ajuste = valorAjuste,
                     .Comentario = motivo,
+                    .Posicion = If(infoVar IsNot Nothing, infoVar.Posicion, variable.Posicion),
                     .Mostrar = variable.MostrarCliente,
                     .CveCategoria = cveCategoria,
                     .EditarAjuste = If(infoVar IsNot Nothing, infoVar.EditarAjuste, "N"),

@@ -232,7 +232,7 @@ Public Class OptimizerC_PerfilN_ReporteFrm
             'Dim ObjR As ResponseModel = JsonConvert.DeserializeObject(Of ResponseModel)(New OptimizerC_PerfilN_Resultado().FindById(CInt(regPId.Text)).Response)
             'Dim lstE As List(Of OptimizerC_PerfilN_EtapasModel) = New OptimizerC_PerfilN_Etapas().FindlstAll(CodCliente.Text, Convert.ToInt64(regPId.Text))
             'Dim lstVariables As List(Of OptimizerC_CatVariablesModel) = New OptimizerC_CatVariables().FindlstAll(0)
-Dim ObjM As OptimizerC_PerfilNModel = New OptimizerC_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
+            Dim ObjM As OptimizerC_PerfilNModel = New OptimizerC_PerfilN().FindById(Convert.ToInt64(regPId.Text), "")
             LBLReferencia.Text = "FOLIO: " + ObjM.FolioR + " | " + ObjM.NomReferencia
             LBLCliente.Text = ObjM.NomCliente
 
@@ -245,7 +245,12 @@ Dim ObjM As OptimizerC_PerfilNModel = New OptimizerC_PerfilN().FindById(Convert.
             Dim etapas = modeloCaptura.GroupBy(Function(x) x.Etapa).Select(
                 Function(g) New With {.Etapa = g.Key, .NombreEtapa = g.First().NombreEtapa}).OrderBy(Function(x) x.Etapa).ToList()
 
-            Dim categorias = modeloCaptura.FindAll(Function(p) p.ReporteInterno = "S").GroupBy(Function(x) x.CveCategoria).ToList()
+
+            Dim categorias = modeloCaptura.FindAll(Function(p) p.ReporteInterno = "S").OrderBy(Function(x) x.PosicionC).
+                ThenBy(Function(x) x.Posicion).
+                ThenBy(Function(x) x.Variable).
+                GroupBy(Function(x) x.CveCategoria).
+                ToList()
 
             'Dim variables = modeloCaptura.GroupBy(Function(x) x.Variable).ToList()
 

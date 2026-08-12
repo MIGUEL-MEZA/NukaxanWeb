@@ -39,7 +39,7 @@ Public Class OptimizerP_PerfilN_Frm
         iList.Add(New DatosGrid() With {.Tipo = 1, .Campo = "TBEMAlimento", .Valida = "S", .ValidaCeros = "S"})
 
         RegistrarDescargaDirecta()
-
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "ConfigurarBotones", "inicializarTabs();", True)
         If Not Page.IsPostBack Then
             DatosLoad()
         End If
@@ -204,13 +204,15 @@ Public Class OptimizerP_PerfilN_Frm
     Sub Acciones(op As Boolean, op2 As Boolean, arrAction As String)
         Dim lb As New LinkButton
         Dim arr2() As String = arrAction.Split(",")
-        Dim arr(6) As String
-        arr(0) = "LB2"
-        arr(1) = "LB11"
-        arr(2) = "LB7"
-        arr(3) = "LB17"
-        arr(4) = "LB18"
-        arr(5) = "LB15"
+        Dim arr(7) As String
+        arr(0) = "LB2"  'Salir
+        arr(1) = "LB15" 'MostrasPrograma
+        arr(2) = "LB11" 'Calcular
+        arr(3) = "LB18" 'Enviar
+        arr(4) = "LB19" 'Ajuste
+        arr(5) = "LB20" 'Excel
+        arr(6) = "LB21" 'PDF
+
         For i = 0 To UBound(arr)
             For j = 0 To UBound(arr2)
                 If i = CInt(arr2(j)) Then
@@ -227,7 +229,7 @@ Public Class OptimizerP_PerfilN_Frm
         Dim IsAdm As Boolean = If(New ArrayList({"1", "2"}).IndexOf(ObjUser.CveRol.ToString) >= 0, True, False)
         Dim IsEstatus As Boolean = If(New ArrayList({"1"}).IndexOf(CveEstatus.Text) >= 0, True, False)
         Dim IsAutor = If(Autor.Text = ObjUser.CodUsuario, True, False)
-        Acciones(False, False, "0,1,2,3,4,5")
+        Acciones(False, False, "0,1,2,3,4,5,6")
         Controles(False)
 
         'IsAdm = False
@@ -242,30 +244,32 @@ Public Class OptimizerP_PerfilN_Frm
         lstc.Add(New FrmControlModel With {.Nombre = "TBEMAlimento", .Tipo = 2})
 
         If regPId.Text = "0" Then 'Nuevo
-            Acciones(True, True, "0,1")
+            Acciones(True, True, "0,2") 'Regresar|Cacular
             Controles(True)
             DDLCliente.Visible = True
             TBNomClienteD.Visible = False
             SeguridadRPT(True, rptEtapas, lstc)
         ElseIf regPId.Text <> "0" And IsEstatus And (IsAutor Or IsAdm) Then
-            Acciones(True, True, "0,1,4,5")
+            Acciones(True, True, "0,1,2,3,4,5,6") 'Regresar|VerPrograma|Cacular|Enviar|Ajuste|Excel|PDF
             Controles(True)
             DDLCliente.Visible = False
             TBNomClienteD.Visible = True
             SeguridadRPT(True, rptEtapas, lstc)
             LB18.Visible = If(CodALLIX.Text <> "" And DDLModalidad.SelectedValue.ToString = "1", True, False)
         ElseIf regPId.Text <> "0" And Not IsEstatus And (IsAutor Or IsAdm) Then
-            Acciones(True, True, "0,5")
+            Acciones(True, True, "0,1,5,6") 'Regresar|VerPrograma|Excel|PDF
             Controles(False)
             SeguridadRPT(False, rptEtapas, lstc)
             LB15.Visible = If(CvePlan.Text <> "0", True, False)
         Else
-            Acciones(True, True, "0,5")
+            Acciones(True, True, "0,1,5,6") 'Regresar|VerPrograma|Excel|PDF
             Controles(False)
             SeguridadRPT(False, rptEtapas, lstc)
             LB15.Visible = If(CvePlan.Text <> "0", True, False)
         End If
-
+        LB18.Visible = False
+        LB20.Visible = False
+        LB21.Visible = False
     End Sub
     Sub LlenaRegistro()
         Try

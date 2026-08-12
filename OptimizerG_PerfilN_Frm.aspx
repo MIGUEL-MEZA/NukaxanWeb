@@ -127,7 +127,6 @@
 
             return modeloCaptura;
         }
-
         document.addEventListener("input", function (e) {
 
             if (e.target.classList.contains("ajuste")) {
@@ -151,7 +150,6 @@
             }
 
         });
-
         function validarModelo(modelo) {
 
             let errores = false;
@@ -206,7 +204,6 @@
 
             return !errores;
         }
-
         function guardarCambios() {
             let modelo = actualizarModeloDesdeUI();
             modelo = normalizarModelo(modelo);
@@ -243,6 +240,50 @@
             });
 
         }
+
+        function configurarBotones() {
+            var tabActivo = $('#myTab li.active').attr('id');
+            console.log('Tab activo:', tabActivo);
+            if (tabActivo == 'li_tab1') {
+                $('#<%= LB15.ClientID %>').show(); //Programa
+                $('#<%= LB11.ClientID %>').show(); //Calcular
+                $('#<%= LB2.ClientID %>').show(); //Salir
+                $('#<%= LB18.ClientID %>').hide(); //Enviar
+                $('#<%= LB19.ClientID %>').hide(); //Ajuste
+                $('#<%= LB20.ClientID %>').hide(); // Excel
+                $('#<%= LB21.ClientID %>').hide(); // PDF
+            }
+            else {
+                $('#<%= LB15.ClientID %>').show(); //Programa
+                $('#<%= LB11.ClientID %>').hide(); //Calcular
+                $('#<%= LB2.ClientID %>').show(); //Salir
+                $('#<%= LB18.ClientID %>').show(); //Enviar
+                $('#<%= LB19.ClientID %>').show(); //Ajuste
+                $('#<%= LB20.ClientID %>').show(); // Excel
+                $('#<%= LB21.ClientID %>').show(); // PDF                    
+            }
+        }
+        function restaurarTab() {
+            var tab = $('#<%= TabName.ClientID %>').val();
+            console.log("Restaurando:", tab);
+            if (tab) {
+                $('#' + tab).tab('show');
+            }
+        }
+        function inicializarTabs() {
+            $('#myTab a').off('shown.bs.tab');
+            $('#myTab a').on('shown.bs.tab', function (e) {
+                var tabId = $(e.target).attr('id');
+                console.log("Guardando:", tabId);
+                $('#<%= TabName.ClientID %>').val(tabId);
+                configurarBotones();
+            });
+            restaurarTab();
+            configurarBotones();
+        }
+        $(document).ready(function () {
+            inicializarTabs();
+        });
     </script>
      <style>
     .header {
@@ -391,27 +432,31 @@ td {
                             class="icon-bar"></span><span class="icon-bar"></span>
                     </button>
                     <div class="collapse navbar-collapse navbar-right navbar-right" id="bar-action">
-                        <asp:LinkButton ID="LB15" runat="server" OnClick="MostrarPrograma" CssClass="lnkbtn-action">
+                        <asp:LinkButton ID="LB15" runat="server" OnClick="MostrarPrograma" CssClass="lnkbtn-action" ClientIDMode="Static">
                             <i runat="server" id="LB_IMG15" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL15">Ver Programa</asp:Label>
                         </asp:LinkButton>
-                        <asp:LinkButton ID="LB18" runat="server" OnClick="Enviar" CssClass="lnkbtn-action">
-                            <i runat="server" id="LB_IMG18" class=""></i>
-                            <asp:Label runat="server" ID="LB_LBL18">Enviar Perfil</asp:Label>
-                        </asp:LinkButton>
-                        <asp:LinkButton ID="LB17" runat="server" OnClick="Guardar" CssClass="lnkbtn-action">
-                            <i runat="server" id="LB_IMG17" class=""></i>
-                            <asp:Label runat="server" ID="LB_LBL17">Editar</asp:Label>
-                        </asp:LinkButton>
-                        <asp:LinkButton ID="LB7" runat="server" OnClick="Guardar" CssClass="lnkbtn-action">
-                            <i runat="server" id="LB_IMG7" class=""></i>
-                            <asp:Label runat="server" ID="LB_LBL7">Cerrar</asp:Label>
-                        </asp:LinkButton>
-                        <asp:LinkButton ID="LB11" runat="server" OnClick="Guardar" CssClass="lnkbtn-action">
+                         <asp:LinkButton ID="LB11" runat="server" OnClick="Guardar" CssClass="lnkbtn-action" ClientIDMode="Static">
                             <i runat="server" id="LB_IMG11" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL11">Calcular</asp:Label>
                         </asp:LinkButton>
-                       <asp:LinkButton ID="LB2" runat="server" OnClick="Regresar" CssClass="lnkbtn-action">
+                        <asp:LinkButton ID="LB18" runat="server" OnClick="Enviar" CssClass="lnkbtn-action" ClientIDMode="Static">
+                            <i runat="server" id="LB_IMG18" class=""></i>
+                            <asp:Label runat="server" ID="LB_LBL18">Enviar Perfil</asp:Label>
+                        </asp:LinkButton>
+                        <asp:LinkButton ID="LB19" runat="server" OnClientClick="guardarCambios(); return false;" CssClass="lnkbtn-action" ClientIDMode="Static">
+                            <i runat="server" id="LB_IMG19" class=""></i>
+                            <asp:Label runat="server" ID="LB_LBL19">Guardar Ajuste</asp:Label>
+                        </asp:LinkButton>
+                        <asp:LinkButton ID="LB20" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action" ClientIDMode="Static">
+                            <i runat="server" id="LB_IMG20" class=""></i>
+                            <asp:Label runat="server" ID="LB_LBL20">Excel</asp:Label>
+                        </asp:LinkButton>
+                        <asp:LinkButton ID="LB21" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action" ClientIDMode="Static">
+                            <i runat="server" id="LB_IMG21" class=""></i>
+                            <asp:Label runat="server" ID="LB_LBL21">PDF</asp:Label>
+                        </asp:LinkButton>
+                       <asp:LinkButton ID="LB2" runat="server" OnClick="Regresar" CssClass="lnkbtn-action" ClientIDMode="Static">
                             <i runat="server" id="LB_IMG2" class=""></i>
                             <asp:Label runat="server" ID="LB_LBL2">Salir</asp:Label>
                         </asp:LinkButton>                         
@@ -420,10 +465,10 @@ td {
                 <div id="Tabs" role="tabpanel">
                     <!-- Nav tabs -->
                     <ul class="nav nav-pills" id="myTab" role="tablist">
-                        <li class="nav-item active" runat="server" id="li_tab1">
+                        <li class="nav-item active" runat="server" id="li_tab1" clientidmode="Static">
                             <a class="nav-link" id="tab1" href="#sec1" aria-controls="sec1" role="tab" data-toggle="tab">REQUERIMIENTOS</a>
                         </li>
-                        <li class="nav-item" runat="server" id="li_tab2">
+                        <li class="nav-item" runat="server" id="li_tab2" clientidmode="Static">
                             <a class="nav-link" id="tab2" href="#sec2" aria-controls="sec2" role="tab" data-toggle="tab">PERFIL</a>
                         </li>
                         <%-- <li class="nav-item" runat="server">
@@ -432,7 +477,7 @@ td {
                     </ul>
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="sec1">
+                        <div role="tabpanel" class="tab-pane active" id="sec1" >
                             <div class="divsec-captura">
                                 <asp:Label runat="server" ID="SECTitulo1" CssClass="control-label"></asp:Label>
                             </div>
@@ -692,21 +737,7 @@ td {
                                 </tr>
                             </table>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="sec2">
-                             <div align="right" style="padding:0px 20px 3px 3px;">
-                                <asp:LinkButton ID="LB19" runat="server" OnClientClick="guardarCambios(); return false;" CssClass="lnkbtn-action">
-                                    <i runat="server" id="LB_IMG19" class=""></i>
-                                    <asp:Label runat="server" ID="LB_LBL19">Guardar Ajuste</asp:Label>
-                                </asp:LinkButton>
-                                  <asp:LinkButton ID="LB20" runat="server" OnClick="DescargarExcel" CssClass="lnkbtn-action">
-                                     <i runat="server" id="LB_IMG20" class=""></i>
-                                    <asp:Label runat="server" ID="LB_LBL20">Excel</asp:Label>
-                                </asp:LinkButton>
-                                <asp:LinkButton ID="LB21" runat="server" OnClick="DescargarPdf" CssClass="lnkbtn-action">
-                                    <i runat="server" id="LB_IMG21" class=""></i>
-                                    <asp:Label runat="server" ID="LB_LBL21">PDF</asp:Label>
-                                </asp:LinkButton>
-                            </div>
+                        <div role="tabpanel" class="tab-pane" id="sec2">                            
                             <asp:Literal runat="server" ID="PerfilN"></asp:Literal>
                         </div>
 

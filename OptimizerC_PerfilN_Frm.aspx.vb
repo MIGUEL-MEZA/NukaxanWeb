@@ -257,7 +257,7 @@ Public Class OptimizerC_PerfilN_Frm
             TBNomClienteD.Visible = False
             SeguridadRPT(True, rptEtapas, lstc)
         ElseIf regPId.Text <> "0" And IsEstatus And (IsAutor Or IsAdm) Then
-            Acciones(True, True, "0,1,2,3,4,5") 'Regresar|VerPrograma|Cacular
+            Acciones(True, True, "0,1,2,3,4,5") 'Regresar|VerPrograma|Cacular|Enviar|Excel|PDF
             Controles(True)
             Controles(True)
             DDLCliente.Visible = False
@@ -265,16 +265,19 @@ Public Class OptimizerC_PerfilN_Frm
             SeguridadRPT(True, rptEtapas, lstc)
             'LB18.Visible = If(CodALLIX.Text <> "" And DDLModalidad.SelectedValue.ToString = "1", True, False)
         ElseIf regPId.Text <> "0" And Not IsEstatus And (IsAutor Or IsAdm) Then
-            Acciones(True, True, "0,1,4,5") 'Regresar|VerPrograma
+            Acciones(True, True, "0,1,4,5") 'Regresar|VerPrograma|Excel|PDF
             Controles(False)
             SeguridadRPT(False, rptEtapas, lstc)
             LB15.Visible = If(CvePlan.Text <> "0", True, False)
         Else
-            Acciones(True, True, "0,1,4,5") 'Regresar|VerPrograma
+            Acciones(True, True, "0,1,4,5") 'Regresar|VerPrograma|Excel|PDF
             Controles(False)
             SeguridadRPT(False, rptEtapas, lstc)
             LB15.Visible = If(CvePlan.Text <> "0", True, False)
         End If
+        LB18.Visible = False
+        LB20.Visible = False
+        LB21.Visible = False
     End Sub
     Sub LlenaRegistro()
         Try

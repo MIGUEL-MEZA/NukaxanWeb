@@ -391,6 +391,7 @@ Public Class OptimizerG_PerfilN
                     .Referencia = valorReferencia,
                     .Ajuste = valorAjuste,
                     .Comentario = motivo,
+                    .Posicion = If(infoVar IsNot Nothing, infoVar.Posicion, variable.Posicion),
                     .Mostrar = ObtenerBanderaMostrar(mostrarValores, etapa.CveEtapa, variable.MostrarCliente),
                     .CveCategoria = cveCategoria,
                     .EditarAjuste = editarAjuste,

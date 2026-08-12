@@ -241,11 +241,18 @@ Dim ObjM As OptimizerP_PerfilNModel = New OptimizerP_PerfilN().FindById(Convert.
             Dim jsonCaptura = JsonConvert.SerializeObject(modeloCaptura)
             ClientScript.RegisterStartupScript(Me.GetType(), "initModelo", "var modeloCaptura = " & jsonCaptura & ";", True)
 
+            'Dim categorias = modeloCaptura.FindAll(Function(p) p.ReporteInterno = "S").OrderBy(Function(x) x.CveCategoria).GroupBy(Function(x) x.CveCategoria).ToList()
 
             Dim etapas = modeloCaptura.GroupBy(Function(x) x.Etapa).Select(
                 Function(g) New With {.Etapa = g.Key, .NombreEtapa = g.First().NombreEtapa}).OrderBy(Function(x) x.Etapa).ToList()
 
-            Dim categorias = modeloCaptura.FindAll(Function(p) p.ReporteInterno = "S").OrderBy(Function(x) x.CveCategoria).GroupBy(Function(x) x.CveCategoria).ToList()
+
+            Dim categorias = modeloCaptura.FindAll(Function(p) p.ReporteInterno = "S").OrderBy(Function(x) x.PosicionC).
+                ThenBy(Function(x) x.Posicion).
+                ThenBy(Function(x) x.Variable).
+                GroupBy(Function(x) x.CveCategoria).
+                ToList()
+
 
             'Dim variables = modeloCaptura.GroupBy(Function(x) x.Variable).ToList()
 

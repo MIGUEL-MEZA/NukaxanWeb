@@ -47,7 +47,7 @@
                 $('#<%= LB21.ClientID %>').hide(); // PDF
             }
             else {
-                $('#<%= LB15.ClientID %>').hide(); //Programa
+                $('#<%= LB15.ClientID %>').show(); //Programa
                 $('#<%= LB11.ClientID %>').hide(); //Calcular
                 $('#<%= LB2.ClientID %>').show(); //Salir
                 $('#<%= LB18.ClientID %>').show(); //Enviar
@@ -57,37 +57,25 @@
         }
         function restaurarTab() {
             var tab = $('#<%= TabName.ClientID %>').val();
-
             console.log("Restaurando:", tab);
-
             if (tab) {
                 $('#' + tab).tab('show');
             }
         }
-
         function inicializarTabs() {
-
             $('#myTab a').off('shown.bs.tab');
-
             $('#myTab a').on('shown.bs.tab', function (e) {
-
                 var tabId = $(e.target).attr('id');
-
                 console.log("Guardando:", tabId);
-
                 $('#<%= TabName.ClientID %>').val(tabId);
-
                 configurarBotones();
             });
-
             restaurarTab();
             configurarBotones();
         }
-
         $(document).ready(function () {
             inicializarTabs();
         });
-
     </script>
     <style>
         .header {
