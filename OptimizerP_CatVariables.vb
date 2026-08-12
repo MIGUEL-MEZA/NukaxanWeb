@@ -75,7 +75,6 @@ Public Class OptimizerP_CatVariables
         ObjModel.ReporteInterno = dr("ReporteInterno")
         ObjModel.ReporteExterno = dr("ReporteExterno")
         ObjModel.EnvioFlujo = dr("EnvioFlujo")
-        ObjModel.MostrarValores = dr("MostrarValores")
         ObjModel.NomCategoria = dr("NomCategoria")
 
         'Bitacora

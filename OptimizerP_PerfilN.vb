@@ -372,8 +372,7 @@ Public Class OptimizerP_PerfilN
             Dim reporteInterno As String = If(infoVar IsNot Nothing, infoVar.ReporteInterno, "N")
             Dim reporteExterno As String = If(infoVar IsNot Nothing, infoVar.ReporteExterno, "N")
             Dim envioFlujo As String = If(infoVar IsNot Nothing, infoVar.EnvioFlujo, "N")
-            Dim mostrarValores As String = If(infoVar IsNot Nothing, infoVar.MostrarValores, "")
-Dim NomVariable As String = If(infoVar IsNot Nothing, infoVar.NomVariable, "")
+            Dim NomVariable As String = If(infoVar IsNot Nothing, infoVar.NomVariable, "")
 
             For Each etapa In lstE.Where(Function(e) e.Aplica = "S")
                 Dim etapaData = variable.Etapas.FirstOrDefault(Function(x) x.Clave = etapa.CveEtapa)
@@ -402,7 +401,6 @@ Dim NomVariable As String = If(infoVar IsNot Nothing, infoVar.NomVariable, "")
                     .EditarAjuste = editarAjuste,
                     .ReporteInterno = reporteInterno,
                     .ReporteExterno = reporteExterno,
-                    .MostrarValores = mostrarValores,
                     .EnvioFlujo = envioFlujo,
                     .NomCategoria = nomCategoria,
                     .PosicionC = PosicionC

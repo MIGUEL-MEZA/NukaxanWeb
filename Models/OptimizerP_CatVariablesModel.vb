@@ -13,7 +13,6 @@
     Public Property ReporteInterno As String = ""
     Public Property ReporteExterno As String = ""
     Public Property EnvioFlujo As String = ""
-    Public Property MostrarValores As String = ""
     Public Property NomCategoria As String = ""
     Public Property FecAct As String = ""
     Public Property UsuAct As Integer = 0
